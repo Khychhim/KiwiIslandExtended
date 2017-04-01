@@ -21,7 +21,9 @@ public class Predator extends Fauna
         super(pos, name, description);
     } 
  
-    
+    public void randomMove(){
+          
+    }
 
 
     @Override
