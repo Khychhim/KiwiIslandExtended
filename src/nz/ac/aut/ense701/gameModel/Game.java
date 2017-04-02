@@ -3,8 +3,10 @@ package nz.ac.aut.ense701.gameModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -34,7 +36,8 @@ public class Game
     public Game() 
     {   
         eventListeners = new HashSet<GameEventListener>();
-
+        rand = new Random();
+        allPredator = new ArrayList<Occupant>();
         createNewGame();
     }
     
@@ -136,6 +139,64 @@ public class Game
                              player.isAlive();
         }
         return isMovePossible;
+    }
+    /**
+     * Check if it was possible to move predator in that direction 
+     * 
+     * @param predator
+     * @param direction the direction to move 
+     * @return true if the move was possible, false if invalid move
+     */
+    public boolean isPredatorMovePossible(Occupant predator,MoveDirection direction){
+         boolean isMovePossible = false;
+         // position which predator move to
+         Position newPosition = predator.getPosition().getNewPosition(direction);
+         
+         //check for valid position
+         if(newPosition.isOnIsland() && newPosition != null){
+               isMovePossible = true;
+         }
+         
+         return isMovePossible;
+    }
+    
+    
+   /**
+    * 
+    * 
+    */
+    public void movePredatorsRandomly(){
+          boolean success = true;
+          ArrayList<Occupant> newPredator = new ArrayList<Occupant>(allPredator);
+          System.out.println(newPredator.size());
+          for(int i  = 0; i< allPredator.size(); i++){
+                Occupant predator = newPredator.get(i);                
+                do{
+                      int index = rand.nextInt(4);
+                      MoveDirection moveDirection = MoveDirection.values()[index];
+                      Position newPosition = predator.getPosition().getNewPosition(moveDirection);
+                      success = island.addOccupant(newPosition, predator);
+                      
+//                      if(success){
+//                            System.out.println("yes");
+//                            island.removeOccupant(newPredator.get(i).getPosition(), newPredator.get(i));
+//                      }
+               }while(!success);
+                System.out.println("Yes");
+                //newPredator.add(predator);
+                //allPredator.remove(0);
+          }
+          
+          for(int i = 0; i< allPredator.size(); i++){
+                System.out.println(island.removeOccupant(allPredator.get(i).getPosition(), allPredator.get(i)));
+               // System.out.println("Go in");
+          }
+          
+          
+          
+         // this.allPredator = new ArrayList<Occupant>(newPredator);
+          
+          this.notifyGameEventListeners();
     }
     
       /**
@@ -829,6 +890,7 @@ public class Game
             else if ( occType.equals("P") )
             {
                 occupant = new Predator(occPos, occName, occDesc);
+                allPredator.add(occupant);
                 totalPredators++;
             }
             else if ( occType.equals("F") )
@@ -839,7 +901,6 @@ public class Game
         }
     }    
 
-
     private Island island;
     private Player player;
     private GameState state;
@@ -848,15 +909,12 @@ public class Game
     private int totalKiwis;
     private int predatorsTrapped;
     private Set<GameEventListener> eventListeners;
+    private Random rand;
+    private ArrayList<Occupant> allPredator;
     
     private final double MIN_REQUIRED_CATCH = 0.8;
         
     private String winMessage = "";
     private String loseMessage  = "";
     private String playerMessage  = "";   
-
-    
-
-
-
 }
