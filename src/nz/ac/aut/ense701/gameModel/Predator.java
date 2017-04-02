@@ -20,12 +20,16 @@ public class Predator extends Fauna
     {
         super(pos, name, description);
     } 
- 
-    public void randomMove(){
-          
+    
+    /**
+     * Move predator to new position
+     * 
+     * @param position the new position of predator 
+     */
+    public void moveToPosition(Position position){
+          super.setPosition(position);
     }
-
-
+    
     @Override
     public String getStringRepresentation() 
     {
