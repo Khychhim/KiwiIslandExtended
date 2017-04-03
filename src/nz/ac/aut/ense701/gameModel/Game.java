@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TimerTask;
 
 /**
  * This is the class that knows the Kiwi Island game rules and state
@@ -20,7 +22,7 @@ import java.util.Set;
  * August 2011 Extended for stage 2. AS
  */
 
-public class Game
+public class Game 
 {
     //Constants shared with UI to provide player data
     public static final int STAMINA_INDEX = 0;
@@ -38,6 +40,7 @@ public class Game
         eventListeners = new HashSet<GameEventListener>();
         rand = new Random();
         allPredator = new ArrayList<Occupant>();
+        Collections.synchronizedList(allPredator);
         createNewGame();
     }
     
@@ -140,63 +143,37 @@ public class Game
         }
         return isMovePossible;
     }
+   
     /**
-     * Check if it was possible to move predator in that direction 
-     * 
-     * @param predator
-     * @param direction the direction to move 
-     * @return true if the move was possible, false if invalid move
-     */
-    public boolean isPredatorMovePossible(Occupant predator,MoveDirection direction){
-         boolean isMovePossible = false;
-         // position which predator move to
-         Position newPosition = predator.getPosition().getNewPosition(direction);
-         
-         //check for valid position
-         if(newPosition.isOnIsland() && newPosition != null){
-               isMovePossible = true;
-         }
-         
-         return isMovePossible;
-    }
-    
-    
-   /**
     * 
     * 
     */
-    public void movePredatorsRandomly(){
+    public synchronized void movePredatorsRandomly(){
           boolean success = true;
-          ArrayList<Occupant> newPredator = new ArrayList<Occupant>(allPredator);
-          System.out.println(newPredator.size());
-          for(int i  = 0; i< allPredator.size(); i++){
-                Occupant predator = newPredator.get(i);                
-                do{
+          ArrayList<Occupant> newPredatorList = new ArrayList<Occupant>();
+          
+          for(int i = 0; i<allPredator.size();i++){
+                Occupant predator = allPredator.get(i);                
+                do{                   
                       int index = rand.nextInt(4);
                       MoveDirection moveDirection = MoveDirection.values()[index];
                       Position newPosition = predator.getPosition().getNewPosition(moveDirection);
-                      success = island.addOccupant(newPosition, predator);
+                      Occupant newPredator = new Predator(newPosition, predator.getName(), predator.getDescription());
                       
-//                      if(success){
-//                            System.out.println("yes");
-//                            island.removeOccupant(newPredator.get(i).getPosition(), newPredator.get(i));
-//                      }
+                      success = island.addOccupant(newPosition, newPredator);
+                      
+                      if(success){
+                            System.out.println("YEs");
+                            newPredatorList.add(newPredator);
+                            island.removeOccupant(predator.getPosition(), predator);                            
+                      }
+                      
+                      this.notifyGameEventListeners();
+                      
                }while(!success);
-                System.out.println("Yes");
-                //newPredator.add(predator);
-                //allPredator.remove(0);
           }
           
-          for(int i = 0; i< allPredator.size(); i++){
-                System.out.println(island.removeOccupant(allPredator.get(i).getPosition(), allPredator.get(i)));
-               // System.out.println("Go in");
-          }
-          
-          
-          
-         // this.allPredator = new ArrayList<Occupant>(newPredator);
-          
-          this.notifyGameEventListeners();
+          this.allPredator = newPredatorList;
     }
     
       /**
