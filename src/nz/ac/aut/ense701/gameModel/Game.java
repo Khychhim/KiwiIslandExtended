@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Timer;
 import java.util.TimerTask;
 
 /**
@@ -31,7 +32,9 @@ public class Game
     public static final int WEIGHT_INDEX = 3;
     public static final int MAXSIZE_INDEX = 4;
     public static final int SIZE_INDEX = 5;
-    
+    public static final int PREDATOR_TIME = 2;
+    public Timer timer;
+   
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
      */
@@ -51,6 +54,7 @@ public class Game
      */
     public void createNewGame()
     {
+        allPredator.clear(); 
         totalPredators = 0;
         totalKiwis = 0;
         predatorsTrapped = 0;
@@ -61,6 +65,14 @@ public class Game
         winMessage = "";
         loseMessage = "";
         playerMessage = "";
+        // timer for predator movement
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+              movePredatorsRandomly();              
+            }
+        },PREDATOR_TIME*1000,PREDATOR_TIME*1000); 
         notifyGameEventListeners();
     }
 
@@ -145,35 +157,64 @@ public class Game
     }
    
     /**
-    * 
+     * method to get a random direction
+     * 
+     * @return a random direction
+     */
+    public MoveDirection getRandomDirection(){
+          int index = rand.nextInt(4);
+          return MoveDirection.values()[index];
+    }
+   
+    /**
+     * check if predator is on same position as hazard in gridsquare
+     * @param predator
+     * @return true if predator position is same as hazard, false if not
+     */
+    public boolean checkIfPredatorOnHazard(Occupant predator){
+        for ( Occupant occupant : island.getOccupants(predator.getPosition())  )
+        {
+            if ( occupant instanceof Hazard )
+            {
+               return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+    * move the predators in a random position at a set interval
     * 
     */
     public synchronized void movePredatorsRandomly(){
-          boolean success = true;
-          ArrayList<Occupant> newPredatorList = new ArrayList<Occupant>();
+          boolean success;
+          ArrayList<Occupant> newPredatorList = new ArrayList<Occupant>(); //use for adding up all the new predators 
           
           for(int i = 0; i<allPredator.size();i++){
+                success = false;
                 Occupant predator = allPredator.get(i);                
                 do{                   
-                      int index = rand.nextInt(4);
-                      MoveDirection moveDirection = MoveDirection.values()[index];
+                      MoveDirection moveDirection = getRandomDirection();
+                     
                       Position newPosition = predator.getPosition().getNewPosition(moveDirection);
-                      Occupant newPredator = new Predator(newPosition, predator.getName(), predator.getDescription());
-                      
-                      success = island.addOccupant(newPosition, newPredator);
-                      
-                      if(success){
-                            System.out.println("YEs");
-                            newPredatorList.add(newPredator);
-                            island.removeOccupant(predator.getPosition(), predator);                            
-                      }
-                      
-                      this.notifyGameEventListeners();
-                      
+                      //condition to avoid exception when newPosition is null
+                      if(newPosition != null){                          
+                            Occupant newPredator = new Predator(newPosition, predator.getName(), predator.getDescription());                      
+                            //check to avoid predator stepping on hazard
+                            if(!checkIfPredatorOnHazard(newPredator)){
+                                  success = island.addOccupant(newPosition, newPredator);
+                                  //if add success, remove previous predator from island and add new predator to arraylist
+                                  if(success){
+                                        newPredatorList.add(newPredator);
+                                        island.removeOccupant(predator.getPosition(), predator);                            
+                                    }                      
+                                  this.notifyGameEventListeners();
+                            }
+                      }                   
                }while(!success);
           }
-          
-          this.allPredator = newPredatorList;
+        // replace new predators for the arraylist   
+        this.allPredator = newPredatorList;
     }
     
       /**
@@ -867,7 +908,7 @@ public class Game
             else if ( occType.equals("P") )
             {
                 occupant = new Predator(occPos, occName, occDesc);
-                allPredator.add(occupant);
+                allPredator.add(occupant);//add predator to arraylist for easy modify position
                 totalPredators++;
             }
             else if ( occType.equals("F") )

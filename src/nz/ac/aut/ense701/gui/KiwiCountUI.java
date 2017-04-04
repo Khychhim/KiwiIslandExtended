@@ -2,6 +2,8 @@ package nz.ac.aut.ense701.gui;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JOptionPane;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
@@ -24,7 +26,7 @@ public class KiwiCountUI
      * Creates a GUI for the KiwiIsland game.
      * @param game the game object to represent with this GUI.
      */
-    public KiwiCountUI(Game game) 
+    public KiwiCountUI(final Game game) 
     {
         assert game != null : "Make sure game object is created before UI";
         this.game = game;
@@ -42,23 +44,27 @@ public class KiwiCountUI
     public void gameStateChanged()
     {
         update();
-        
+        Object[] options = {"OK"};
         // check for "game over" or "game won"
         if ( game.getState() == GameState.LOST )
         {
-            JOptionPane.showMessageDialog(
-                    this, 
-                    game.getLoseMessage(), "Game over!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            game.createNewGame();
+            game.timer.cancel();
+            game.timer.purge();
+            int option = JOptionPane.showOptionDialog(this, game.getLoseMessage(), "Game over!", 
+                    JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            
+            if(option == JOptionPane.OK_OPTION){
+                  game.createNewGame();
+            }  
         }
         else if ( game.getState() == GameState.WON )
         {
-            JOptionPane.showMessageDialog(
-                    this, 
-                    game.getWinMessage(), "Well Done!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            game.createNewGame();
+              int option = JOptionPane.showOptionDialog(this,  game.getWinMessage(), "Well Done!", 
+                    JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+              
+            if(option == JOptionPane.OK_OPTION){
+                  game.createNewGame();
+            }  
         }
         else if (game.messageForPlayer())
         {
@@ -625,4 +631,5 @@ public class KiwiCountUI
     // End of variables declaration//GEN-END:variables
 
     private Game game;
+    private Timer timer;
 }
