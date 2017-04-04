@@ -1,7 +1,5 @@
 package nz.ac.aut.ense701.main;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gui.KiwiCountUI;
 

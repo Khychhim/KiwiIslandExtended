@@ -2,8 +2,6 @@ package nz.ac.aut.ense701.gui;
 
 import java.awt.Component;
 import java.awt.GridLayout;
-import java.util.Timer;
-import java.util.TimerTask;
 import javax.swing.JOptionPane;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
@@ -631,5 +629,4 @@ public class KiwiCountUI
     // End of variables declaration//GEN-END:variables
 
     private Game game;
-    private Timer timer;
 }

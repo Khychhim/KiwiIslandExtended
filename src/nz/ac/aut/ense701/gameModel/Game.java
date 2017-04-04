@@ -109,6 +109,14 @@ public class Game
     }    
  
     /**
+     * Get arraylist of all predator on island
+     * @return an arraylist of predator 
+     */
+    public ArrayList<Occupant> getAllPredator(){
+          return this.allPredator;
+    }
+    
+    /**
      * Provide a description of occupant
      * @param whichOccupant
      * @return description if whichOccuoant is an instance of occupant, empty string otherwise
@@ -171,7 +179,7 @@ public class Game
      * @param predator
      * @return true if predator position is same as hazard, false if not
      */
-    public boolean checkIfPredatorOnHazard(Occupant predator){
+    public boolean isPredatorOnHazard(Occupant predator){
         for ( Occupant occupant : island.getOccupants(predator.getPosition())  )
         {
             if ( occupant instanceof Hazard )
@@ -201,7 +209,7 @@ public class Game
                       if(newPosition != null){                          
                             Occupant newPredator = new Predator(newPosition, predator.getName(), predator.getDescription());                      
                             //check to avoid predator stepping on hazard
-                            if(!checkIfPredatorOnHazard(newPredator)){
+                            if(!isPredatorOnHazard(newPredator)){
                                   success = island.addOccupant(newPosition, newPredator);
                                   //if add success, remove previous predator from island and add new predator to arraylist
                                   if(success){
