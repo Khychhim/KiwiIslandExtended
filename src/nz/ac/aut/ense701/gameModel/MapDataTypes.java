@@ -12,7 +12,6 @@ import java.util.Scanner;
  */
 public final class MapDataTypes {
     public ArrayList<String> tileTypes = new ArrayList<String>();
-    public ArrayList<Item> itemTypes = new ArrayList<Item>();
     public ArrayList<Food> foodTypes = new ArrayList<Food>();
     public ArrayList<Tool> toolTypes = new ArrayList<Tool>();
     public ArrayList<Fauna> faunaTypes = new ArrayList<Fauna>();

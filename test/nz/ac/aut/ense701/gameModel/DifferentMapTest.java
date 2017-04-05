@@ -10,6 +10,7 @@ import org.junit.Test;
  */
 
 public class DifferentMapTest extends junit.framework.TestCase {
+    MapDataTypes mapDataTypes;
     
     public DifferentMapTest() {
     }
@@ -22,6 +23,7 @@ public class DifferentMapTest extends junit.framework.TestCase {
      */
     @Override
     protected void setUp() {
+        mapDataTypes = new MapDataTypes();
     }
 
     /**
@@ -31,10 +33,24 @@ public class DifferentMapTest extends junit.framework.TestCase {
      */
     @Override
     protected void tearDown() {
+        mapDataTypes = null;
     }
     
     @Test
-    public void testIsBrokenandBreak(){
-        
+    public void testDidMapDataTypesLoad(){
+        mapDataTypes.loadTypesFromFile();
+        //None of them should be null or empty
+        assertFalse("Fauna should not be null", mapDataTypes.faunaTypes == null);
+        assertFalse("Fauna should not be empty", mapDataTypes.faunaTypes.isEmpty());
+        assertFalse("Food should not be null", mapDataTypes.foodTypes == null);
+        assertFalse("Food should not be empty", mapDataTypes.foodTypes.isEmpty());
+        assertFalse("Hazards should not be null", mapDataTypes.hazardTypes == null);
+        assertFalse("Hazards should not be empty", mapDataTypes.hazardTypes.isEmpty());
+        assertFalse("Kiwi should not be null", mapDataTypes.kiwiTypes == null);
+        assertFalse("Kiwi should not be empty", mapDataTypes.kiwiTypes.isEmpty());
+        assertFalse("Tiles should not be null", mapDataTypes.tileTypes == null);
+        assertFalse("Tiles should not be empty", mapDataTypes.tileTypes.isEmpty());
+        assertFalse("Tool should not be null", mapDataTypes.toolTypes == null);
+        assertFalse("Tool should not be empty", mapDataTypes.toolTypes.isEmpty());
     }
 }
