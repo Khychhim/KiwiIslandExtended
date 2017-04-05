@@ -15,7 +15,6 @@ public class GameTest extends junit.framework.TestCase
     Player     player;
     Position   playerPosition;
     Island island ;
-    ArrayList<Occupant> allPredator;
     /**
      * Default constructor for test class GameTest
      */
@@ -37,7 +36,6 @@ public class GameTest extends junit.framework.TestCase
         playerPosition = game.getPlayer().getPosition();
         player         = game.getPlayer();
         island = game.getIsland();
-        allPredator = game.getAllPredator();
     }
 
     /**
@@ -127,6 +125,22 @@ public class GameTest extends junit.framework.TestCase
     }
     
     @Test
+    public void testGetRandomDirection(){
+          MoveDirection direction = game.getRandomDirection();
+          assertTrue(direction instanceof MoveDirection);         
+    }
+    
+    @Test
+    public void testMovePredatorRandomly(){
+          //method to move predator out of the current position
+          game.movePredatorsRandomly();
+          //one of the position which predator is on previously
+          Position position = new Position(island, 6,4);
+          //check if predator is still on that same position
+          assertFalse("Predator should not be in this position", island.hasPredator(position));
+    }
+    
+    @Test
     public void testIsPlayerMovePossibleValidMove(){
         //At start of game player has valid moves EAST, West & South
         assertTrue("Move should be valid", game.isPlayerMovePossible(MoveDirection.SOUTH));
@@ -141,15 +155,15 @@ public class GameTest extends junit.framework.TestCase
     @Test
     public void testIsPredatorOnHazardValid(){
           Position hazardPosition = new Position(island, 7, 4);
-          allPredator.get(0).setPosition(hazardPosition);
-          assertTrue("Predator should be on hazard square",game.isPredatorOnHazard(allPredator.get(0)));
+          Predator predator = new Predator(hazardPosition,"Rat","Eat Kiwi");
+          assertTrue("Predator should be on hazard square",game.isPredatorOnHazard(predator));
     }
     
     @Test
     public void testIsPredatorOnHazardInValid(){
           Position nonHazardPosition = new Position(island, 1, 1);
-          allPredator.get(0).setPosition(nonHazardPosition);
-          assertFalse("Predator should be not be on hazard square",game.isPredatorOnHazard(allPredator.get(0)));
+          Predator predator = new Predator(nonHazardPosition,"Rat","Eat Kiwi");
+          assertFalse("Predator should be not be on hazard square",game.isPredatorOnHazard(predator));
     }
     
     @Test

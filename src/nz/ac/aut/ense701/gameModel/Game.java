@@ -32,7 +32,7 @@ public class Game
     public static final int WEIGHT_INDEX = 3;
     public static final int MAXSIZE_INDEX = 4;
     public static final int SIZE_INDEX = 5;
-    public static final int PREDATOR_TIME = 2;
+    public static final int PREDATOR_TIME = 5;
     public Timer timer;
    
     /**
@@ -720,6 +720,7 @@ public class Game
             Occupant occupant = island.getPredator(current);
             //Predator has been trapped so remove
             island.removeOccupant(current, occupant); 
+            allPredator.remove(occupant);
             predatorsTrapped++;
         }
         
