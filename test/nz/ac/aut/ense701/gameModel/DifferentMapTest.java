@@ -1,5 +1,6 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.PrintWriter;
 import org.junit.Test;
 
 /**
@@ -11,6 +12,9 @@ import org.junit.Test;
 
 public class DifferentMapTest extends junit.framework.TestCase {
     MapDataTypes mapDataTypes;
+    DifferentMap differentMap;
+    
+    public final int MAP_SIZE = 15;
     
     public DifferentMapTest() {
     }
@@ -24,6 +28,7 @@ public class DifferentMapTest extends junit.framework.TestCase {
     @Override
     protected void setUp() {
         mapDataTypes = new MapDataTypes();
+        differentMap = new DifferentMap(MAP_SIZE, MAP_SIZE, "River Song");
     }
 
     /**
@@ -53,4 +58,13 @@ public class DifferentMapTest extends junit.framework.TestCase {
         assertFalse("Tool should not be null", mapDataTypes.toolTypes == null);
         assertFalse("Tool should not be empty", mapDataTypes.toolTypes.isEmpty());
     }
+    
+    @Test
+    public void testDidPrintWriterAccessFile(){
+        PrintWriter pw = differentMap.CreateFile();
+        assertFalse("Printwriter should not be null", pw == null);
+        assertFalse("The printwriter should not have an error", pw.checkError());
+        pw.close();
+    }
+    
 }
