@@ -225,6 +225,10 @@ public class Game
         this.allPredator = newPredatorList;
     }
     
+    public void predatorMoveToKiwi(){
+          
+    }
+    
       /**
      * Get terrain for position
      * @param row
