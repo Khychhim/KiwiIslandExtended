@@ -9,7 +9,10 @@ package nz.ac.aut.ense701.gameModel;
  */
 public class Predator extends Fauna
 {
-
+      private boolean isKiwisInRange;
+      private int rowAwayFromKiwi;
+      private int coloumnAwayFromKiwi;
+      
     /**
      * Constructor for objects of class Predator
      * @param pos the position of the predator object
@@ -19,7 +22,42 @@ public class Predator extends Fauna
     public Predator(Position pos, String name, String description) 
     {
         super(pos, name, description);
+        this.isKiwisInRange = false;
+        this.coloumnAwayFromKiwi = 0;
+        this.rowAwayFromKiwi = 0;
     } 
+    
+    public Predator(Position pos, String name, String description,boolean isKiwisInRange,int column,int row){
+           super(pos, name, description);
+           this.isKiwisInRange = isKiwisInRange;
+           this.coloumnAwayFromKiwi = column;
+           this.rowAwayFromKiwi = row;
+    }
+    
+    public void setRowAwayFromKiwi(int row){
+          this.rowAwayFromKiwi = row;
+    }
+    
+    public int getRowAwayFromKiwi(){
+          return this.rowAwayFromKiwi;
+    }
+    
+        public void setcoloumnAwayFromKiwi(int column){
+          this.coloumnAwayFromKiwi = column;
+    }
+    
+    public int getColoumnAwayFromKiwi(){
+          return this.coloumnAwayFromKiwi;
+    }
+    
+    
+    public void setKiwisInRange(Boolean isKiwisInRange){
+          this.isKiwisInRange = isKiwisInRange;
+    }
+    
+    public boolean isKiwisInRange(){
+          return this.isKiwisInRange;
+    }
     
     @Override
     public String getStringRepresentation() 

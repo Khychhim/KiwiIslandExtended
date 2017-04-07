@@ -126,6 +126,19 @@ public class Island
         return square.getOccupants();
     }
     
+    public boolean hasKiwi(Position position){
+          Occupant[] allOccupants = getOccupants(position);
+
+                 for(Occupant occupant: allOccupants){
+                if(occupant instanceof Kiwi){
+                      return true;
+                }
+          }
+          
+         
+          return false;
+    }
+    
     /**
     * Get string for occupants of this position
     * @param position
