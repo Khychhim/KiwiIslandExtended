@@ -42,8 +42,8 @@ public class Game
     {   
         eventListeners = new HashSet<GameEventListener>();
         rand = new Random();
-        allPredator = new ArrayList<Occupant>();
-        Collections.synchronizedList(allPredator);
+        allPredators = new ArrayList<Occupant>();
+        Collections.synchronizedList(allPredators);
         createNewGame();
     }
     
@@ -54,7 +54,7 @@ public class Game
      */
     public void createNewGame()
     {
-        allPredator.clear(); 
+        allPredators.clear(); 
         totalPredators = 0;
         totalKiwis = 0;
         predatorsTrapped = 0;
@@ -70,7 +70,7 @@ public class Game
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-              movePredatorsRandomly();              
+              movePredators();              
             }
         },PREDATOR_TIME*1000,PREDATOR_TIME*1000); 
         notifyGameEventListeners();
@@ -113,7 +113,7 @@ public class Game
      * @return an arraylist of predator 
      */
     public ArrayList<Occupant> getAllPredator(){
-          return this.allPredator;
+          return this.allPredators;
     }
     
     /**
@@ -190,40 +190,43 @@ public class Game
         return false;
     }
     
-    /**
-    * move the predators in a random position at a set interval
-    * 
-    */
-    public synchronized void movePredatorsRandomly(){
-          boolean success;
-          ArrayList<Occupant> newPredatorList = new ArrayList<Occupant>(); //use for adding up all the new predators 
-          
-          for(int i = 0; i<allPredator.size();i++){
-                success = false;
-                Occupant predator = allPredator.get(i);                
-                do{                   
-                      MoveDirection moveDirection = getRandomDirection();
-                     
-                      Position newPosition = predator.getPosition().getNewPosition(moveDirection);
-                      //condition to avoid exception when newPosition is null
-                      if(newPosition != null){                          
-                            Occupant newPredator = new Predator(newPosition, predator.getName(), predator.getDescription());                      
-                            //check to avoid predator stepping on hazard
-                            if(!isPredatorOnHazard(newPredator)){
-                                  success = island.addOccupant(newPosition, newPredator);
-                                  //if add success, remove previous predator from island and add new predator to arraylist
-                                  if(success){
-                                        newPredatorList.add(newPredator);
-                                        island.removeOccupant(predator.getPosition(), predator);                            
-                                    }                      
-                                  this.notifyGameEventListeners();
-                            }
-                      }                   
-               }while(!success);
-          }
-        // replace new predators for the arraylist   
-        this.allPredator = newPredatorList;
-    }
+        /**
+       * move the predators in a random position at a set interval
+       *
+       */
+      public synchronized Occupant movePredatorRandomly(Predator predator) {
+            boolean success = false;
+            Occupant newPredator = null;
+                  do {
+                        MoveDirection moveDirection = getRandomDirection();
+                        
+                        Position newPosition = predator.getPosition().getNewPosition(moveDirection);
+                        //condition to avoid exception when newPosition is null
+                        if (newPosition != null) {
+                              newPredator = new Predator(newPosition, predator.getName(), predator.getDescription());
+                              //check to avoid predator stepping on hazard
+                              if (!isPredatorOnHazard(newPredator)) {
+                                    success = island.addOccupant(newPosition, newPredator);
+                                    //if add success, remove previous predator from island and add new predator to arraylist
+                                    if (success) {                                         
+                                          island.removeOccupant(predator.getPosition(), predator);
+                                    }
+                                    this.notifyGameEventListeners();
+                              }
+                        }
+                  } while (!success);
+              return newPredator;
+      }
+      
+      public synchronized void movePredators() {
+            ArrayList<Occupant> newPredatorList = new ArrayList<Occupant>(); //use for adding up all the new predators 
+            boolean success;
+            for (int i = 0; i < allPredators.size(); i++) {
+                  Predator predator = (Predator) allPredators.get(i);          
+                       newPredatorList.add(movePredatorRandomly(predator));
+            }
+            this.allPredators = newPredatorList;
+      }
     
       /**
      * Get terrain for position
@@ -720,7 +723,7 @@ public class Game
             Occupant occupant = island.getPredator(current);
             //Predator has been trapped so remove
             island.removeOccupant(current, occupant); 
-            allPredator.remove(occupant);
+            allPredators.remove(occupant);
             predatorsTrapped++;
         }
         
@@ -917,7 +920,7 @@ public class Game
             else if ( occType.equals("P") )
             {
                 occupant = new Predator(occPos, occName, occDesc);
-                allPredator.add(occupant);//add predator to arraylist for easy modify position
+                allPredators.add(occupant);//add predator to arraylist for easy modify position
                 totalPredators++;
             }
             else if ( occType.equals("F") )
@@ -937,7 +940,7 @@ public class Game
     private int predatorsTrapped;
     private Set<GameEventListener> eventListeners;
     private Random rand;
-    private ArrayList<Occupant> allPredator;
+    private ArrayList<Occupant> allPredators;
     
     private final double MIN_REQUIRED_CATCH = 0.8;
         
