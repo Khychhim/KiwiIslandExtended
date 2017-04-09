@@ -189,7 +189,7 @@ public class Game {
        * move the predators in a random position at a set interval
        *
        */
-      public synchronized Occupant movePredatorsRandomly(Predator predator) {
+      public synchronized Occupant movePredatorRandomly(Predator predator) {
             boolean success = false;
             Occupant newPredator = null;
                   do {
@@ -303,9 +303,9 @@ public class Game {
             for (int i = 0; i < allPredators.size(); i++) {
                   Predator predator = (Predator) allPredators.get(i);
                   if (isKiwiNearPredator(predator)) {
-                      newPredatorList.add(movePredatorsRandomly(predator));
+                      //newPredatorList.add(movePredatorRandomly(predator));
                   } else {
-                       newPredatorList.add(movePredatorsRandomly(predator));
+                       newPredatorList.add(movePredatorRandomly(predator));
                   }
                   
             }
@@ -771,6 +771,7 @@ public class Game {
                   Occupant occupant = island.getPredator(current);
                   //Predator has been trapped so remove
                   island.removeOccupant(current, occupant);
+                  //remove predator object from the arraylist if trap
                   allPredators.remove(occupant);
                   predatorsTrapped++;
             }
