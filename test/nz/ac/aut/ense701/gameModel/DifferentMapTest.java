@@ -1,5 +1,9 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import org.junit.Test;
 
@@ -42,7 +46,7 @@ public class DifferentMapTest extends junit.framework.TestCase {
     }
     
     @Test
-    public void testDidMapDataTypesLoad(){
+    public void testDidMapDataTypesLoad() {
         mapDataTypes.loadTypesFromFile();
         //None of them should be null or empty
         assertFalse("Fauna should not be null", mapDataTypes.faunaTypes == null);
@@ -60,11 +64,35 @@ public class DifferentMapTest extends junit.framework.TestCase {
     }
     
     @Test
-    public void testDidPrintWriterAccessFile(){
+    public void testDidPrintWriterAccessFile() {
         PrintWriter pw = differentMap.CreateFile();
         assertFalse("Printwriter should not be null", pw == null);
         assertFalse("The printwriter should not have an error", pw.checkError());
         pw.close();
     }
     
+    @Test
+    public void testWasMapCreated() {
+        BufferedReader br = null;
+        try {
+            differentMap.generateMap();
+            File file = new File("IslandData.txt");
+            assertTrue("Map file should exist under the name IslandData.txt", file.exists());
+            
+            br = new BufferedReader(new FileReader("IslandData.txt"));
+            boolean fileIsEmpty = false;
+            if(br.readLine() == null) fileIsEmpty = true;
+            
+            assertTrue("Map file should not be empty", !fileIsEmpty);
+        } catch (IOException ex) {
+            assertTrue("Error " + ex, false);
+        } finally {
+            try {
+                br.close();
+            } catch (IOException ex) {
+                assertTrue("Error " + ex, false);
+            }
+        }
+    }
+        
 }
