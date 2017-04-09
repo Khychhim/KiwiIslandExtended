@@ -131,11 +131,21 @@ public class GameTest extends junit.framework.TestCase
     }
     
     @Test
+    public void testIsPredatorOnHazard(){
+          // position with hazard on it
+          Position position = new Position(island,7,4);
+          //add a predator to hazard position
+          Occupant predator = new Predator(position, "Cat","Danger");
+          island.addOccupant(position, predator);
+          //check if predator in hazard position
+          assertTrue("Predator should not be in hazard position", game.isPredatorOnHazard(predator));
+    }
+    
+    @Test
     public void testMovePredatorRandomly(){
-          //method to move predator out of the current position
-          
           //one of the position which predator is on previously
           Position position = new Position(island, 6,4);
+            //method to move predator out of the current position
           game.movePredators();
           //check if predator is still on that same position
           assertFalse("Predator should not be in this position", island.hasPredator(position));
