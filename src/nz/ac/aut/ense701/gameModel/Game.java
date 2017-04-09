@@ -30,7 +30,7 @@ public class Game {
       public static final int WEIGHT_INDEX = 3;
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
-      public static final int PREDATOR_TIME = 2;
+      public static final int PREDATOR_TIME = 5;
       public Timer timer;
 
       /**
@@ -40,7 +40,6 @@ public class Game {
             eventListeners = new HashSet<GameEventListener>();
             rand = new Random();
             allPredators = new ArrayList<Occupant>();
-            allKiwis = new ArrayList<Occupant>();
             Collections.synchronizedList(allPredators);
             createNewGame();
       }
@@ -50,7 +49,6 @@ public class Game {
        */
       public void createNewGame() {
             allPredators.clear();
-            allKiwis.clear();
             totalPredators = 0;
             totalKiwis = 0;
             predatorsTrapped = 0;
@@ -66,7 +64,7 @@ public class Game {
             timer.scheduleAtFixedRate(new TimerTask() {
                   @Override
                   public void run() {
-                        movePredator();
+                        movePredators();
                   }
             }, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);
             notifyGameEventListeners();
@@ -212,55 +210,27 @@ public class Game {
                   } while (!success);
               return newPredator;
       }
-      
-//      /**
-//       * move the predators in a random position at a set interval
-//       *
-//       */
-//      public synchronized void movePredatorsRandomly() {
-//            boolean success;
-//            ArrayList<Occupant> newPredatorList = new ArrayList<Occupant>(); //use for adding up all the new predators 
-//
-//            for (int i = 0; i < allPredators.size(); i++) {
-//                  success = false;
-//                  Occupant predator = allPredators.get(i);
-//                  do {
-//                        MoveDirection moveDirection = getRandomDirection();
-//
-//                        Position newPosition = predator.getPosition().getNewPosition(moveDirection);
-//                        //condition to avoid exception when newPosition is null
-//                        if (newPosition != null) {
-//                              Occupant newPredator = new Predator(newPosition, predator.getName(), predator.getDescription());
-//                              //check to avoid predator stepping on hazard
-//                              if (!isPredatorOnHazard(newPredator)) {
-//                                    success = island.addOccupant(newPosition, newPredator);
-//                                    //if add success, remove previous predator from island and add new predator to arraylist
-//                                    if (success) {
-//                                          newPredatorList.add(newPredator);
-//                                          island.removeOccupant(predator.getPosition(), predator);
-//                                    }
-//                                    this.notifyGameEventListeners();
-//                              }
-//                        }
-//                  } while (!success);
-//            }
-//            // replace new predators for the arraylist   
-//            this.allPredators = newPredatorList;
-//      }
 
+      /**
+       * check if kiwi is near a predator in a selected direction two grid squares away
+       * @param predator the predator used to check for nearby kiwi
+       * @param direction the direction in which predator can move toward to
+       * @param row an integer value that use to set how far away kiwi is away from predator in row 
+       * @param col an integer value that use to set how far away kiwi is away from predator in column
+       * @return true if there is nearby kiwis from predator, false if it does not
+       */
       public boolean isKiwiNearPredator(Predator predator, MoveDirection direction, int row, int col) {
-            Position oneStep = predator.getPosition().getNewPosition(MoveDirection.NORTH);
-            if (oneStep != null) {
-                  if (island.hasKiwi(oneStep)) {
-                        //predator.setKiwisInRange(true);
+            // get the new position in which predator is moving to
+            Position oneStep = predator.getPosition().getNewPosition(direction);
+            if (oneStep != null) { 
+                  if (island.hasKiwi(oneStep)) { // check for one square ahead             
                         predator.setRowAwayFromKiwi(row);
                         predator.setcoloumnAwayFromKiwi(col);
                         return true;
                   } else {
-                        Position twoStep = oneStep.getNewPosition(MoveDirection.NORTH);
+                        Position twoStep = oneStep.getNewPosition(direction);
                         if ( twoStep != null) {
-                              if(island.hasKiwi(twoStep)){
-                              //predator.setKiwisInRange(true);
+                              if(island.hasKiwi(twoStep)){ // check for two square ahead
                               predator.setRowAwayFromKiwi(row + row);
                               predator.setcoloumnAwayFromKiwi(col + col);
                               return true;
@@ -271,9 +241,15 @@ public class Game {
             return false;
       }
 
+      /**
+       * check is kiwi is near predator in up, down, left, right direction
+       * @param predator the predator that will be used to check is kiwi nearby
+       * @return true if there is kiwi near predator, false if there is not
+       */
       public boolean isKiwiNearPredator(Predator predator) {
             boolean isKiwiNearPredator = false;
-            if (isKiwiNearPredator(predator, MoveDirection.NORTH, -1, 0)) {
+            // even if there are kiwi in multiple direction, the predator will move to the first kiwi that is in range
+            if (isKiwiNearPredator(predator, MoveDirection.NORTH, -1, 0)) { 
                   isKiwiNearPredator = true;
             } else if (isKiwiNearPredator(predator, MoveDirection.SOUTH, 1, 0)) {
                   isKiwiNearPredator = true;
@@ -285,30 +261,63 @@ public class Game {
             return isKiwiNearPredator;
       }
 
-      public void predatorMoveToKiwi(Predator predator) {
-            if (predator.getRowAwayFromKiwi() < 0) {
-                  Position newPosition = predator.getPosition().getNewPosition(MoveDirection.NORTH);
-                  Occupant newPredator = new Predator(newPosition, predator.getName(), predator.getDescription());
-                  island.addOccupant(newPosition, newPredator);
-                  island.removeOccupant(predator.getPosition(), predator);
-            } else if (predator.getRowAwayFromKiwi() > 0) {
-
+      /**
+       * predator move toward kiwi position one grid square at a time
+       * 
+       * @param predator the predator that will move to kiwi
+       */
+      public Predator predatorMoveToKiwi(Predator predator) {
+            
+            Position newPosition = null;
+            int rowAwayFromKiwi = predator.getRowAwayFromKiwi();
+            int columnAwayFromKiwi = predator.getColoumnAwayFromKiwi();
+            
+            //check which direction the kiwi is away from the predator and move toward it
+            if (rowAwayFromKiwi < 0) {
+                  newPosition = predator.getPosition().getNewPosition(MoveDirection.NORTH);
+            } else if (rowAwayFromKiwi > 0) {
+                 newPosition = predator.getPosition().getNewPosition(MoveDirection.SOUTH);
+            } else if(columnAwayFromKiwi > 0){
+                  newPosition = predator.getPosition().getNewPosition(MoveDirection.EAST);
+            }else if(columnAwayFromKiwi < 0){
+                  newPosition = predator.getPosition().getNewPosition(MoveDirection.WEST);
             }
-
+            
+            // add new predator to island, remove the old predator
+            Predator newPredator = new Predator(newPosition, predator.getName(), predator.getDescription());
+            island.addOccupant(newPosition, newPredator);
+            island.removeOccupant(predator.getPosition(), predator);
+            this.notifyGameEventListeners();
+            return newPredator;
       }
 
-      public synchronized void movePredator() {
+      /**
+       * method to move predator in a random way or move toward kiwis depending on the condition.
+       *
+       */
+      public synchronized void movePredators() {
             ArrayList<Occupant> newPredatorList = new ArrayList<Occupant>(); //use for adding up all the new predators 
-            boolean success;
+            
             for (int i = 0; i < allPredators.size(); i++) {
                   Predator predator = (Predator) allPredators.get(i);
-                  if (isKiwiNearPredator(predator)) {
-                      //newPredatorList.add(movePredatorRandomly(predator));
-                  } else {
+                  if (isKiwiNearPredator(predator)) { // check if kiwi nearby
+                      Predator newPredator = predatorMoveToKiwi(predator);
+                      newPredatorList.add(newPredator);
+                      
+                      //remove kiwi if predator and kiwi on the same grid square
+                      for(Occupant kiwi : island.getOccupants(newPredator.getPosition())){
+                            if(kiwi instanceof Kiwi){
+                                  island.removeOccupant(kiwi.getPosition(), kiwi);
+                                  this.totalKiwis--;
+                                  this.notifyGameEventListeners();
+                                  this.updateGameState();
+                            }
+                      }                           
+                  } else {//if kiwi is not nearby, move predator randomly
                        newPredatorList.add(movePredatorRandomly(predator));
-                  }
-                  
+                  }                  
             }
+            // set the arraylist according to the changes made
             this.allPredators = newPredatorList;
       }
 
@@ -332,7 +341,6 @@ public class Game {
        */
       public boolean isVisible(int row, int column) {
             return island.isVisible(new Position(island, row, column));
-
       }
 
       /**
@@ -704,7 +712,11 @@ public class Game {
                   state = GameState.LOST;
                   message = "Sorry, you have lost the game. You do not have sufficient stamina to move.";
                   this.setLoseMessage(message);
-            } else if (predatorsTrapped == totalPredators) {
+            } else if (totalKiwis == 0) {
+                  state = GameState.LOST;
+                  message = "Sorry, you have lost the game. You fail to capture the predator and now all the kiwis has die.";
+                  this.setLoseMessage(message);
+            }else if (predatorsTrapped == totalPredators) {
                   state = GameState.WON;
                   message = "You win! You have done an excellent job and trapped all the predators.";
                   this.setWinMessage(message);
@@ -882,6 +894,7 @@ public class Game {
                         String terrainString = terrainRow.substring(col, col + 1);
                         Terrain terrain = Terrain.getTerrainFromStringRepresentation(terrainString);
                         island.setTerrain(pos, terrain);
+                        island.setVisible(pos);
                   }
             }
       }
@@ -936,7 +949,6 @@ public class Game {
                         occupant = new Hazard(occPos, occName, occDesc, impact);
                   } else if (occType.equals("K")) {
                         occupant = new Kiwi(occPos, occName, occDesc);
-                        allKiwis.add(occupant);
                         totalKiwis++;
                   } else if (occType.equals("P")) {
                         occupant = new Predator(occPos, occName, occDesc);
@@ -961,7 +973,6 @@ public class Game {
       private Set<GameEventListener> eventListeners;
       private Random rand;
       private ArrayList<Occupant> allPredators;
-      private ArrayList<Occupant> allKiwis;
 
       private final double MIN_REQUIRED_CATCH = 0.8;
 

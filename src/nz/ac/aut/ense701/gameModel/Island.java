@@ -128,7 +128,6 @@ public class Island
     
     public boolean hasKiwi(Position position){
           Occupant[] allOccupants = getOccupants(position);
-
                  for(Occupant occupant: allOccupants){
                 if(occupant instanceof Kiwi){
                       return true;
@@ -359,7 +358,7 @@ public class Island
      * Private convenience method to change the visibility of grid squares.
      * @param position the position to change
      */
-    private void setVisible(Position position)
+    public void setVisible(Position position)
     {
         if ( (position != null) && position.isOnIsland() )
         {
