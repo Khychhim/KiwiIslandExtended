@@ -266,7 +266,7 @@ public class Game {
        * 
        * @param predator the predator that will move to kiwi
        */
-      public Predator predatorMoveToKiwi(Predator predator) {
+      public synchronized Predator predatorMoveToKiwi(Predator predator) {
             
             Position newPosition = null;
             int rowAwayFromKiwi = predator.getRowAwayFromKiwi();
@@ -290,7 +290,7 @@ public class Game {
             this.notifyGameEventListeners();
             return newPredator;
       }
-
+      
       /**
        * method to move predator in a random way or move toward kiwis depending on the condition.
        *
@@ -312,7 +312,8 @@ public class Game {
                                   this.notifyGameEventListeners();
                                   this.updateGameState();
                             }
-                      }                           
+                      }
+                           
                   } else {//if kiwi is not nearby, move predator randomly
                        newPredatorList.add(movePredatorRandomly(predator));
                   }                  
@@ -894,7 +895,6 @@ public class Game {
                         String terrainString = terrainRow.substring(col, col + 1);
                         Terrain terrain = Terrain.getTerrainFromStringRepresentation(terrainString);
                         island.setTerrain(pos, terrain);
-                        island.setVisible(pos);
                   }
             }
       }

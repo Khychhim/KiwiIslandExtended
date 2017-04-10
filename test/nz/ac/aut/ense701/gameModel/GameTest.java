@@ -132,9 +132,16 @@ public class GameTest extends junit.framework.TestCase
     
     @Test
     public void testMovePredatorRandomly(){       
-          //one of the position which predator is on 
-          Position position = new Position(island, 6,4);
-          Predator predator = island.getPredator(position);
+          //add the position to island if there is no predator exist before
+          //else just check the method
+          Position position = new Position(island, 0,2);
+          Predator predator;
+          if(!island.hasPredator(position)){
+            predator = new Predator(position,"Cat","Danger");
+            island.addOccupant(position, predator);
+          }else{
+                predator = island.getPredator(position);
+          }
            //method to move predator out of the current position
           game.movePredatorRandomly(predator);
           //check if predator is still on that same position
@@ -142,8 +149,46 @@ public class GameTest extends junit.framework.TestCase
     }
     
     @Test
-    public void testIsKiwiNearPredator(){
+    public void testIsKiwiNearPredator(){          
+          Position positionPredator = new Position(island, 0,2);
+          Position positionKiwi = new Position(island,0,0);
+          Predator predator;
+          Kiwi kiwi;
+          if(!island.hasPredator(positionPredator)){
+                predator = new Predator(positionPredator,"Cat","Danger");
+                island.addOccupant(positionPredator, predator);
+          }else{
+                predator = island.getPredator(positionPredator);
+          }
           
+          if(!island.hasKiwi(positionKiwi)){
+                kiwi = new Kiwi(positionKiwi,"Kiwi","Cute");
+                island.addOccupant(positionKiwi, kiwi);
+          }
+          assertTrue("Kiwi should be near predator",game.isKiwiNearPredator(predator));
+    }
+    
+    @Test
+    public void testPredatorMoveToKiwi(){
+          Position positionPredator = new Position(island, 0,2);
+          Position positionKiwi = new Position(island,0,0);
+          Predator predator;
+          Kiwi kiwi;
+          if(!island.hasPredator(positionPredator)){
+                predator = new Predator(positionPredator,"Cat","Danger",0,-2);
+                island.addOccupant(positionPredator, predator);
+          }else{
+                predator = island.getPredator(positionPredator);
+          }
+          
+          if(!island.hasKiwi(positionKiwi)){
+                kiwi = new Kiwi(positionKiwi,"Kiwi","Cute");
+                island.addOccupant(positionKiwi, kiwi);
+          }
+          Predator newPredator = game.predatorMoveToKiwi(predator);
+          newPredator.setcoloumnAwayFromKiwi(-1);
+          game.predatorMoveToKiwi(newPredator);
+          assertTrue("Predator should be in this position",island.hasPredator(positionKiwi));
     }
     
     @Test
@@ -463,8 +508,7 @@ public class GameTest extends junit.framework.TestCase
 
 /**
  * Private helper methods
- */
-    
+ */    
     private boolean trapAllPredators()
     {
         //Firstly player needs a trap

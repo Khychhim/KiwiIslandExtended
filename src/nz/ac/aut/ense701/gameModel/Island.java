@@ -126,6 +126,11 @@ public class Island
         return square.getOccupants();
     }
     
+    /**
+     * Check if this position has a kiwi 
+     * @param position which position
+     * @return true if the position has kiwi, false if it does not
+     */
     public boolean hasKiwi(Position position){
           Occupant[] allOccupants = getOccupants(position);
                  for(Occupant occupant: allOccupants){
@@ -133,8 +138,6 @@ public class Island
                       return true;
                 }
           }
-          
-         
           return false;
     }
     
@@ -166,9 +169,7 @@ public class Island
                 Occupant occupant = occupants[i];
                 isPredator = occupant instanceof Predator ;
                 i++;
-            }
-    
-                    
+            }         
         }
         return isPredator;
     } 
@@ -358,7 +359,7 @@ public class Island
      * Private convenience method to change the visibility of grid squares.
      * @param position the position to change
      */
-    public void setVisible(Position position)
+    private void setVisible(Position position)
     {
         if ( (position != null) && position.isOnIsland() )
         {

@@ -61,6 +61,19 @@ public class IslandTest extends junit.framework.TestCase
     }
     
     @Test
+    public void testHasKiwi(){
+        Kiwi kiwi = new Kiwi(onIsland, "Kiwi", "Little spotted kiwi");
+        testIsland.addOccupant(onIsland, kiwi);
+        assertTrue(testIsland.hasKiwi(onIsland));
+    }
+    
+    @Test
+    public void testHasKiwiNoKiwi(){
+        testIsland.addOccupant(onIsland, cat);
+        assertFalse(testIsland.hasKiwi(onIsland));
+    }
+    
+    @Test
     public void testHasPredatorNoPredator(){
         Kiwi kiwi = new Kiwi(onIsland, "Kiwi", "Little spotted kiwi");
         testIsland.addOccupant(onIsland, kiwi);
