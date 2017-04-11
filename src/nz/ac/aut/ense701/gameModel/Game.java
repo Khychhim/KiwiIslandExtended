@@ -28,6 +28,8 @@ public class Game
     public static final int MAXSIZE_INDEX = 4;
     public static final int SIZE_INDEX = 5;
     
+    public static String playerName = "River Song";
+    
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
      */
@@ -45,10 +47,13 @@ public class Game
      */
     public void createNewGame()
     {
+        DifferentMap dm = new DifferentMap(25, 25, playerName);
+        dm.generateMap();
         totalPredators = 0;
         totalKiwis = 0;
         predatorsTrapped = 0;
         kiwiCount = 0;
+        score = new Score();
         initialiseIslandFromFile("IslandData.txt");
         drawIsland();
         state = GameState.PLAYING;
@@ -847,6 +852,7 @@ public class Game
     private int totalPredators;
     private int totalKiwis;
     private int predatorsTrapped;
+    public Score score;
     private Set<GameEventListener> eventListeners;
     
     private final double MIN_REQUIRED_CATCH = 0.8;
