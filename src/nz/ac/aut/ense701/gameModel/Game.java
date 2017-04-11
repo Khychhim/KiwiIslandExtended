@@ -488,6 +488,7 @@ public class Game
                 if (!kiwi.counted()) {
                     kiwi.count();
                     kiwiCount++;
+                    score.addScore(Score.VALUE_KIWI_COUNTED);
                 }
             }
         }
@@ -558,19 +559,19 @@ public class Game
         if ( !player.isAlive() )
         {
             state = GameState.LOST;
-            message = "Sorry, you have lost the game. " + this.getLoseMessage();
+            message = "Sorry, you have lost the game. " + this.getLoseMessage() + endGameBonus();
             this.setLoseMessage(message);
         }
         else if (!playerCanMove() )
         {
             state = GameState.LOST;
-            message = "Sorry, you have lost the game. You do not have sufficient stamina to move.";
+            message = "Sorry, you have lost the game. You do not have sufficient stamina to move." + endGameBonus();
             this.setLoseMessage(message);
         }
         else if(predatorsTrapped == totalPredators)
         {
             state = GameState.WON;
-            message = "You win! You have done an excellent job and trapped all the predators.";
+            message = "You win! You have done an excellent job and trapped all the predators." + endGameBonus();
             this.setWinMessage(message);
         }
         else if(kiwiCount == totalKiwis)
@@ -578,7 +579,7 @@ public class Game
             if(predatorsTrapped >= totalPredators * MIN_REQUIRED_CATCH)
             {
                 state = GameState.WON;
-                message = "You win! You have counted all the kiwi and trapped at least 80% of the predators.";
+                message = "You win! You have counted all the kiwi and trapped at least 80% of the predators." + endGameBonus();
                 this.setWinMessage(message);
             }
         }
@@ -586,6 +587,20 @@ public class Game
             notifyGameEventListeners();
     }
     
+    private String endGameBonus() {
+        int kiwisCountedBonus = (int)(Score.KIWIS_COUNTED * ((double) kiwiCount / totalKiwis));
+        int predatorsTrappedBonus = (int)(Score.PREDATORS_TRAPPED * ((double) predatorsTrapped / totalPredators));
+        int remainingStaminaBonus = (int)(Score.REMAINING_STAMINA * (player.getStaminaLevel() / player.getMaximumStaminaLevel()));
+        int survivalBonus = player.isAlive() ? Score.SURVIVED : 0;
+        score.addScore(kiwisCountedBonus + predatorsTrappedBonus + remainingStaminaBonus + survivalBonus);
+        
+        String bonusString = "\nSurvival Bonus:          " + survivalBonus +
+                             "\nStamina Remaining Bonus: " + remainingStaminaBonus + 
+                             "\nKiwis Counted Bonus:     " + kiwisCountedBonus + 
+                             "\nPredators Trapped Bonus: " + predatorsTrappedBonus;
+
+        return bonusString;
+    }
        
     /**
      * Sets details about players win
@@ -639,6 +654,7 @@ public class Game
             //Predator has been trapped so remove
             island.removeOccupant(current, occupant); 
             predatorsTrapped++;
+            score.addScore(Score.VALUE_PREDATOR_TRAPPED);
         }
         
         return hadPredator;
@@ -667,11 +683,13 @@ public class Game
     private void handleHazard(Hazard hazard) {
         if (hazard.isFatal()) 
         {
+            score.subtractScore(Score.VALUE_HARARD_DEATH);
             player.kill();
             this.setLoseMessage(hazard.getDescription() + " has killed you.");
         } 
         else if (hazard.isBreakTrap()) 
         {
+            score.subtractScore(Score.VALUE_HAZARD_BREAK_TRAP);
             Tool trap = player.getTrap();
             if (trap != null) {
                 trap.setBroken();
@@ -681,6 +699,7 @@ public class Game
         else // hazard reduces player's stamina
         {
             double impact = hazard.getImpact();
+            score.subtractScore(Score.VALUE_HAZARD_NON_FATAL);
             // Impact is a reduction in players energy by this % of Max Stamina
             double reduction = player.getMaximumStaminaLevel() * impact;
             player.reduceStamina(reduction);
@@ -856,6 +875,7 @@ public class Game
     private Set<GameEventListener> eventListeners;
     
     private final double MIN_REQUIRED_CATCH = 0.8;
+    private final int IMPACT_SCORE_MULTIPLIER = 100;
         
     private String winMessage = "";
     private String loseMessage  = "";

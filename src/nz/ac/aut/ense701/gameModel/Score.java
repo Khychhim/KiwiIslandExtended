@@ -5,13 +5,6 @@
  */
 package nz.ac.aut.ense701.gameModel;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
-
 /**
  *
  * @author joshl
@@ -19,22 +12,22 @@ import javax.swing.border.BevelBorder;
 public class Score {
     private int score;
     
+    //Score Values for each event
+    public static final int VALUE_HARARD_DEATH = 100;
+    public static final int VALUE_HAZARD_BREAK_TRAP = 40;
+    public static final int VALUE_HAZARD_NON_FATAL = 30;
+    public static final int VALUE_KIWI_COUNTED = 50;
+    public static final int VALUE_PREDATOR_TRAPPED = 40;
+    public static final int VALUE_KIWI_EATEN = 50;
+    //Score Values for end game multiplied by percentage completed
+    public static final int SURVIVED = 100;
+    public static final int KIWIS_COUNTED = 150;
+    public static final int PREDATORS_TRAPPED = 150;
+    public static final int REMAINING_STAMINA = 100;
+    //public static final int TRASH_COLLECTED = 200; //Not yet implemented
+    
     public Score() {
         score = 0;
-    }
-    
-    public JPanel getScoreBox(int width, int height) {
-        JPanel scoreBox = new JPanel(new BorderLayout());
-        scoreBox.setPreferredSize(new Dimension(width, height));
-        scoreBox.setBorder(new BevelBorder(BevelBorder.RAISED));
-        scoreBox.setForeground(Color.LIGHT_GRAY);
-        
-        JLabel scoreLabel = new JLabel("Score: " + score);
-        scoreLabel.setPreferredSize(new Dimension(width, height));
-        
-        scoreBox.add(scoreLabel);
-        
-        return scoreBox;
     }
     
     public int getScore() {
