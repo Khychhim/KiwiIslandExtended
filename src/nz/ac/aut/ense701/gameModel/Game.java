@@ -3,6 +3,7 @@ package nz.ac.aut.ense701.gameModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Scanner;
@@ -18,7 +19,7 @@ import java.util.Set;
  * August 2011 Extended for stage 2. AS
  */
 
-public class Game
+public class Game implements Serializable
 {
     //Constants shared with UI to provide player data
     public static final int STAMINA_INDEX = 0;
@@ -836,7 +837,7 @@ public class Game
                 occupant = new Fauna(occPos, occName, occDesc);
             }
             if ( occupant != null ) island.addOccupant(occPos, occupant);
-        }
+        }        
     }    
 
 
