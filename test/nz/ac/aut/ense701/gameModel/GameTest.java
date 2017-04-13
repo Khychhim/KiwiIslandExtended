@@ -1,6 +1,5 @@
 package nz.ac.aut.ense701.gameModel;
 
-import java.util.ArrayList;
 import org.junit.Test;
 
 /**
@@ -15,6 +14,7 @@ public class GameTest extends junit.framework.TestCase
     Player     player;
     Position   playerPosition;
     Island island ;
+    
     /**
      * Default constructor for test class GameTest
      */
@@ -204,20 +204,6 @@ public class GameTest extends junit.framework.TestCase
     public void testIsPlayerMovePossibleInvalidMove(){
         //At start of game player has valid moves EAST, West & South
         assertFalse("Move should not be valid", game.isPlayerMovePossible(MoveDirection.NORTH));
-    }
-    
-    @Test
-    public void testIsPredatorOnHazardValid(){
-          Position hazardPosition = new Position(island, 7, 4);
-          Predator predator = new Predator(hazardPosition,"Rat","Eat Kiwi");
-          assertTrue("Predator should be on hazard square",game.isPredatorOnHazard(predator));
-    }
-    
-    @Test
-    public void testIsPredatorOnHazardInValid(){
-          Position nonHazardPosition = new Position(island, 1, 1);
-          Predator predator = new Predator(nonHazardPosition,"Rat","Eat Kiwi");
-          assertFalse("Predator should be not be on hazard square",game.isPredatorOnHazard(predator));
     }
     
     @Test
@@ -422,6 +408,7 @@ public class GameTest extends junit.framework.TestCase
         Tool screwdriver = new Tool(playerPosition,"Screwdriver", "Useful screwdriver",1.0, 1.0);
         player.collect(screwdriver);
         assertTrue("Player should have screwdriver",player.hasItem(screwdriver));
+        
         game.useItem(screwdriver);
         assertFalse("Trap should be fixed", trap.isBroken());
     }

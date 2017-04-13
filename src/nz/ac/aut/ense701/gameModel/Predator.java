@@ -24,6 +24,7 @@ public class Predator extends Fauna
         this.coloumnAwayFromKiwi = 0;
         this.rowAwayFromKiwi = 0;
     } 
+ 
     
     public Predator(Position pos, String name, String description,int row ,int column){
            super(pos, name, description);
