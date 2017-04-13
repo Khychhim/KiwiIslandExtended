@@ -30,6 +30,10 @@ public class Score {
         score = 0;
     }
     
+    public Score(int score) {
+        this.score = score;
+    }
+    
     public int getScore() {
         return score;
     }
