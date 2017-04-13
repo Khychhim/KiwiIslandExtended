@@ -1,19 +1,17 @@
 package nz.ac.aut.ense701.gameModel;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 /**
  * A class to represent an island in the world on which the game is played.
  * @author AS
  * @version Stage 1
  */
-public class Island 
+public class Island
 {
     private final int numRows;
     private final int numColumns;
     private GridSquare[][] islandGrid;
     private Position previousPlayerPos;
+
    
     /**
      * Initial island constructor.
@@ -38,6 +36,8 @@ public class Island
     public int getNumRows() {
         return numRows;
     }
+    
+
     /**
      * Get the value of numColumns
      * @return the value of numColumns
@@ -210,7 +210,7 @@ public class Island
      * @param occupant the occupant to add
      * @return true if occupant was successfully added, false if not
      */
-    public  boolean addOccupant(Position position, Occupant occupant)
+    public boolean addOccupant(Position position, Occupant occupant)
     {
         boolean success = false;
         if( position.isOnIsland()&& occupant != null )
@@ -233,7 +233,7 @@ public class Island
      * @param occupant the occupant to remove
      * @return true if occupant was successfully removed, false if not
      */
-    public  boolean removeOccupant(Position position, Occupant occupant)
+    public boolean removeOccupant(Position position, Occupant occupant)
     {
         boolean success = false;
         if( position.isOnIsland()&& occupant != null  )

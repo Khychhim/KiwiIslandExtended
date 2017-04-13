@@ -24,7 +24,7 @@ public class KiwiCountUI
      * Creates a GUI for the KiwiIsland game.
      * @param game the game object to represent with this GUI.
      */
-    public KiwiCountUI(final Game game) 
+    public KiwiCountUI(Game game) 
     {
         assert game != null : "Make sure game object is created before UI";
         this.game = game;
@@ -42,27 +42,23 @@ public class KiwiCountUI
     public void gameStateChanged()
     {
         update();
-        Object[] options = {"OK"};
+        
         // check for "game over" or "game won"
         if ( game.getState() == GameState.LOST )
         {
-            game.timer.cancel();
-            game.timer.purge();
-            int option = JOptionPane.showOptionDialog(this, game.getLoseMessage(), "Game over!", 
-                    JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-            
-            if(option == JOptionPane.OK_OPTION){
-                  game.createNewGame();
-            }  
+            JOptionPane.showMessageDialog(
+                    this, 
+                    game.getLoseMessage(), "Game over!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            game.createNewGame();
         }
         else if ( game.getState() == GameState.WON )
         {
-              int option = JOptionPane.showOptionDialog(this,  game.getWinMessage(), "Well Done!", 
-                    JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-              
-            if(option == JOptionPane.OK_OPTION){
-                  game.createNewGame();
-            }  
+            JOptionPane.showMessageDialog(
+                    this, 
+                    game.getWinMessage(), "Well Done!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            game.createNewGame();
         }
         else if (game.messageForPlayer())
         {
