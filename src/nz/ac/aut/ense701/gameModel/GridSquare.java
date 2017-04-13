@@ -1,5 +1,6 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +13,7 @@ import java.util.Set;
  * @version 2.0 - August 2011 - Extended for Stage 2. AS
  */
 
-public class GridSquare 
+public class GridSquare implements Serializable
 {
     private static final int MAX_OCCUPANTS = 3;
     private Terrain terrain;

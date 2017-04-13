@@ -1,11 +1,13 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
+
 /**
  * A class to represent an island in the world on which the game is played.
  * @author AS
  * @version Stage 1
  */
-public class Island
+public class Island implements Serializable
 {
     private final int numRows;
     private final int numColumns;
