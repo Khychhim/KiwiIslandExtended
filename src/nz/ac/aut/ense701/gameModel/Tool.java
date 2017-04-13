@@ -8,7 +8,7 @@ package nz.ac.aut.ense701.gameModel;
  * @version July 2011
  */
 
-public class Tool extends Item 
+public class Tool extends Item
 {
     private boolean broken;
     

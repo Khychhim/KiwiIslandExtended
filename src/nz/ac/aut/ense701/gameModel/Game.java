@@ -837,7 +837,7 @@ public class Game implements Serializable
                 occupant = new Fauna(occPos, occName, occDesc);
             }
             if ( occupant != null ) island.addOccupant(occPos, occupant);
-        }        
+        }
     }    
 
 

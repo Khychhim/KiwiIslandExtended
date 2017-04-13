@@ -11,7 +11,7 @@ import java.util.HashSet;
  * @author AS
  * @version July 2011
  */
-public class Player 
+public class Player
 {
     public static final double MOVE_STAMINA = 1.0;
     
