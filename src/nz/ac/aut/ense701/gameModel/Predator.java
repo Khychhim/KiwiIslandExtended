@@ -9,7 +9,9 @@ package nz.ac.aut.ense701.gameModel;
  */
 public class Predator extends Fauna
 {
-
+      private int rowAwayFromKiwi;
+      private int coloumnAwayFromKiwi;
+      
     /**
      * Constructor for objects of class Predator
      * @param pos the position of the predator object
@@ -19,7 +21,31 @@ public class Predator extends Fauna
     public Predator(Position pos, String name, String description) 
     {
         super(pos, name, description);
+        this.coloumnAwayFromKiwi = 0;
+        this.rowAwayFromKiwi = 0;
     } 
+    
+    public Predator(Position pos, String name, String description,int row ,int column){
+           super(pos, name, description);
+           this.coloumnAwayFromKiwi = column;
+           this.rowAwayFromKiwi = row;
+    }
+    
+    public void setRowAwayFromKiwi(int row){
+          this.rowAwayFromKiwi = row;
+    }
+    
+    public int getRowAwayFromKiwi(){
+          return this.rowAwayFromKiwi;
+    }
+    
+    public void setcoloumnAwayFromKiwi(int column){
+          this.coloumnAwayFromKiwi = column;
+    }
+    
+    public int getColoumnAwayFromKiwi(){
+          return this.coloumnAwayFromKiwi;
+    }
     
     @Override
     public String getStringRepresentation() 

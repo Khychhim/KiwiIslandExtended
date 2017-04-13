@@ -127,6 +127,21 @@ public class Island
     }
     
     /**
+     * Check if this position has a kiwi 
+     * @param position which position
+     * @return true if the position has kiwi, false if it does not
+     */
+    public boolean hasKiwi(Position position){
+          Occupant[] allOccupants = getOccupants(position);
+                 for(Occupant occupant: allOccupants){
+                if(occupant instanceof Kiwi){
+                      return true;
+                }
+          }
+          return false;
+    }
+    
+    /**
     * Get string for occupants of this position
     * @param position
     * @return string representing occupants
@@ -154,9 +169,7 @@ public class Island
                 Occupant occupant = occupants[i];
                 isPredator = occupant instanceof Predator ;
                 i++;
-            }
-    
-                    
+            }         
         }
         return isPredator;
     } 
