@@ -3,10 +3,15 @@ package nz.ac.aut.ense701.gameModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * This is the class that knows the Kiwi Island game rules and state
@@ -18,7 +23,7 @@ import java.util.Set;
  * August 2011 Extended for stage 2. AS
  */
 
-public class Game
+public class Game 
 {
     //Constants shared with UI to provide player data
     public static final int STAMINA_INDEX = 0;
@@ -27,14 +32,18 @@ public class Game
     public static final int WEIGHT_INDEX = 3;
     public static final int MAXSIZE_INDEX = 4;
     public static final int SIZE_INDEX = 5;
-    
+    public static final int PREDATOR_TIME = 30;
+    public Timer timer;
+   
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
      */
     public Game() 
     {   
         eventListeners = new HashSet<GameEventListener>();
-
+        rand = new Random();
+        allPredators = new ArrayList<Occupant>();
+        Collections.synchronizedList(allPredators);
         createNewGame();
     }
     
@@ -45,6 +54,7 @@ public class Game
      */
     public void createNewGame()
     {
+        allPredators.clear(); 
         totalPredators = 0;
         totalKiwis = 0;
         predatorsTrapped = 0;
@@ -55,6 +65,14 @@ public class Game
         winMessage = "";
         loseMessage = "";
         playerMessage = "";
+        // timer for predator movement
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+              movePredators();              
+            }
+        },PREDATOR_TIME*1000,PREDATOR_TIME*1000); 
         notifyGameEventListeners();
     }
 
@@ -90,6 +108,14 @@ public class Game
         return state;
     }    
  
+    /**
+     * Get arraylist of all predator on island
+     * @return an arraylist of predator 
+     */
+    public ArrayList<Occupant> getAllPredator(){
+          return this.allPredators;
+    }
+    
     /**
      * Provide a description of occupant
      * @param whichOccupant
@@ -137,6 +163,70 @@ public class Game
         }
         return isMovePossible;
     }
+   
+    /**
+     * method to get a random direction
+     * 
+     * @return a random direction
+     */
+    public MoveDirection getRandomDirection(){
+          int index = rand.nextInt(4);
+          return MoveDirection.values()[index];
+    }
+   
+    /**
+     * check if predator is on same position as hazard in gridsquare
+     * @param predator
+     * @return true if predator position is same as hazard, false if not
+     */
+    public boolean isPredatorOnHazard(Occupant predator){
+        for ( Occupant occupant : island.getOccupants(predator.getPosition())  )
+        {
+            if ( occupant instanceof Hazard )
+            {
+               return true;
+            }
+        }
+        return false;
+    }
+    
+        /**
+       * move the predators in a random position at a set interval
+       *
+       */
+      public synchronized Occupant movePredatorRandomly(Predator predator) {
+            boolean success = false;
+            Occupant newPredator = null;
+                  do {
+                        MoveDirection moveDirection = getRandomDirection();
+                        
+                        Position newPosition = predator.getPosition().getNewPosition(moveDirection);
+                        //condition to avoid exception when newPosition is null
+                        if (newPosition != null) {
+                              newPredator = new Predator(newPosition, predator.getName(), predator.getDescription());
+                              //check to avoid predator stepping on hazard
+                              if (!isPredatorOnHazard(newPredator)) {
+                                    success = island.addOccupant(newPosition, newPredator);
+                                    //if add success, remove previous predator from island and add new predator to arraylist
+                                    if (success) {                                         
+                                          island.removeOccupant(predator.getPosition(), predator);
+                                    }
+                                    this.notifyGameEventListeners();
+                              }
+                        }
+                  } while (!success);
+              return newPredator;
+      }
+      
+      public synchronized void movePredators() {
+            ArrayList<Occupant> newPredatorList = new ArrayList<Occupant>(); //use for adding up all the new predators 
+            boolean success;
+            for (int i = 0; i < allPredators.size(); i++) {
+                  Predator predator = (Predator) allPredators.get(i);          
+                       newPredatorList.add(movePredatorRandomly(predator));
+            }
+            this.allPredators = newPredatorList;
+      }
     
       /**
      * Get terrain for position
@@ -633,6 +723,7 @@ public class Game
             Occupant occupant = island.getPredator(current);
             //Predator has been trapped so remove
             island.removeOccupant(current, occupant); 
+            allPredators.remove(occupant);
             predatorsTrapped++;
         }
         
@@ -829,6 +920,7 @@ public class Game
             else if ( occType.equals("P") )
             {
                 occupant = new Predator(occPos, occName, occDesc);
+                allPredators.add(occupant);//add predator to arraylist for easy modify position
                 totalPredators++;
             }
             else if ( occType.equals("F") )
@@ -839,7 +931,6 @@ public class Game
         }
     }    
 
-
     private Island island;
     private Player player;
     private GameState state;
@@ -848,15 +939,12 @@ public class Game
     private int totalKiwis;
     private int predatorsTrapped;
     private Set<GameEventListener> eventListeners;
+    private Random rand;
+    private ArrayList<Occupant> allPredators;
     
     private final double MIN_REQUIRED_CATCH = 0.8;
         
     private String winMessage = "";
     private String loseMessage  = "";
     private String playerMessage  = "";   
-
-    
-
-
-
 }

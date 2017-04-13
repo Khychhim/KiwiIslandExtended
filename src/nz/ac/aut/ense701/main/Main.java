@@ -28,7 +28,7 @@ public class Main
             @Override
             public void run() 
             {
-                gui.setVisible(true);
+                gui.setVisible(true); 
             }
         });
     }
