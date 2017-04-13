@@ -32,7 +32,7 @@ public class Game
     public static final int WEIGHT_INDEX = 3;
     public static final int MAXSIZE_INDEX = 4;
     public static final int SIZE_INDEX = 5;
-    public static final int PREDATOR_TIME = 5;
+    public static final int PREDATOR_TIME = 30;
     public Timer timer;
    
     /**
