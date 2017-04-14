@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream;
  */
 public class Serialization {
 
-    Serialization(Game game) {
+    public Serialization(Game game) {
         try {
             //get current directory location
             String currentDirectory = System.clearProperty("user.dir");
