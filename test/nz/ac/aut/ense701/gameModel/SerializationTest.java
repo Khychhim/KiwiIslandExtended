@@ -30,7 +30,7 @@ public class SerializationTest {
      * Test Game object is serializable
      */
     @Test
-    public void testGameIsSerializable() {
+    public void test_GameIsSerializable() {
         boolean expResult = true;
         boolean isSerialbizable;
         try {
@@ -47,7 +47,7 @@ public class SerializationTest {
      * Test save file is created
      */
     @Test
-    public void testSaveFileIsCreated() {
+    public void test_SaveFileIsCreated() {
 
         boolean expResult = true;
         boolean isFileCreated = false;
@@ -87,4 +87,47 @@ public class SerializationTest {
         assertEquals(expResult, isFileNameSame);
     }
 
+    /*
+     * Test Island information -  Save row
+     */
+    @Test
+    public void test_IslandRowsIsSaved() {
+        int expResult;
+        int loadedResult;
+
+        //CREATE SAVE DATA
+        Game game = new Game();
+        Serialization serialization = new Serialization(new Game());
+
+        //Load saved game
+        Deserialization des = new Deserialization();
+        Game loadedgame = des.deserialize();
+
+        expResult = game.getIsland().getNumRows();
+        loadedResult = loadedgame.getIsland().getNumRows();
+
+        assertEquals(expResult, loadedResult);
+    }
+
+    /*
+     * Test Island information -  Saved column
+     */
+    @Test
+    public void test_IslandColumnIsSaved() {
+        int expResult;
+        int loadedResult;
+
+        //CREATE SAVE DATA
+        Game game = new Game();
+        Serialization serialization = new Serialization(new Game());
+
+        //Load saved game
+        Deserialization des = new Deserialization();
+        Game loadedgame = des.deserialize();
+
+        expResult = game.getIsland().getNumColumns();
+        loadedResult = loadedgame.getIsland().getNumColumns();
+
+        assertEquals(expResult, loadedResult);
+    }
 }
