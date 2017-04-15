@@ -21,6 +21,7 @@ import java.util.Set;
 
 public class Game implements Serializable
 {
+     private static final long serialVersionUID = 1L;
     //Constants shared with UI to provide player data
     public static final int STAMINA_INDEX = 0;
     public static final int MAXSTAMINA_INDEX = 1;
