@@ -42,23 +42,27 @@ public class KiwiCountUI
     public void gameStateChanged()
     {
         update();
-        
+        Object[] options = {"OK"};
         // check for "game over" or "game won"
         if ( game.getState() == GameState.LOST )
         {
-            JOptionPane.showMessageDialog(
-                    this, 
-                    game.getLoseMessage(), "Game over!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            game.createNewGame();
+            game.timer.cancel();
+            game.timer.purge();
+            int option = JOptionPane.showOptionDialog(this, game.getLoseMessage(), "Game over!", 
+                    JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            
+            if(option == JOptionPane.OK_OPTION){
+                  game.createNewGame();
+            }  
         }
         else if ( game.getState() == GameState.WON )
         {
-            JOptionPane.showMessageDialog(
-                    this, 
-                    game.getWinMessage(), "Well Done!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            game.createNewGame();
+              int option = JOptionPane.showOptionDialog(this,  game.getWinMessage(), "Well Done!", 
+                    JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+              
+            if(option == JOptionPane.OK_OPTION){
+                  game.createNewGame();
+            }  
         }
         else if (game.messageForPlayer())
         {
