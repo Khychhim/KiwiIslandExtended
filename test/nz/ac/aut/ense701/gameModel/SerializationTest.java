@@ -51,21 +51,10 @@ public class SerializationTest {
 
         boolean expResult = true;
         boolean isFileCreated = false;
-        Game game = new Game();
 
         //CREATE SAVE DATA
-        try {
-            if (game.getPlayer().isAlive()) {
-                FileOutputStream fstream = new FileOutputStream("data.dat");
-                ObjectOutputStream objSteram = new ObjectOutputStream(fstream);
-                objSteram.writeObject(game);
-                //CLOSE OBJECTSTREAM AND FILEOUTPUTSTREAM
-                objSteram.close();
-                fstream.close();
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(SerializationTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Game game = new Game();
+        Serialization serialization = new Serialization(game);
 
         //CHECK FILE EXISTS
         File file = new File("data.dat");
@@ -85,20 +74,9 @@ public class SerializationTest {
         boolean isFileNameSame = false;
         String fileName = "data.dat";
 
-        Game game = new Game();
         //CREATE SAVE DATA
-        try {
-            if (game.getPlayer().isAlive()) {
-                FileOutputStream fstream = new FileOutputStream("data.dat");
-                ObjectOutputStream objSteram = new ObjectOutputStream(fstream);
-                objSteram.writeObject(game);
-                //CLOSE OBJECTSTREAM AND FILEOUTPUTSTREAM
-                objSteram.close();
-                fstream.close();
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(SerializationTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Game game = new Game();
+        Serialization serialization = new Serialization(new Game());
 
         //CHECK FILE named "data.dat" exists
         File file = new File(fileName);
@@ -109,5 +87,4 @@ public class SerializationTest {
         assertEquals(expResult, isFileNameSame);
     }
 
-   
 }
