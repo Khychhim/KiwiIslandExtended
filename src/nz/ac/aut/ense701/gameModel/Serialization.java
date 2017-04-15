@@ -14,15 +14,15 @@ public class Serialization {
     public Serialization(Game game) {
         try {
             //get current directory location
-            String currentDirectory = System.clearProperty("user.dir");
+            String currentDirectory = System.getProperty("java.io.tmpdir");
 
                 //export & saving Game object
-            FileOutputStream fostream = new FileOutputStream(currentDirectory + "/temp/data.dat");
+            FileOutputStream fostream = new FileOutputStream(currentDirectory + "data.dat");
             ObjectOutputStream iostream = new ObjectOutputStream(fostream);
             iostream.writeObject(game);
 
             //debug - output save successfully 
-            System.out.println("Serialzed data is saved: " + currentDirectory + "/temp/data.dat");
+            System.out.println("Serialzed data is saved: " + currentDirectory + "data.dat");
 
             //close FileStream and ObjectOutputStream
             iostream.close();

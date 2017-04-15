@@ -13,12 +13,15 @@ public class Deserialization {
         Game game = null;
         try {
             //get current directory location
-            String currentDirectory = System.clearProperty("user.dir");
+            String currentDirectory = System.getProperty("java.io.tmpdir");
 
             //Import & load Game object
-            FileInputStream fstream = new FileInputStream(currentDirectory + "/data.dat");
+            FileInputStream fstream = new FileInputStream("data.dat");
             ObjectInputStream objectStream = new ObjectInputStream(fstream);
             game = (Game) objectStream.readObject();
+
+            //Debug - print of loading path
+            System.out.println("Deserialize loaded from: " + currentDirectory + "data.dat");
 
             //Close FileStream and ObjectOutputStream
             objectStream.close();
