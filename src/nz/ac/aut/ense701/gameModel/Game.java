@@ -12,6 +12,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 /**
  * This is the class that knows the Kiwi Island game rules and state and
@@ -36,7 +38,7 @@ public class Game {
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
      */
-      public Game() {
+      public Game() throws ParserConfigurationException, TransformerException {
             eventListeners = new HashSet<GameEventListener>();
             rand = new Random();
             allPredators = new ArrayList<Occupant>();
@@ -47,7 +49,7 @@ public class Game {
       /**
        * Starts a new game. At this stage data is being read from a text file
        */
-      public void createNewGame() {
+      public void createNewGame() throws ParserConfigurationException, TransformerException {
             DifferentMap dm = new DifferentMap(15, 15, playerName);
             dm.generateMap();
             allPredators.clear();
@@ -58,6 +60,11 @@ public class Game {
             score = new Score();
             initialiseIslandFromFile("IslandData.txt");
             drawIsland();
+            
+            //creating game acheivement XML document at start of game.
+            GameAchievement achievement = new GameAchievement();
+            achievement.createAchievementXML();
+            
             state = GameState.PLAYING;
             winMessage = "";
             loseMessage = "";

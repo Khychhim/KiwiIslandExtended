@@ -2,7 +2,11 @@ package nz.ac.aut.ense701.gui;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
 import nz.ac.aut.ense701.gameModel.GameState;
@@ -52,7 +56,13 @@ public class KiwiCountUI
                     JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
             
             if(option == JOptionPane.OK_OPTION){
-                  game.createNewGame();
+                try {
+                    game.createNewGame();
+                } catch (ParserConfigurationException ex) {
+                    Logger.getLogger(KiwiCountUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (TransformerException ex) {
+                    Logger.getLogger(KiwiCountUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }  
         }
         else if ( game.getState() == GameState.WON )
@@ -61,7 +71,13 @@ public class KiwiCountUI
                     JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
               
             if(option == JOptionPane.OK_OPTION){
-                  game.createNewGame();
+                  try {
+                      game.createNewGame();
+                  } catch (ParserConfigurationException ex) {
+                      Logger.getLogger(KiwiCountUI.class.getName()).log(Level.SEVERE, null, ex);
+                  } catch (TransformerException ex) {
+                      Logger.getLogger(KiwiCountUI.class.getName()).log(Level.SEVERE, null, ex);
+                  }
             }  
         }
         else if (game.messageForPlayer())
