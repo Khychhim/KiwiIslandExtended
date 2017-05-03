@@ -2,6 +2,7 @@ package nz.ac.aut.ense701.gui;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
@@ -129,6 +130,9 @@ public class KiwiCountUI
         
         //Update score
         scoreText.setText("" + game.score.getScore());
+        
+        //focus on the window for keypress listener
+        this.pnlIsland.requestFocusInWindow();
     }
     
     /** This method is called from within the constructor to
@@ -181,6 +185,12 @@ public class KiwiCountUI
 
             pnlContent.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
             pnlContent.setLayout(new java.awt.BorderLayout(10, 0));
+
+            pnlIsland.addKeyListener(new java.awt.event.KeyAdapter() {
+                  public void keyPressed(java.awt.event.KeyEvent evt) {
+                        pnlIslandKeyPressed(evt);
+                  }
+            });
 
             javax.swing.GroupLayout pnlIslandLayout = new javax.swing.GroupLayout(pnlIsland);
             pnlIsland.setLayout(pnlIslandLayout);
@@ -486,6 +496,11 @@ public class KiwiCountUI
             });
             listObjects.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
             listObjects.setVisibleRowCount(3);
+            listObjects.addKeyListener(new java.awt.event.KeyAdapter() {
+                  public void keyPressed(java.awt.event.KeyEvent evt) {
+                        listObjectsKeyPressed(evt);
+                  }
+            });
             listObjects.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
                   public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                         listObjectsValueChanged(evt);
@@ -607,6 +622,31 @@ public class KiwiCountUI
     private void btnCountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCountActionPerformed
         game.countKiwi();
     }//GEN-LAST:event_btnCountActionPerformed
+
+      private void pnlIslandKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlIslandKeyPressed
+            int keycode = evt.getKeyCode();
+            
+          switch (keycode) {
+                case KeyEvent.VK_UP:
+                      game.playerMove(MoveDirection.NORTH);
+                      break;
+                case KeyEvent.VK_DOWN:
+                      game.playerMove(MoveDirection.SOUTH);
+                      break;
+                case KeyEvent.VK_LEFT:
+                      game.playerMove(MoveDirection.WEST);
+                      break;
+                case KeyEvent.VK_RIGHT:
+                      game.playerMove(MoveDirection.EAST);
+                      break;
+                default:
+                      break;
+          }
+      }//GEN-LAST:event_pnlIslandKeyPressed
+
+      private void listObjectsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listObjectsKeyPressed
+            this.pnlIsland.requestFocusInWindow();
+      }//GEN-LAST:event_listObjectsKeyPressed
     
     /**
      * Creates and initialises the island grid.
