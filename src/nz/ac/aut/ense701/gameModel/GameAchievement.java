@@ -6,6 +6,8 @@
 package nz.ac.aut.ense701.gameModel;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,7 +26,7 @@ import org.w3c.dom.Element;
  * @author Nishan
  */
 public class GameAchievement {
-    
+    Element player;
     
     public Document createAchievementXML() throws ParserConfigurationException, TransformerException{
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -34,7 +36,7 @@ public class GameAchievement {
         
         Element rootElement = AchievementDoc.createElement("Achievements");
         AchievementDoc.appendChild(rootElement);
-        Element player = AchievementDoc.createElement("Player");
+        player = AchievementDoc.createElement("Player");
         rootElement.appendChild(player);
         // set attribute to staff element
         Attr attr = AchievementDoc.createAttribute("id");
@@ -54,7 +56,31 @@ public class GameAchievement {
     }
     
     public void setAchievements(Document doc){
-        boolean won3games = false;
+        boolean won3games = true;
+        if(won3games){
+            try{
+                
+            Element name = doc.createElement("Award");
+            name.appendChild(doc.createTextNode("Survivor"));
+            player.appendChild(name);
+            Element description = doc.createElement("Description");
+            description.appendChild(doc.createTextNode("Won three games in a row!"));
+            player.appendChild(description);
+            
+            
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File("Achievements.xml"));
+        // Output to console for testing
+        // StreamResult result = new StreamResult(System.out);
+            transformer.transform(source, result);
+            System.out.println("Achievement file saved with survivor award added!");
+                
+            } catch (TransformerException ex) {
+                Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         
         
     }

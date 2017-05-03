@@ -63,7 +63,8 @@ public class Game {
             
             //creating game acheivement XML document at start of game.
             GameAchievement achievement = new GameAchievement();
-            achievement.createAchievementXML();
+           // achievement.createAchievementXML();
+            achievement.setAchievements(achievement.createAchievementXML());
             
             state = GameState.PLAYING;
             winMessage = "";
