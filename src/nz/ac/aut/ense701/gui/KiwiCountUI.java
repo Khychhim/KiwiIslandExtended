@@ -76,7 +76,7 @@ public class KiwiCountUI
     
      private void setAsGameListener()
     {
-       game.addGameEventListener(this); 
+       game.addGameEventListener(this);      
     }
      
     /**
