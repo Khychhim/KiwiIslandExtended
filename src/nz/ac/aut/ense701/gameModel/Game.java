@@ -30,6 +30,7 @@ public class Game {
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
       public static final int PREDATOR_TIME = 30;
+      public static final int MAP_SIZE = 20;
       public Timer timer;
     public static String playerName = "River Song";
     
@@ -48,7 +49,8 @@ public class Game {
        * Starts a new game. At this stage data is being read from a text file
        */
       public void createNewGame() {
-            DifferentMap dm = new DifferentMap(15, 15, playerName);
+            
+            DifferentMap dm = new DifferentMap(MAP_SIZE, MAP_SIZE, playerName);
             dm.generateMap();
             allPredators.clear();
             totalPredators = 0;
@@ -70,6 +72,7 @@ public class Game {
                         movePredators();
                   }
             }, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);
+            calculatePlayerView();
             notifyGameEventListeners();
       }
 
@@ -673,7 +676,7 @@ public class Game {
 
                   // Is there a hazard?
                   checkForHazard();
-
+                  this.calculatePlayerView();
                   updateGameState();
             }
             return successfulMove;
@@ -918,6 +921,7 @@ public class Game {
                         String terrainString = terrainRow.substring(col, col + 1);
                         Terrain terrain = Terrain.getTerrainFromStringRepresentation(terrainString);
                         island.setTerrain(pos, terrain);
+                        island.setVisible(pos);
                   }
             }
       }
@@ -986,8 +990,50 @@ public class Game {
             }
       }
 
+      public void calculatePlayerView(){
+            int playerPositionCol = player.getPosition().getColumn();
+             int playerPositionRow = player.getPosition().getRow();
+             
+            int view = (int)Math.round(MAP_SIZE*0.6);
+            int right = (view/2)+1;
+            int left = (view/2) -1;
+            if(view % 2 == 0){
+                  
+                  startMapCol = playerPositionCol-left;
+                  if(startMapCol >= 0){
+                        endMapCol = playerPositionCol+right;
+                        if(endMapCol >=MAP_SIZE-1){
+                               endMapCol = MAP_SIZE;
+                              startMapCol = MAP_SIZE-view;
+                             
+                        }
+                  }else{
+                        startMapCol = 0;
+                        endMapCol = view ;
+                  }
+                  
+                  startMapRow = playerPositionRow-left;
+                  if(startMapRow >=0){
+                        endMapRow = playerPositionRow+right;
+                         if(endMapRow >=MAP_SIZE-1){
+                              endMapRow = MAP_SIZE;
+                              startMapRow = MAP_SIZE-view;
+                        }
+                  }else{
+                        startMapRow = 0;
+                        endMapRow = view;
+                  }
+            }
+            
+      }
+      
+    public int startMapRow;
+    public int endMapRow;
+    public int startMapCol;
+    public int endMapCol;
+    
       private Island island;
-      private Player player;
+      public Player player;
       private GameState state;
       private int kiwiCount;
       private int totalPredators;

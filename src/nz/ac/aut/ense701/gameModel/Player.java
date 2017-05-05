@@ -354,7 +354,7 @@ public class Player
         if( hasStaminaToMove(terrain) )
         {
             this.position = newPosition;
-            reduceStamina(getStaminaNeededToMove(terrain));
+            //reduceStamina(getStaminaNeededToMove(terrain));
         }
     }
 }

@@ -359,7 +359,7 @@ public class Island
      * Private convenience method to change the visibility of grid squares.
      * @param position the position to change
      */
-    private void setVisible(Position position)
+    public void setVisible(Position position)
     {
         if ( (position != null) && position.isOnIsland() )
         {
