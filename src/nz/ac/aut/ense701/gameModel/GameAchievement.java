@@ -6,6 +6,7 @@
 package nz.ac.aut.ense701.gameModel;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -20,52 +21,67 @@ import org.w3c.dom.Attr;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  *
  * @author Nishan
  */
 public class GameAchievement {
-    Element player;
+    Element Achievement;
     
-    public Document createAchievementXML() throws ParserConfigurationException, TransformerException{
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-	DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-        Document AchievementDoc = docBuilder.newDocument();
-        // root elements
+    public Document ReadAchievementXML(){
+        Document xml = null;
         
-        Element rootElement = AchievementDoc.createElement("Achievements");
-        AchievementDoc.appendChild(rootElement);
-        player = AchievementDoc.createElement("Player");
-        rootElement.appendChild(player);
-        // set attribute to staff element
-        Attr attr = AchievementDoc.createAttribute("id");
-        attr.setValue("1");
-        player.setAttributeNode(attr);
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource source = new DOMSource(AchievementDoc);
-        StreamResult result = new StreamResult(new File("Achievements.xml"));
-        // Output to console for testing
-        // StreamResult result = new StreamResult(System.out);
-        
-        transformer.transform(source, result);
-        System.out.println("Achievement file saved!");
-        return AchievementDoc;
+        try{
+         
+            File fXmlFile = new File("Achievements.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            xml = dBuilder.parse(fXmlFile);
+       
+            
+        }
+        catch(SAXException e){
+            System.out.println("SAXException error");
+                
+        }
+        catch(IOException e){
+            System.out.println("IOException error");
+        }
+        catch(ParserConfigurationException e){
+            System.out.println("Parser Error");
+        }
+            
+
+        return xml;
 
     }
     
     public void setAchievements(Document doc){
-        boolean won3games = false;
+        boolean won3games = true;
         if(won3games){
             try{
                 
+            Element root = doc.getDocumentElement();
+            Element achievement = doc.createElement("Achievement");
+            root.appendChild(achievement);
+            
+            Attr attr = doc.createAttribute("id");
+            attr.setValue("1");
+            achievement.setAttributeNode(attr);
+            
             Element name = doc.createElement("Award");
             name.appendChild(doc.createTextNode("Survivor"));
-            player.appendChild(name);
+            achievement.appendChild(name);
+            
+
+     
             Element description = doc.createElement("Description");
             description.appendChild(doc.createTextNode("Won three games in a row!"));
-            player.appendChild(description);
+            achievement.appendChild(description);
+ 
+  
             
             
             TransformerFactory transformerFactory = TransformerFactory.newInstance();

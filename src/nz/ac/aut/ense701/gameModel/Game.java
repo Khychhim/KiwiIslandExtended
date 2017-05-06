@@ -14,6 +14,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 /**
  * This is the class that knows the Kiwi Island game rules and state and
@@ -33,6 +35,7 @@ public class Game {
       public static final int SIZE_INDEX = 5;
       public static final int PREDATOR_TIME = 30;
       public Timer timer;
+     
     public static String playerName = "River Song";
     
     /**
@@ -49,7 +52,7 @@ public class Game {
       /**
        * Starts a new game. At this stage data is being read from a text file
        */
-      public void createNewGame() throws ParserConfigurationException, TransformerException {
+      public void createNewGame() {
             DifferentMap dm = new DifferentMap(15, 15, playerName);
             dm.generateMap();
             allPredators.clear();
@@ -64,7 +67,7 @@ public class Game {
             //creating game acheivement XML document at start of game.
             GameAchievement achievement = new GameAchievement();
            // achievement.createAchievementXML();
-            achievement.setAchievements(achievement.createAchievementXML());
+            achievement.setAchievements(achievement.ReadAchievementXML());
             
             state = GameState.PLAYING;
             winMessage = "";
