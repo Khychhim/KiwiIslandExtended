@@ -56,7 +56,7 @@ public class GameAchievement {
     }
     
     public void setAchievements(Document doc){
-        boolean won3games = true;
+        boolean won3games = false;
         if(won3games){
             try{
                 
