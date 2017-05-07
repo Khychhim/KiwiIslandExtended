@@ -5,11 +5,15 @@
  */
 package nz.ac.aut.ense701.gui;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -21,12 +25,22 @@ import javax.swing.JPanel;
  *
  * @author joshl
  */
-public class MainMenu extends JPanel {
-    private javax.swing.JButton startGame;
+public class MainMenu extends JPanel implements MouseListener {
+    private javax.swing.JLabel startGame;
+    private javax.swing.JLabel startGameTextLabel;
     private javax.swing.JLabel menuBackground;
     private javax.swing.JLayeredPane menuPane;
     private Image backGroundImage;
     private Image buttonImage;
+    private Image startGameText;
+    
+    private static final int INIT_WINDOW_WIDTH = 1000;
+    private static final int INIT_WINDOW_HEIGHT = 700;
+    
+    private static final float BUTTON_WIDTH_RATIO = 0.4f;
+    private static final float BUTTON_HEIGHT_RATIO = 0.075f;
+    private static final float BUTTON_X_POSITION_RATIO = 0.5f;
+    private static final float BUTTON_Y_POSITION_RATIO = 0.09f;
     
     public MainMenu() {
         init();
@@ -42,23 +56,36 @@ public class MainMenu extends JPanel {
     }
     
     private void init() {
-        JFrame mainMenu = new JFrame();
+        JFrame mainMenu = new JFrame("Kiwi Island");
         try {
             backGroundImage = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/MenuBackground.png"));
-        } catch (IOException e) {
-            System.err.println("Unable to load backGround image. " + e.getMessage());
-        }
-        try {
             buttonImage = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/Button.png"));
         } catch (IOException e) {
-            System.err.println("Unable to load button image. " + e.getMessage());
+            System.err.println("Unable to load Image. " + e.getMessage());
+        }
+        try {
+            startGameText = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/StartGame.png"));
+        } catch (IOException e) {
+            System.err.println("Unable to load start game text image. " + e.getMessage());
         }
         mainMenu.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
                 int width = e.getComponent().getWidth();
                 int height = e.getComponent().getHeight();
+                int buttonWidth = (int) (width*BUTTON_WIDTH_RATIO);
+                int buttonHeight =  (int) (height*BUTTON_HEIGHT_RATIO);
                 menuBackground.setIcon(new ImageIcon(scaleImage(backGroundImage, width, height)));
+                menuBackground.setPreferredSize(e.getComponent().getSize());
+                menuBackground.setBounds(0, 0, width, height);
+                startGame.setIcon(new ImageIcon(scaleImage(buttonImage, (int)(width*BUTTON_WIDTH_RATIO), (int)(height*BUTTON_HEIGHT_RATIO))));
+                int x = (int) ((width-buttonWidth)*BUTTON_X_POSITION_RATIO);
+                int y = (int) ((height-buttonHeight)*BUTTON_Y_POSITION_RATIO);
+                startGame.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+                startGame.setBounds(x, y, buttonWidth, buttonHeight);
+                startGameTextLabel.setIcon(new ImageIcon(scaleImage(startGameText, (int)(width*BUTTON_WIDTH_RATIO), (int)(height*BUTTON_HEIGHT_RATIO))));
+                startGameTextLabel.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+                startGameTextLabel.setBounds(x, y, buttonWidth, buttonHeight);
             }
 
             @Override
@@ -70,30 +97,32 @@ public class MainMenu extends JPanel {
             @Override
             public void componentHidden(ComponentEvent e) {}
         });
+        
         menuPane = new javax.swing.JLayeredPane();
+        menuPane.addMouseListener(this);
         menuBackground = new javax.swing.JLabel();
+        menuBackground.setPreferredSize(mainMenu.getSize());
+        startGame = new javax.swing.JLabel();
+        int width = (int)(mainMenu.getWidth()*BUTTON_WIDTH_RATIO);
+        int height = (int)(mainMenu.getHeight()*BUTTON_HEIGHT_RATIO);
+        int x = (int) ((mainMenu.getWidth()-width)*BUTTON_X_POSITION_RATIO);
+        int y = (int) ((mainMenu.getHeight()-height)*BUTTON_Y_POSITION_RATIO);
+        startGame.setPreferredSize(new Dimension(width, height));
+        startGame.setBounds(x, y, width, height);
+        startGameTextLabel = new javax.swing.JLabel();
+        startGameTextLabel.setPreferredSize(new Dimension(width, height));
+        startGameTextLabel.setBounds(x, y, width, height);
 
         mainMenu.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        mainMenu.setPreferredSize(new java.awt.Dimension(867, 677));
-        ImageIcon icon = new ImageIcon(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/MenuBackground.png"));
-        menuBackground.setIcon(icon);
+        mainMenu.setPreferredSize(new java.awt.Dimension(INIT_WINDOW_WIDTH, INIT_WINDOW_HEIGHT));
 
-        menuPane.setLayer(menuBackground, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        javax.swing.GroupLayout menuLayeredPaneLayout = new javax.swing.GroupLayout(menuPane);
-        menuPane.setLayout(menuLayeredPaneLayout);
-        menuLayeredPaneLayout.setHorizontalGroup(
-            menuLayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuLayeredPaneLayout.createSequentialGroup()
-                .addComponent(menuBackground)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        menuLayeredPaneLayout.setVerticalGroup(
-            menuLayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuLayeredPaneLayout.createSequentialGroup()
-                .addComponent(menuBackground)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+        menuPane.setLayer(menuBackground, 0);
+        menuPane.setLayer(startGame, 1);
+        menuPane.setLayer(startGameTextLabel, 2);
+        
+        menuPane.add(menuBackground);
+        menuPane.add(startGame);
+        menuPane.add(startGameTextLabel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(mainMenu.getContentPane());
         mainMenu.getContentPane().setLayout(layout);
@@ -120,4 +149,24 @@ public class MainMenu extends JPanel {
         
         return resized;
     }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {}
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        Point clickLoc = e.getPoint();
+        if(startGame.getBounds().contains(clickLoc)) {
+            System.out.println("Start Game...");
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
 }
