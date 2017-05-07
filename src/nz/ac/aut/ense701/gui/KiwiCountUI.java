@@ -655,26 +655,27 @@ public class KiwiCountUI
     private void initIslandGrid()
     {
         // Add the grid
-        int rows    = 12;
-        int columns = 12;
+        int rows    = game.getViewSizeOfMap();
+        int columns = game.getViewSizeOfMap();
         // set up the layout manager for the island grid panel
         pnlIsland.setLayout(new GridLayout(rows, columns));
         // create all the grid square panels and add them to the panel
         // the layout manager of the panel takes care of assigning them to the
         // the right position
+        //System.out.println(game.getViewSizeOfMap());
         System.out.println("player pos" + game.player.getPosition().getRow()+","+game.player.getPosition().getColumn());
-         System.out.println("Row start " +game.startMapRow);
-          System.out.println("Row end "+game.endMapRow);
-           System.out.println("Col start "+game.startMapCol);
-            System.out.println("col end "+game.endMapCol);
+         System.out.println("Row start " +game.getStartRow());
+          System.out.println("Row end "+game.getEndRow());
+           System.out.println("Col start "+game.getStartCol());
+            System.out.println("col end "+game.getEndCol());
         change();
     }
     
     private void change(){
           if(gsp == null){
-                for ( int row = game.startMapRow ; row < game.endMapRow ; row++ )
+                for ( int row = game.getStartRow() ; row < game.getEndRow() ; row++ )
                   {
-                      for ( int col = game.startMapCol ; col < game.endMapCol ; col++ )
+                      for ( int col = game.getStartCol() ; col < game.getEndCol() ; col++ )
                       {
                             gsp = new GridSquarePanel(game, row, col);
                           pnlIsland.add(gsp);
@@ -682,9 +683,9 @@ public class KiwiCountUI
                   }
           }else{
                 pnlIsland.removeAll();
-                 for ( int row = game.startMapRow ; row < game.endMapRow ; row++ )
+                 for ( int row = game.getStartRow() ; row < game.getEndRow() ; row++ )
                   {
-                      for ( int col = game.startMapCol ; col < game.endMapCol ; col++ )
+                      for ( int col = game.getStartCol() ; col < game.getEndCol() ; col++ )
                       {
                            gsp = new GridSquarePanel(game, row, col);
                             pnlIsland.add(gsp);
