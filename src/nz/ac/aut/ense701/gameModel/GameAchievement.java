@@ -21,6 +21,8 @@ import org.w3c.dom.Attr;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -52,38 +54,131 @@ public class GameAchievement {
         catch(ParserConfigurationException e){
             System.out.println("Parser Error");
         }
-            
-
         return xml;
-
     }
     
-    public void setAchievements(Document doc){
-        boolean won3games = true;
-        if(won3games){
-            try{
+    public void lossGameResetCounter(){
+        Document xml = null;
+        try{
+         
+            File File = new File("AwardCounts.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            xml = dBuilder.parse(File);
+            Node main = xml.getElementsByTagName("Player1").item(0);
+            NodeList list = main.getChildNodes();
+            
+            for(int i=0; i<list.getLength(); i++){
+                Node node = list.item(i);
+                if("gamesWon".equals(node.getNodeName())){
+                    System.out.println("True");
+                    System.out.println("Lost your chance at winning 3 games in a row.");
+                    int gameCounter = 0;
+                    node.setTextContent(Integer.toString(gameCounter));
+                }
+            }
+            
+            // write the content into xml file
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(xml);
+		StreamResult result = new StreamResult((File));
+		transformer.transform(source, result);
+
+		System.out.println("Done"); 
+        }
+        catch(SAXException e){
+            System.out.println("SAXException error");
                 
+        }
+        catch(IOException e){
+            System.out.println("IOException error");
+        }
+        catch(ParserConfigurationException e){
+            System.out.println("Parser Error");
+        }
+        catch(TransformerException e){
+            System.out.println("Transformer Excpetion");
+        }
+        
+        
+        
+        
+    }
+    
+    
+    public void Won3Games(){
+        Document xml = null;
+        try{
+         
+            File File = new File("AwardCounts.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            xml = dBuilder.parse(File);
+            Node main = xml.getElementsByTagName("Player1").item(0);
+            NodeList list = main.getChildNodes();
+            
+            for(int i=0; i<list.getLength(); i++){
+                Node node = list.item(i);
+                if("gamesWon".equals(node.getNodeName())){
+                    System.out.println("True");
+                   
+                    if(node.getTextContent().equals("3")){
+                        System.out.println("Won 3 games in a row");
+                        GameAchievement game = new GameAchievement();
+                        boolean won3games = true;
+                        setAchievements(game.ReadAchievementXML(), won3games);
+                        //send a message to achievement xml. 
+                    }
+                    else{
+                        int gameCounter;
+                        gameCounter = Integer.parseInt(node.getTextContent());
+                        gameCounter++;
+                        node.setTextContent(Integer.toString(gameCounter));
+                    }
+                }
+            }
+
+            // write the content into xml file
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(xml);
+		StreamResult result = new StreamResult((File));
+		transformer.transform(source, result);
+
+		System.out.println("Done"); 
+        }
+        catch(SAXException e){
+            System.out.println("SAXException error");
+                
+        }
+        catch(IOException e){
+            System.out.println("IOException error");
+        }
+        catch(ParserConfigurationException e){
+            System.out.println("Parser Error");
+        }
+        catch(TransformerException e){
+            System.out.println("Transformer Excpetion");
+        }
+    }
+    
+    public void setAchievements(Document doc, Boolean won3games){
+        if(won3games){
+        try{     
             Element root = doc.getDocumentElement();
             Element achievement = doc.createElement("Achievement");
             root.appendChild(achievement);
-            
             Attr attr = doc.createAttribute("id");
             attr.setValue("1");
             achievement.setAttributeNode(attr);
-            
             Element name = doc.createElement("Award");
             name.appendChild(doc.createTextNode("Survivor"));
             achievement.appendChild(name);
-            
-
-     
             Element description = doc.createElement("Description");
             description.appendChild(doc.createTextNode("Won three games in a row!"));
             achievement.appendChild(description);
- 
-  
-            
-            
+
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
@@ -101,6 +196,8 @@ public class GameAchievement {
         
     }
     
+    
+
     
     
     

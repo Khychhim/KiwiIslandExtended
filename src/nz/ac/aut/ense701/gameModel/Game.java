@@ -64,11 +64,12 @@ public class Game {
             initialiseIslandFromFile("IslandData.txt");
             drawIsland();
             
+            
             //creating game acheivement XML document at start of game.
             GameAchievement achievement = new GameAchievement();
            // achievement.createAchievementXML();
-            achievement.setAchievements(achievement.ReadAchievementXML());
-            
+            //achievement.setAchievements(achievement.ReadAchievementXML());
+            achievement.lossGameResetCounter();
             state = GameState.PLAYING;
             winMessage = "";
             loseMessage = "";
