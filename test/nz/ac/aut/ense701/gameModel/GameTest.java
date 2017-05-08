@@ -93,12 +93,12 @@ public class GameTest extends junit.framework.TestCase
     
     @Test
     public void testGetNumRows(){
-        assertEquals("Check row number", game.getNumRows(), 10);
+        assertEquals("Check row number", game.getNumRows(), 20);
     }
     
     @Test
     public void testGetNumColumns(){
-        assertEquals("Check column number", game.getNumRows(), 10);
+        assertEquals("Check column number", game.getNumColumns(), 20);
     }
     
     @Test

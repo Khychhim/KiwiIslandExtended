@@ -48,8 +48,7 @@ public class Game {
       /**
        * Starts a new game. At this stage data is being read from a text file
        */
-      public void createNewGame() {
-            
+      public void createNewGame() {            
             DifferentMap dm = new DifferentMap(MAP_SIZE, MAP_SIZE, playerName);
             dm.generateMap();
             allPredators.clear();
