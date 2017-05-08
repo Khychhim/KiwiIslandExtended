@@ -63,13 +63,6 @@ public class Game {
             score = new Score();
             initialiseIslandFromFile("IslandData.txt");
             drawIsland();
-            
-            
-            //creating game acheivement XML document at start of game.
-            GameAchievement achievement = new GameAchievement();
-           // achievement.createAchievementXML();
-            //achievement.setAchievements(achievement.ReadAchievementXML());
-            achievement.lossGameResetCounter();
             state = GameState.PLAYING;
             winMessage = "";
             loseMessage = "";
@@ -726,18 +719,27 @@ public class Game {
             state = GameState.LOST;
             message = "Sorry, you have lost the game. " + this.getLoseMessage() + endGameBonus();
             this.setLoseMessage(message);
+            //creates achievement object to reset counter of total games won.
+            GameAchievement achievement = new GameAchievement();
+            achievement.lossGameResetCounter();
         }
         else if (!playerCanMove() )
         {
             state = GameState.LOST;
             message = "Sorry, you have lost the game. You do not have sufficient stamina to move." + endGameBonus();
             this.setLoseMessage(message);
+            //creates achievement object to reset counter of total games won.
+            GameAchievement achievement = new GameAchievement();
+            achievement.lossGameResetCounter();
         }
         else if(predatorsTrapped == totalPredators)
         {
             state = GameState.WON;
             message = "You win! You have done an excellent job and trapped all the predators." + endGameBonus();
             this.setWinMessage(message);
+            //adds to count for assigning achievement for winning 3 games in a row.
+            GameAchievement achievement = new GameAchievement();
+            achievement.Won3Games();
         }
         else if(kiwiCount == totalKiwis)
         {
@@ -746,6 +748,9 @@ public class Game {
                 state = GameState.WON;
                 message = "You win! You have counted all the kiwi and trapped at least 80% of the predators." + endGameBonus();
                 this.setWinMessage(message);
+                //adds to count for assigning achievement for winning 3 games in a row.
+                GameAchievement achievement = new GameAchievement();
+                achievement.Won3Games();
             }
         }
             // notify listeners about changes
