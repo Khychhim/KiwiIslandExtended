@@ -35,6 +35,9 @@ public class Game {
       public static final int SIZE_INDEX = 5;
       public static final int PREDATOR_TIME = 30;
       public Timer timer;
+      GameAchievement counting = new GameAchievement();
+      public int count_of_steps = counting.readCount();
+      
      
     public static String playerName = "River Song";
     
@@ -670,6 +673,10 @@ public class Game {
             if (isPlayerMovePossible(direction)) {
                   Position newPosition = player.getPosition().getNewPosition(direction);
                   Terrain terrain = island.getTerrain(newPosition);
+                  count_of_steps++;
+  
+                  
+                  
 
                   // move the player to new position
                   player.moveToPosition(newPosition, terrain);
@@ -722,6 +729,9 @@ public class Game {
             //creates achievement object to reset counter of total games won.
             GameAchievement achievement = new GameAchievement();
             achievement.lossGameResetCounter();
+            achievement.write_to_count(count_of_steps);
+            achievement.read_kiwiCount(kiwiCount);
+
         }
         else if (!playerCanMove() )
         {
@@ -731,6 +741,9 @@ public class Game {
             //creates achievement object to reset counter of total games won.
             GameAchievement achievement = new GameAchievement();
             achievement.lossGameResetCounter();
+            achievement.write_to_count(count_of_steps);
+            achievement.read_kiwiCount(kiwiCount);
+
         }
         else if(predatorsTrapped == totalPredators)
         {
@@ -740,6 +753,11 @@ public class Game {
             //adds to count for assigning achievement for winning 3 games in a row.
             GameAchievement achievement = new GameAchievement();
             achievement.Won3Games();
+            achievement.write_to_count(count_of_steps);
+            achievement.read_kiwiCount(kiwiCount);
+
+            
+         
         }
         else if(kiwiCount == totalKiwis)
         {
@@ -751,6 +769,9 @@ public class Game {
                 //adds to count for assigning achievement for winning 3 games in a row.
                 GameAchievement achievement = new GameAchievement();
                 achievement.Won3Games();
+                achievement.write_to_count(count_of_steps);
+                achievement.read_kiwiCount(kiwiCount);
+                
             }
         }
             // notify listeners about changes

@@ -157,7 +157,8 @@ public class GameAchievement {
                         //create object game for achievement and write to 
                         //game achievement class.
                
-                        setAchievements(game.ReadAchievementXML(), won3games);
+                        setAchievements(game.ReadAchievementXML(), won3games,
+                                false, false);
                         //send a message to achievement xml. 
                     }
                     else{
@@ -203,8 +204,11 @@ public class GameAchievement {
      * given to the player.
      * @param doc
      * @param won3games 
+     * @param walked_distance 
      */
-    public void setAchievements(Document doc, Boolean won3games){
+    public void setAchievements(Document doc, Boolean won3games,
+            Boolean walked_distance, Boolean kiwi){
+        
      
         if(won3games){ //if player has won 3 games in a row.
         try{     
@@ -235,6 +239,216 @@ public class GameAchievement {
                 Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        
+        else if(walked_distance){
+        try{     
+            Element root = doc.getDocumentElement();
+            //access root node.
+            Element achievement = doc.createElement("Achievement");
+            root.appendChild(achievement);
+            Attr attr = doc.createAttribute("id");
+            attr.setValue("2");
+            achievement.setAttributeNode(attr);
+            Element name = doc.createElement("Award");
+            name.appendChild(doc.createTextNode("Traveller"));
+            achievement.appendChild(name);
+            Element description = doc.createElement("Description");
+            description.appendChild(doc.createTextNode("You have walked over 1000 steps!!"));
+            achievement.appendChild(description);
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File("Achievements.xml"));
+        // Output to console for testing
+        // StreamResult result = new StreamResult(System.out);
+            transformer.transform(source, result);
+            System.out.println("Achievement file saved with survivor award added!");
+                
+        } catch (TransformerException ex) {
+                Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+     }
+        else if(kiwi){
+         try{     
+            Element root = doc.getDocumentElement();
+            //access root node.
+            Element achievement = doc.createElement("Achievement");
+            root.appendChild(achievement);
+            Attr attr = doc.createAttribute("id");
+            attr.setValue("3");
+            achievement.setAttributeNode(attr);
+            Element name = doc.createElement("Award");
+            name.appendChild(doc.createTextNode("Hero"));
+            achievement.appendChild(name);
+            Element description = doc.createElement("Description");
+            description.appendChild(doc.createTextNode("You have saved allot of kiwis!!"));
+            achievement.appendChild(description);
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File("Achievements.xml"));
+        // Output to console for testing
+        // StreamResult result = new StreamResult(System.out);
+            transformer.transform(source, result);
+            System.out.println("Achievement file saved with survivor award added!");
+                
+        } catch (TransformerException ex) {
+                Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+        }
+               
     }
+    
+    
+    public void read_kiwiCount(int kiwi){
+        Document xml = null;
+        try{
+            File File = new File("AwardCounts.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            xml = dBuilder.parse(File);
+            Node main = xml.getElementsByTagName("Player1").item(0);
+            NodeList list = main.getChildNodes();
+            
+            for(int i=0; i<list.getLength(); i++){
+                Node node = list.item(i);
+                if("savedKiwis".equals(node.getNodeName())){
+                    System.out.println("True");
+                    System.out.println("Counting kiwis saved added to the xml..");
+                    node.setTextContent(Integer.toString(kiwi));
+                    if(kiwi == 1){
+                        setAchievements(ReadAchievementXML(), false, false, true);
+                    }
+                }
+                
+            }
+            
+            // write the content into xml file
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(xml);
+		StreamResult result = new StreamResult((File));
+		transformer.transform(source, result);
+
+		System.out.println("Done"); 
+        }
+        catch(SAXException e){
+            System.out.println("SAXException error");
+                
+        }
+        catch(IOException e){
+            System.out.println("IOException error");
+        }
+        catch(ParserConfigurationException e){
+            System.out.println("Parser Error");
+        }
+        catch(TransformerException e){
+            System.out.println("Transformer Excpetion");
+        }
+    }
+    
+    
+    public void write_to_count(int count_of_step){
+         Document xml = null;
+        try{
+         
+            File File = new File("AwardCounts.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            xml = dBuilder.parse(File);
+            Node main = xml.getElementsByTagName("Player1").item(0);
+            NodeList list = main.getChildNodes();
+            
+            for(int i=0; i<list.getLength(); i++){
+                Node node = list.item(i);
+                if("squares".equals(node.getNodeName())){
+                    System.out.println("True");
+                    System.out.println("Counting steps added to the xml..");
+                    node.setTextContent(Integer.toString(count_of_step));
+                    if(count_of_step >=1000){ //if player walks over 1000 squares.
+                        setAchievements(ReadAchievementXML(),false, true, false);
+       
+                    }
+                }
+            }
+            
+            // write the content into xml file
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(xml);
+		StreamResult result = new StreamResult((File));
+		transformer.transform(source, result);
+
+		System.out.println("Done"); 
+        }
+        catch(SAXException e){
+            System.out.println("SAXException error");
+                
+        }
+        catch(IOException e){
+            System.out.println("IOException error");
+        }
+        catch(ParserConfigurationException e){
+            System.out.println("Parser Error");
+        }
+        catch(TransformerException e){
+            System.out.println("Transformer Excpetion");
+        }
+
+    }
+    
+    
+    public int readCount(){
+        int count_of_steps=0;
+         Document xml = null;
+        try{
+         
+            File File = new File("AwardCounts.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            xml = dBuilder.parse(File);
+            Node main = xml.getElementsByTagName("Player1").item(0);
+            NodeList list = main.getChildNodes();
+            
+            for(int i=0; i<list.getLength(); i++){
+                Node node = list.item(i);
+                if("squares".equals(node.getNodeName())){
+                    System.out.println("True");
+                    System.out.println("Counting steps read");              
+                    count_of_steps = Integer.parseInt(node.getTextContent()); //convert number of steps
+                }
+            }
+            
+            // write the content into xml file
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(xml);
+		StreamResult result = new StreamResult((File));
+		transformer.transform(source, result);
+
+		System.out.println("Done"); 
+        }
+        catch(SAXException e){
+            System.out.println("SAXException error");
+                
+        }
+        catch(IOException e){
+            System.out.println("IOException error");
+        }
+        catch(ParserConfigurationException e){
+            System.out.println("Parser Error");
+        }
+        catch(TransformerException e){
+            System.out.println("Transformer Excpetion");
+        }
+        return count_of_steps;
+        
+    }
+
 
 }

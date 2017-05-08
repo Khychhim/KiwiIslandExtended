@@ -56,13 +56,7 @@ public class KiwiCountUI
                     JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
             
             if(option == JOptionPane.OK_OPTION){
-                try {
-                    game.createNewGame();
-                } catch (ParserConfigurationException ex) {
-                    Logger.getLogger(KiwiCountUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (TransformerException ex) {
-                    Logger.getLogger(KiwiCountUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                game.createNewGame();
             }  
         }
         else if ( game.getState() == GameState.WON )
@@ -71,13 +65,7 @@ public class KiwiCountUI
                     JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
               
             if(option == JOptionPane.OK_OPTION){
-                  try {
-                      game.createNewGame();
-                  } catch (ParserConfigurationException ex) {
-                      Logger.getLogger(KiwiCountUI.class.getName()).log(Level.SEVERE, null, ex);
-                  } catch (TransformerException ex) {
-                      Logger.getLogger(KiwiCountUI.class.getName()).log(Level.SEVERE, null, ex);
-                  }
+                game.createNewGame();
             }  
         }
         else if (game.messageForPlayer())
