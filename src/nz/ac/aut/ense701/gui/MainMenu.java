@@ -33,31 +33,38 @@ public class MainMenu extends JPanel implements MouseListener {
     private javax.swing.JLayeredPane menuPane;
     private Image backGroundImage;
     private Image buttonImage;
-    private Image startGameText;
     private Timer resizeTimer;
     
     private final JLabel[] buttons;
     private final JLabel[] buttonText;
+    private final Image[] buttonTextImages;
     
-    private static final int START_GAME = 0;
-    private static final int HIGH_SCORES = 1;
+    private static final int START_GAME     = 0;
+    private static final int HIGH_SCORES    = 1;
+    private static final int GLOSSARY       = 2;
+    private static final int ACHIEVMENTS    = 3;
+    private static final int OPTIONS        = 4;
+    private static final int EXIT_GAME      = 5;
     
-    private static final int NUMBER_OF_BUTTONS = 2;
+    private static final int NUMBER_OF_BUTTONS = 6;
     
     private static final long WAIT_FOR_RESIZE = 250;
     
     private static final int INIT_WINDOW_WIDTH = 1000;
     private static final int INIT_WINDOW_HEIGHT = 700;
     
-    private static final float BUTTON_WIDTH_RATIO = 0.4f;
-    private static final float BUTTON_HEIGHT_RATIO = 0.075f;
-    private static final float BUTTON_X_POSITION_RATIO = 0.5f;
-    private static final float BUTTON_Y_POSITION_RATIO = 0.09f;
+    private static final float BUTTON_WIDTH_RATIO       = 0.4f;
+    private static final float BUTTON_TEXT_WIDTH_RATIO  = 0.3f;
+    private static final float BUTTON_HEIGHT_RATIO      = 0.075f;
+    private static final float BUTTON_X_POSITION_RATIO  = 0.5f;
+    private static final float TEXT_X_POSITION_RATIO  = 0.6f;
+    private static final float BUTTON_Y_POSITION_RATIO  = 0.09f;
     
     public MainMenu() {
         resizeTimer = new Timer();
         buttons = new JLabel[NUMBER_OF_BUTTONS];
         buttonText = new JLabel[NUMBER_OF_BUTTONS];
+        buttonTextImages = new Image[NUMBER_OF_BUTTONS];
         init();
     }
     
@@ -76,7 +83,12 @@ public class MainMenu extends JPanel implements MouseListener {
             backGroundImage = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/MenuBackground.png"));
             buttonImage = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/Button.png"));
             //Text Images
-            startGameText = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/StartGame.png"));
+            buttonTextImages[START_GAME] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/StartGame.png"));
+            buttonTextImages[ACHIEVMENTS] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/Achievements.png"));
+            buttonTextImages[EXIT_GAME] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/ExitGame.png"));
+            buttonTextImages[GLOSSARY] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/Glossary.png"));
+            buttonTextImages[HIGH_SCORES] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/HighScores.png"));
+            buttonTextImages[OPTIONS] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/Options.png"));
         } catch (IOException e) {
             System.err.println("Unable to load Image. " + e.getMessage());
         }
@@ -110,19 +122,22 @@ public class MainMenu extends JPanel implements MouseListener {
         menuBackground = new JLabel();
         menuBackground.setPreferredSize(mainMenu.getSize());
         int width = (int)(mainMenu.getWidth()*BUTTON_WIDTH_RATIO);
+        int textWidth = (int)(mainMenu.getWidth()*BUTTON_TEXT_WIDTH_RATIO);
         int height = (int)(mainMenu.getHeight()*BUTTON_HEIGHT_RATIO);
         int x = (int) ((mainMenu.getWidth()-width)*BUTTON_X_POSITION_RATIO);
         //Loop for each button with width, height and x position staying the same
         for(int i = 0; i < NUMBER_OF_BUTTONS; i++) {
             //Setup buttons
             int y = (int) ((mainMenu.getHeight()-height)*BUTTON_Y_POSITION_RATIO*(i+1));
+            if(i == NUMBER_OF_BUTTONS-1) //Place the last button at the bottom
+                y = (int) ((mainMenu.getHeight()-height)*(1-BUTTON_Y_POSITION_RATIO));
             buttons[i] = new JLabel();
             buttons[i].setPreferredSize(new Dimension(width, height));
             buttons[i].setBounds(x, y, width, height);
             //Setup button Text
             buttonText[i] = new JLabel();
-            buttonText[i].setPreferredSize(new Dimension(width, height));
-            buttonText[i].setBounds(x, y, width, height);
+            buttonText[i].setPreferredSize(new Dimension(textWidth, height));
+            buttonText[i].setBounds(x, y, textWidth, height);
             //Set the layers for correct drawing order
             menuPane.setLayer(buttons[i], 1);
             menuPane.setLayer(buttonText[i], 2);
@@ -159,26 +174,29 @@ public class MainMenu extends JPanel implements MouseListener {
         int width = e.getComponent().getWidth();
         int height = e.getComponent().getHeight();
         int buttonWidth = (int) (width*BUTTON_WIDTH_RATIO);
+        int buttonTextWidth = (int) (width*BUTTON_TEXT_WIDTH_RATIO);
         int buttonHeight =  (int) (height*BUTTON_HEIGHT_RATIO);
         menuBackground.setIcon(new ImageIcon(scaleImage(backGroundImage, width, height)));
         menuBackground.setPreferredSize(e.getComponent().getSize());
         menuBackground.setBounds(0, 0, width, height);
-        //Set scaled icons to the buttons and text
+        //Set scaled image for buttons
         ImageIcon buttonIcon = new ImageIcon(
-                scaleImage(buttonImage, (int)(width*BUTTON_WIDTH_RATIO), (int)(height*BUTTON_HEIGHT_RATIO)));
-        buttonText[START_GAME].setIcon(new ImageIcon(
-                scaleImage(startGameText, (int)(width*BUTTON_WIDTH_RATIO), (int)(height*BUTTON_HEIGHT_RATIO))));
-        buttonText[HIGH_SCORES].setIcon(new ImageIcon(
-                scaleImage(startGameText, (int)(width*BUTTON_WIDTH_RATIO), (int)(height*BUTTON_HEIGHT_RATIO))));
+                scaleImage(buttonImage, buttonWidth, buttonHeight));
         //Resize the buttons
         int x = (int) ((width-buttonWidth)*BUTTON_X_POSITION_RATIO);
+        int textX = (int) ((width-buttonWidth)*TEXT_X_POSITION_RATIO);
         for(int i = 0; i < NUMBER_OF_BUTTONS; i++) {
             int y = (int) ((height-buttonHeight)*BUTTON_Y_POSITION_RATIO*(i+1));
+            if(i == NUMBER_OF_BUTTONS-1) //Place the last button at the bottom
+                y = (int) ((height-buttonHeight)*(1-BUTTON_Y_POSITION_RATIO));
             buttons[i].setIcon(buttonIcon);
             buttons[i].setPreferredSize(new Dimension(buttonWidth, buttonHeight));
             buttons[i].setBounds(x, y, buttonWidth, buttonHeight);
-            buttonText[i].setPreferredSize(new Dimension(buttonWidth, buttonHeight));
-            buttonText[i].setBounds(x, y, buttonWidth, buttonHeight);
+            buttonText[i].setPreferredSize(new Dimension(buttonTextWidth, buttonHeight));
+            buttonText[i].setBounds(textX, y, buttonTextWidth, buttonHeight);
+            //Sets resized button text
+            buttonText[i].setIcon(new ImageIcon(
+                scaleImage(buttonTextImages[i], buttonTextWidth, buttonHeight)));
         }
     }
     
@@ -203,6 +221,14 @@ public class MainMenu extends JPanel implements MouseListener {
             System.out.println("Start Game...");
         } else if(buttons[HIGH_SCORES].getBounds().contains(clickLoc)) {
             System.out.println("High Scores...");
+        } else if(buttons[GLOSSARY].getBounds().contains(clickLoc)) {
+            System.out.println("Glossary...");
+        } else if(buttons[ACHIEVMENTS].getBounds().contains(clickLoc)) {
+            System.out.println("Achivements...");
+        } else if(buttons[OPTIONS].getBounds().contains(clickLoc)) {
+            System.out.println("Options...");
+        } else if(buttons[EXIT_GAME].getBounds().contains(clickLoc)) {
+            System.exit(0);
         }
     }
 
