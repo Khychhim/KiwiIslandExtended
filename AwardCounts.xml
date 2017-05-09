@@ -6,7 +6,7 @@ and open the template in the editor.
     <Player1>
         <name>player1</name>
         <savedKiwis>0</savedKiwis>
-        <gamesWon>1</gamesWon>
-        <squares>53</squares>
+        <gamesWon>0</gamesWon>
+        <squares>0</squares>
     </Player1>
 </Count>

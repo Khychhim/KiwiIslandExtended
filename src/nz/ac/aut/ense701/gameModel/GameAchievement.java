@@ -146,7 +146,6 @@ public class GameAchievement {
             //loop through all nodes in the xml dom parser.
             for(int i=0; i<list.getLength(); i++){
                 Node node = list.item(i);
-               won3gamesinrow = false;
                 if("gamesWon".equals(node.getNodeName())){
                     System.out.println("True");
                    
@@ -156,14 +155,13 @@ public class GameAchievement {
                         System.out.println("Won 3 games in a row");
                         //if number of games won is 3 set achievement.
                           won3gamesinrow = true;
-         
-                        GameAchievement game = new GameAchievement();
                         boolean won3games = true;
                         //create object game for achievement and write to 
                         //game achievement class.
-               
-                        setAchievements(game.ReadAchievementXML(), won3games,
+                        won3gamesinrow = true;
+                        setAchievements(ReadAchievementXML(), won3games,
                                 false, false);
+                        
                         //send a message to achievement xml. 
                     }
                     else{

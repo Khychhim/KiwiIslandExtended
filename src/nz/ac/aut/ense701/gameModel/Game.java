@@ -68,11 +68,6 @@ public class Game {
             initialiseIslandFromFile("IslandData.txt");
             drawIsland();
             state = GameState.PLAYING;
-            GameAchievement game = new GameAchievement();
-            game.Won3Games();
-            
-
-
             winMessage = "";
             loseMessage = "";
             playerMessage = "";
@@ -743,7 +738,9 @@ public class Game {
             achievement.lossGameResetCounter();
             achievement.write_to_count(count_of_steps);
             achievement.read_kiwiCount(kiwiCount);
+
             setAchievement(achievement);
+            
 
            
             message = "Sorry, you have lost the game. " + this.getLoseMessage() + endGameBonus();
@@ -761,6 +758,7 @@ public class Game {
             achievement.write_to_count(count_of_steps);
             achievement.read_kiwiCount(kiwiCount);
             setAchievement(achievement);
+            
     
             message = "Sorry, you have lost the game. You do not have sufficient stamina to move." + endGameBonus();
             this.setLoseMessage(message);
