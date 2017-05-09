@@ -16,6 +16,6 @@ public class Trigger extends Occupant {
     
     @Override
     public String getStringRepresentation() {
-        return "M";
+        return "Q";
     }
 }
