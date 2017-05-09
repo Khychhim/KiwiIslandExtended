@@ -1,5 +1,8 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,7 +15,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.swing.JOptionPane;
+import javax.swing.JFrame;
+import nz.ac.aut.ense701.gui.MiniGamePanel;
 
 /**
  * This is the class that knows the Kiwi Island game rules and state and
@@ -69,6 +73,7 @@ public class Game {
                   @Override
                   public void run() {
                         movePredators();
+                        System.out.println("Predator move: "+  PREDATOR_TIME * 1000);
                   }
             }, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);
             notifyGameEventListeners();
@@ -850,8 +855,8 @@ public class Game {
                 //remove launched trigger
                 island.removeOccupant(current, occupant);
                 
-                //Debug - JOptionPane (Launch mini game)
-                //JOptionPane.showMessageDialog(null, "alert", "alert", JOptionPane.ERROR_MESSAGE);
+                //Launtch mini game panel 
+                miniGameStart(this);
             }
         }
     
@@ -948,6 +953,8 @@ public class Game {
                   }
             }
       }
+      
+      
 
       /**
        * Reads player data and creates the player.
@@ -1013,6 +1020,30 @@ public class Game {
                         island.addOccupant(occPos, occupant);
                   }
             }
+      }
+      
+      /**
+       * Set up the frame
+       * set up mini game panel instance
+       * @param game 
+       */
+      private void miniGameStart(Game game){
+                //setup Mini game panel
+                MiniGamePanel minigamePanel = new MiniGamePanel(game);
+                
+                //setup Frame
+                JFrame frame = new JFrame();
+                frame.add(minigamePanel);
+                frame.setSize(minigamePanel.getSize());
+                
+                //set frame location (Centre of the screen)
+//                Toolkit toolkit = frame.getToolkit();
+//                Dimension dimension=toolkit.getScreenSize();
+//                frame.setLocation(dimension.width/2 - frame.getWidth()/2,
+//                dimension.height/2 - frame.getHeight()/2);
+                
+                frame.setVisible(true);
+                frame.pack();
       }
 
       private Island island;
