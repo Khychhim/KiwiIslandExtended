@@ -849,6 +849,7 @@ public class Game {
             if (hadTrigger) //can delete the trigger
             {
                 //pause game timer
+                timer.cancel();
                 
                 //remove trigger
                 Occupant occupant = island.getTrigger(current);
@@ -1045,7 +1046,7 @@ public class Game {
                 frame.setVisible(true);
                 frame.pack();
       }
-
+      
       private Island island;
       private Player player;
       private GameState state;
