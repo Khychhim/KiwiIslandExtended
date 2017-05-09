@@ -48,8 +48,8 @@ public class Game {
        * Starts a new game. At this stage data is being read from a text file
        */
       public void createNewGame() {
-            DifferentMap dm = new DifferentMap(15, 15, playerName);
-            dm.generateMap();
+        //    DifferentMap dm = new DifferentMap(15, 15, playerName);
+        //    dm.generateMap();
             allPredators.clear();
             totalPredators = 0;
             totalKiwis = 0;
@@ -979,6 +979,8 @@ public class Game {
                         totalPredators++;
                   } else if (occType.equals("F")) {
                         occupant = new Fauna(occPos, occName, occDesc);
+                  } else if (occType.equals("Q")) {
+                        occupant = new Trigger(occPos, occName, occDesc);
                   }
                   if (occupant != null) {
                         island.addOccupant(occPos, occupant);
