@@ -37,6 +37,7 @@ public class Game {
       public static final int PREDATOR_TIME = 30;
       public Timer timer;
     public static String playerName = "River Song";
+    public ArrayList<QuizQuestion> quizQuestionList;
     
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
