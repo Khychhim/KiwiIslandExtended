@@ -12,6 +12,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.JOptionPane;
 
 /**
  * This is the class that knows the Kiwi Island game rules and state and
@@ -674,6 +675,9 @@ public class Game {
                   // Is there a hazard?
                   checkForHazard();
 
+                  //Is there a trigger
+                  checkForTrigger();
+
                   updateGameState();
             }
             return successfulMove;
@@ -827,6 +831,29 @@ public class Game {
                   }
         }
     }
+      
+      /**
+       * Check if the player has met a trigger
+       * pause game timer
+       * remove trigger
+       * launch mini game quiz
+       */
+        private void checkForTrigger() {
+            Position current = player.getPosition();
+            boolean hadTrigger = island.hasTrigger(current);
+            if (hadTrigger) //can delete the trigger
+            {
+                //pause game timer
+                
+                //remove trigger
+                Occupant occupant = island.getTrigger(current);
+                //remove launched trigger
+                island.removeOccupant(current, occupant);
+                
+                //Debug - JOptionPane (Launch mini game)
+                //JOptionPane.showMessageDialog(null, "alert", "alert", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     
     /**
      * Apply impact of hazard
