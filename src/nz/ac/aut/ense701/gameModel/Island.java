@@ -174,6 +174,28 @@ public class Island
         return isPredator;
     } 
     
+     /**
+     * Checks if this position contains a predator.
+     * @param position which position 
+     * @return true if contains a predator, false if not
+     */
+    public boolean hasTrigger(Position position) 
+    {
+        GridSquare square = getGridSquare(position);
+        Occupant[] occupants = square.getOccupants();
+        boolean isTrigger = false;
+        if(occupants.length>0)
+        {
+            int i = 0;
+            while ( i < occupants.length && !isTrigger ) {
+                Occupant occupant = occupants[i];
+                isTrigger = occupant instanceof Trigger ;
+                i++;
+            }         
+        }
+        return isTrigger;
+    } 
+    
     /************************************************************************************************************************
      * Mutator methods
     *************************************************************************************************************************/
@@ -285,7 +307,33 @@ public class Island
             }       
         }
         return predator;
+    }    
+     
+    /**
+     * Get the first predator that is in this position
+     * @param position which position
+     * @return predator or null if there is not one here.
+     */
+     public Trigger getTrigger(Position position) 
+    {
+        GridSquare square = getGridSquare(position);
+        Occupant[] occupants = square.getOccupants();
+        Trigger trigger = null;
+        if(occupants.length>0)
+        {
+            int i = 0;
+            while ( i < occupants.length && (trigger == null )) {
+                Occupant occupant = occupants[i];
+                if(occupant instanceof Trigger)
+                {
+                    trigger = (Trigger) occupant;
+                }
+                i++;
+            }       
+        }
+        return trigger;
     }
+     
     /**
      * Produces a textual representation of the island on the console.
      * This exists  for debugging purposes during early development.
