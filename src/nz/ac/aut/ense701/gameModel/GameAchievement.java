@@ -35,6 +35,9 @@ import org.xml.sax.SAXException;
 
 public class GameAchievement {
     public Element Achievement;
+    public boolean won3gamesinrow;
+    public boolean walked;
+    public boolean savedKiwis;
     
     //Empty constructor.
     public GameAchievement(){
@@ -143,6 +146,7 @@ public class GameAchievement {
             //loop through all nodes in the xml dom parser.
             for(int i=0; i<list.getLength(); i++){
                 Node node = list.item(i);
+               won3gamesinrow = false;
                 if("gamesWon".equals(node.getNodeName())){
                     System.out.println("True");
                    
@@ -151,7 +155,8 @@ public class GameAchievement {
                         //user testing check to see if game won.
                         System.out.println("Won 3 games in a row");
                         //if number of games won is 3 set achievement.
-                        
+                          won3gamesinrow = true;
+         
                         GameAchievement game = new GameAchievement();
                         boolean won3games = true;
                         //create object game for achievement and write to 
@@ -211,6 +216,7 @@ public class GameAchievement {
         
      
         if(won3games){ //if player has won 3 games in a row.
+      
         try{     
             Element root = doc.getDocumentElement();
             //access root node.
@@ -321,7 +327,8 @@ public class GameAchievement {
                     System.out.println("True");
                     System.out.println("Counting kiwis saved added to the xml..");
                     node.setTextContent(Integer.toString(kiwi));
-                    if(kiwi == 1){
+                    if(kiwi >=1){
+                        savedKiwis = true;
                         setAchievements(ReadAchievementXML(), false, false, true);
                     }
                 }
@@ -370,7 +377,9 @@ public class GameAchievement {
                     System.out.println("True");
                     System.out.println("Counting steps added to the xml..");
                     node.setTextContent(Integer.toString(count_of_step));
+                    walked = false;
                     if(count_of_step >=1000){ //if player walks over 1000 squares.
+                        walked = true;
                         setAchievements(ReadAchievementXML(),false, true, false);
        
                     }
@@ -449,6 +458,27 @@ public class GameAchievement {
         return count_of_steps;
         
     }
+    
+    
+    
+    
+    public String getWon3Achievement(){
+          return "Achievement unlocked: **SURVIVOR** - "
+                  + " You have won 3 games in a row!!";
+          
+      }
+      
+    public String getWalkingAchievement(){
+          return "Achievement unlocked: **TRAVELLER** - "
+                  + " You have travelled over 1000 steps!!";
+      }
+      
+      
+    public String getSavedKiwiAchievement(){
+             return "Achievement unlocked: **HERO** - "
+                  + " You have saved allot of kiwis well done!!!";
+          
+      }
 
 
 }

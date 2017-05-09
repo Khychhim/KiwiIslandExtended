@@ -37,6 +37,7 @@ public class Game {
       public Timer timer;
       GameAchievement counting = new GameAchievement();
       public int count_of_steps = counting.readCount();
+      GameAchievement achievement;
       
      
     public static String playerName = "River Song";
@@ -67,6 +68,11 @@ public class Game {
             initialiseIslandFromFile("IslandData.txt");
             drawIsland();
             state = GameState.PLAYING;
+            GameAchievement game = new GameAchievement();
+            game.Won3Games();
+            
+
+
             winMessage = "";
             loseMessage = "";
             playerMessage = "";
@@ -708,6 +714,14 @@ public class Game {
       public void removeGameEventListener(GameEventListener listener) {
             eventListeners.remove(listener);
       }
+      
+      public GameAchievement setAchievement(GameAchievement game){
+          return this.achievement = game;
+      }
+      
+      public GameAchievement getAchievement(){
+          return this.achievement;
+      }
 
       /**
        * *******************************************************************************************************************************
@@ -724,37 +738,46 @@ public class Game {
         if ( !player.isAlive() )
         {
             state = GameState.LOST;
-            message = "Sorry, you have lost the game. " + this.getLoseMessage() + endGameBonus();
-            this.setLoseMessage(message);
             //creates achievement object to reset counter of total games won.
             GameAchievement achievement = new GameAchievement();
             achievement.lossGameResetCounter();
             achievement.write_to_count(count_of_steps);
             achievement.read_kiwiCount(kiwiCount);
+            setAchievement(achievement);
+
+           
+            message = "Sorry, you have lost the game. " + this.getLoseMessage() + endGameBonus();
+            this.setLoseMessage(message);
+
 
         }
         else if (!playerCanMove() )
         {
+
             state = GameState.LOST;
-            message = "Sorry, you have lost the game. You do not have sufficient stamina to move." + endGameBonus();
-            this.setLoseMessage(message);
             //creates achievement object to reset counter of total games won.
             GameAchievement achievement = new GameAchievement();
             achievement.lossGameResetCounter();
             achievement.write_to_count(count_of_steps);
             achievement.read_kiwiCount(kiwiCount);
+            setAchievement(achievement);
+    
+            message = "Sorry, you have lost the game. You do not have sufficient stamina to move." + endGameBonus();
+            this.setLoseMessage(message);
+      
 
         }
         else if(predatorsTrapped == totalPredators)
         {
             state = GameState.WON;
-            message = "You win! You have done an excellent job and trapped all the predators." + endGameBonus();
-            this.setWinMessage(message);
             //adds to count for assigning achievement for winning 3 games in a row.
             GameAchievement achievement = new GameAchievement();
             achievement.Won3Games();
             achievement.write_to_count(count_of_steps);
             achievement.read_kiwiCount(kiwiCount);
+            message = "You win! You have done an excellent job and trapped all the predators." + endGameBonus();
+            this.setWinMessage(message);
+
 
             
          
@@ -764,13 +787,14 @@ public class Game {
             if(predatorsTrapped >= totalPredators * MIN_REQUIRED_CATCH)
             {
                 state = GameState.WON;
-                message = "You win! You have counted all the kiwi and trapped at least 80% of the predators." + endGameBonus();
-                this.setWinMessage(message);
                 //adds to count for assigning achievement for winning 3 games in a row.
                 GameAchievement achievement = new GameAchievement();
                 achievement.Won3Games();
                 achievement.write_to_count(count_of_steps);
                 achievement.read_kiwiCount(kiwiCount);
+                message = "You win! You have counted all the kiwi and trapped at least 80% of the predators." + endGameBonus();
+                this.setWinMessage(message);
+  
                 
             }
         }
@@ -820,6 +844,8 @@ public class Game {
             playerMessage = message;
 
       }
+      
+
 
       /**
        * Check if player able to move
@@ -831,6 +857,7 @@ public class Game {
                     || isPlayerMovePossible(MoveDirection.EAST) || isPlayerMovePossible(MoveDirection.WEST));
 
       }
+      
 
       /**
        * Trap a predator in this position
@@ -1040,4 +1067,5 @@ public class Game {
     private String winMessage = "";
     private String loseMessage  = "";
     private String playerMessage  = "";   
+
 }

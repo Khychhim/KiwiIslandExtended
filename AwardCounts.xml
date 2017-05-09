@@ -5,9 +5,8 @@ and open the template in the editor.
 --><Count>
     <Player1>
         <name>player1</name>
-        <game>0</game>
-        <savedKiwis>1</savedKiwis>
-        <gamesWon>0</gamesWon>
-        <squares>1076</squares>
+        <savedKiwis>0</savedKiwis>
+        <gamesWon>1</gamesWon>
+        <squares>53</squares>
     </Player1>
 </Count>
