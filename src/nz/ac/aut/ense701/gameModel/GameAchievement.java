@@ -38,6 +38,9 @@ public class GameAchievement {
     public boolean won3gamesinrow;
     public boolean walked;
     public boolean savedKiwis;
+    public int amount_of_kiwiSaved = 1;
+    public int amount_of_steps = 1000;
+    
     
     //Empty constructor.
     public GameAchievement(){
@@ -308,7 +311,13 @@ public class GameAchievement {
                
     }
     
-    
+    /**
+     * Reads the value in saved kiwi in the AwardCounts.xml document then
+     * checks to see if player has saved a certain amount of kiwis,
+     * if so assigns true to the boolean savedKiwis and sets the required
+     * achievement to be stored in the Achievements.xml
+     * @param kiwi 
+     */
     public void read_kiwiCount(int kiwi){
         Document xml = null;
         try{
@@ -325,7 +334,7 @@ public class GameAchievement {
                     System.out.println("True");
                     System.out.println("Counting kiwis saved added to the xml..");
                     node.setTextContent(Integer.toString(kiwi));
-                    if(kiwi >=1){
+                    if(kiwi >=amount_of_kiwiSaved){ //if player saves x amount of kiwi. 
                         savedKiwis = true;
                         setAchievements(ReadAchievementXML(), false, false, true);
                     }
@@ -376,7 +385,7 @@ public class GameAchievement {
                     System.out.println("Counting steps added to the xml..");
                     node.setTextContent(Integer.toString(count_of_step));
                     walked = false;
-                    if(count_of_step >=1000){ //if player walks over 1000 squares.
+                    if(count_of_step >=amount_of_steps){ //if player walks over 1000 squares.
                         walked = true;
                         setAchievements(ReadAchievementXML(),false, true, false);
        
