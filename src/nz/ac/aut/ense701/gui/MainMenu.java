@@ -22,7 +22,9 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import nz.ac.aut.ense701.gameModel.Game;
 
 /**
  *
@@ -34,7 +36,9 @@ public class MainMenu extends JPanel implements MouseListener {
     private Image backGroundImage;
     private Image buttonImage;
     private Timer resizeTimer;
+    private final JFrame menu;
     
+    private final JFrame[] subMenus;
     private final JLabel[] buttons;
     private final JLabel[] buttonText;
     private final Image[] buttonTextImages;
@@ -47,6 +51,7 @@ public class MainMenu extends JPanel implements MouseListener {
     private static final int EXIT_GAME      = 5;
     
     private static final int NUMBER_OF_BUTTONS = 6;
+    private static final int NUMBER_OF_SUB_MENUS = 5;
     
     private static final long WAIT_FOR_RESIZE = 250;
     
@@ -65,20 +70,20 @@ public class MainMenu extends JPanel implements MouseListener {
         buttons = new JLabel[NUMBER_OF_BUTTONS];
         buttonText = new JLabel[NUMBER_OF_BUTTONS];
         buttonTextImages = new Image[NUMBER_OF_BUTTONS];
-        init();
+        subMenus = new JFrame[NUMBER_OF_SUB_MENUS];
+        subMenus[ACHIEVMENTS] = new AchievementsMenu().getMenu();
+        subMenus[ACHIEVMENTS].addComponentListener(backListener());
+        subMenus[HIGH_SCORES] = new HighScoresMenu().getMenu();
+        subMenus[HIGH_SCORES].addComponentListener(backListener());
+        subMenus[GLOSSARY] = new GlossaryMenu().getMenu();
+        subMenus[GLOSSARY].addComponentListener(backListener());
+        subMenus[OPTIONS] = new OptionsMenu().getMenu();
+        subMenus[OPTIONS].addComponentListener(backListener());
+        menu = init();
     }
     
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new MainMenu().setVisible(true);
-            }
-        });
-    }
-    
-    private void init() {
-        JFrame mainMenu = new JFrame("Kiwi Island");
+    private JFrame init() {
+        JFrame mainMenu = new JFrame("Kiwi Island - Main menu");
         try {
             backGroundImage = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/MenuBackground.png"));
             buttonImage = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/Button.png"));
@@ -167,6 +172,8 @@ public class MainMenu extends JPanel implements MouseListener {
         mainMenu.pack();
         mainMenu.setVisible(true);
         mainMenu.setLocationRelativeTo(null);
+        
+        return mainMenu;
     }
     
     private void resizeWindow(ComponentEvent e) {
@@ -218,18 +225,72 @@ public class MainMenu extends JPanel implements MouseListener {
     public void mousePressed(MouseEvent e) {
         Point clickLoc = e.getPoint();
         if(buttons[START_GAME].getBounds().contains(clickLoc)) {
-            System.out.println("Start Game...");
+            Object[] options = {"New Game", "Load Game"};
+            int option = JOptionPane.showOptionDialog(menuPane, 
+                    "Start a New Game or Load a Saved Game?", "Start Game", 
+                    JOptionPane.YES_NO_CANCEL_OPTION, 
+                    JOptionPane.DEFAULT_OPTION, 
+                    null, options, options[1]);
+            
+            switch(option) {
+                case 0:
+                    menu.setVisible(false);
+                    //Create Game
+                    final Game game = new Game();
+                    //Create the GUI for the game
+                    final KiwiCountUI gui  = new KiwiCountUI(game);
+                    gui.setLocation(menu.getLocation());
+                    gui.addComponentListener(backListener());
+                    gui.setVisible(true);
+                    break;
+                case 1:
+                    System.err.println("Load Game");
+                    break;
+                default:
+                    System.out.println("No option selected");
+                    break;
+            }
         } else if(buttons[HIGH_SCORES].getBounds().contains(clickLoc)) {
-            System.out.println("High Scores...");
+            menu.setVisible(false);
+            subMenus[HIGH_SCORES].setVisible(true);
+            subMenus[HIGH_SCORES].setLocation(menu.getLocation());
+            subMenus[HIGH_SCORES].setSize(menu.getWidth(), menu.getHeight());
         } else if(buttons[GLOSSARY].getBounds().contains(clickLoc)) {
-            System.out.println("Glossary...");
+            menu.setVisible(false);
+            subMenus[GLOSSARY].setVisible(true);
+            subMenus[GLOSSARY].setLocation(menu.getLocation());
+            subMenus[GLOSSARY].setSize(menu.getWidth(), menu.getHeight());
         } else if(buttons[ACHIEVMENTS].getBounds().contains(clickLoc)) {
-            System.out.println("Achivements...");
+            menu.setVisible(false);
+            subMenus[ACHIEVMENTS].setVisible(true);
+            subMenus[ACHIEVMENTS].setLocation(menu.getLocation());
+            subMenus[ACHIEVMENTS].setSize(menu.getWidth(), menu.getHeight());
         } else if(buttons[OPTIONS].getBounds().contains(clickLoc)) {
-            System.out.println("Options...");
+            menu.setVisible(false);
+            subMenus[OPTIONS].setVisible(true);
+            subMenus[OPTIONS].setLocation(menu.getLocation());
+            subMenus[OPTIONS].setSize(menu.getWidth(), menu.getHeight());
         } else if(buttons[EXIT_GAME].getBounds().contains(clickLoc)) {
             System.exit(0);
         }
+    }
+    
+    private ComponentListener backListener() {
+        return new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {}
+
+            @Override
+            public void componentMoved(ComponentEvent e) {}
+
+            @Override
+            public void componentShown(ComponentEvent e) {}
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                menu.setVisible(true);
+            }
+        };
     }
 
     @Override
