@@ -920,7 +920,6 @@ public class Game {
                         String terrainString = terrainRow.substring(col, col + 1);
                         Terrain terrain = Terrain.getTerrainFromStringRepresentation(terrainString);
                         island.setTerrain(pos, terrain);
-                        island.setVisible(pos);
                   }
             }
       }
@@ -989,8 +988,6 @@ public class Game {
             }
       }
 
-      
-      
       /**
        * set the start and end position for row and column which will be 
        * used to display the view of the map 
