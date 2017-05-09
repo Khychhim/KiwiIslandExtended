@@ -477,7 +477,7 @@ public class GameAchievement {
       
     public String getWalkingAchievement(){
           return "Achievement unlocked: **TRAVELLER** - "
-                  + " You have travelled over 1000 steps!!";
+                  + " You have travelled far!!";
       }
       
       
