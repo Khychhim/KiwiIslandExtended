@@ -288,6 +288,7 @@ public class MainMenu extends JPanel implements MouseListener {
 
             @Override
             public void componentHidden(ComponentEvent e) {
+                menu.setSize(e.getComponent().getSize());
                 menu.setVisible(true);
             }
         };

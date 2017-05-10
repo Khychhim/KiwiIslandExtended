@@ -31,11 +31,11 @@ import javax.swing.JPanel;
 public abstract class SubMenu extends JPanel implements MouseListener {
     private javax.swing.JLabel menuBackground;
     private JLabel backButton;
-    private javax.swing.JLayeredPane menuPane;
+    protected javax.swing.JLayeredPane menuPane;
     private Image backGroundImage;
     private Image backButtonImage;
     private Timer resizeTimer;
-    private JFrame menu;
+    protected JFrame menu;
     
     private static final long WAIT_FOR_RESIZE = 250;
     
@@ -48,7 +48,7 @@ public abstract class SubMenu extends JPanel implements MouseListener {
     
     public SubMenu(String frameName) {
         resizeTimer = new Timer();
-        menu = init(frameName);
+        init(frameName);
     }
     
     public JFrame getMenu() {
@@ -59,8 +59,8 @@ public abstract class SubMenu extends JPanel implements MouseListener {
         this.menu = menu;
     }
     
-    private JFrame init(String frameName) {
-        JFrame menu = new JFrame(frameName);
+    private void init(String frameName) {
+        menu = new JFrame(frameName);
         try {
             backGroundImage = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/SubMenuBackground.png"));
             backButtonImage = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/BackButton.png"));
@@ -120,11 +120,9 @@ public abstract class SubMenu extends JPanel implements MouseListener {
 
         menu.pack();
         menu.setLocationRelativeTo(null);
-        
-        return menu;
     }
     
-    private void resizeWindow(ComponentEvent e) {
+    protected void resizeWindow(ComponentEvent e) {
         int width = e.getComponent().getWidth();
         int height = e.getComponent().getHeight();
         int backButtonWidth = (int) (width*BACK_BUTTON_WIDTH_RATIO);
@@ -142,7 +140,7 @@ public abstract class SubMenu extends JPanel implements MouseListener {
                              backButtonWidth, backButtonHeight);
     }
     
-    private Image scaleImage(Image image, int width, int height) {
+    protected Image scaleImage(Image image, int width, int height) {
         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = resized.createGraphics();
         
