@@ -7,6 +7,7 @@ package nz.ac.aut.ense701.gameModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -24,12 +25,17 @@ import org.xml.sax.SAXException;
  */
 public class ReadQuizXML {
 
+    private ArrayList<QuizQuestion> questionArrayList;
+
     public static void main(String[] args) {
         new ReadQuizXML();
     }
 
+    /**
+     * ReadQuizXML method read quizXML.xml and store in questionArrayList
+     */
     public ReadQuizXML() {
-        File quizFile = new File("quiz.xml");
+        File quizFile = new File("quizQuestions.xml");
         Document doc = null;
 
         DocumentBuilderFactory docBuildFactory = DocumentBuilderFactory.newInstance();
@@ -62,6 +68,11 @@ public class ReadQuizXML {
             Node questionNode = questionList.item(i);
             Element questionElement = (Element) questionNode;
 
+            //get difficulty
+            Node difficultyNode = questionElement.getElementsByTagName("difficulty").item(0);
+            Element difficultyElement = (Element) difficultyNode;
+            System.out.println("Difficulty: " + difficultyElement.getTextContent());
+
             //get quizquestion
             Node quizquestionNode = questionElement.getElementsByTagName("quizquestion").item(0);
             Element quizquestionElement = (Element) quizquestionNode;
@@ -81,22 +92,6 @@ public class ReadQuizXML {
 
         }
 
-//         Node node = list.item(0);
-//         node.getAttributes()
-//        for (int i = 0; i < list.getLength(); i++) {
-//            System.out.println(list.getLength());
-//            Node node = list.item(i);
-//
-//            if (node.getNodeType() == Node.ELEMENT_NODE) {
-//                Element element = (Element) node;
-//
-//                System.out.println("ID:" + element.getAttribute("ID"));
-//                System.out.println("Name :" + element.getElementsByTagName("Name").item(0).getTextContent());
-//                System.out.println("Surname :" + element.getElementsByTagName("Surname").item(0).getTextContent());
-//                System.out.println("Age :" + element.getElementsByTagName("Age").item(0).getTextContent());
-//
-//            }
-//        }
     }
 
 }
