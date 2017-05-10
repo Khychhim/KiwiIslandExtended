@@ -67,6 +67,10 @@ public class Game {
             score = new Score();
             initialiseIslandFromFile("IslandData.txt");
             drawIsland();
+
+
+
+  
             state = GameState.PLAYING;
             winMessage = "";
             loseMessage = "";
@@ -736,6 +740,7 @@ public class Game {
             //creates achievement object to reset counter of total games won.
             GameAchievement achievement = new GameAchievement();
             achievement.lossGameResetCounter();
+
             achievement.write_to_count(count_of_steps);
             achievement.read_kiwiCount(kiwiCount);
 
@@ -754,10 +759,12 @@ public class Game {
             state = GameState.LOST;
             //creates achievement object to reset counter of total games won.
             GameAchievement achievement = new GameAchievement();
+            
+
             achievement.lossGameResetCounter();
             achievement.write_to_count(count_of_steps);
             achievement.read_kiwiCount(kiwiCount);
-            setAchievement(achievement);
+            setAchievement(achievement);//setter or getter for achievement instance.
             
     
             message = "Sorry, you have lost the game. You do not have sufficient stamina to move." + endGameBonus();
@@ -792,7 +799,8 @@ public class Game {
                 achievement.read_kiwiCount(kiwiCount);
                 message = "You win! You have counted all the kiwi and trapped at least 80% of the predators." + endGameBonus();
                 this.setWinMessage(message);
-  
+                
+                
                 
             }
         }
