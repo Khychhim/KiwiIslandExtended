@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<quiz>
+    <questions>
+      <question>
+		<difficulty>1</difficulty>
+        <quizquestion>What is kiwi taste like?</quizquestion>
+        <answer>pork</answer>
+        <answer>beef</answer>
+        <answer>bird</answer>
+        <answer>chicken</answer>
+        <correct>4</correct>
+      </question>
+
+      <question>
+		<difficulty>2</difficulty>
+        <quizquestion>What is kiwi favioute fruit?></quizquestion>
+        <answer>apple</answer>
+        <answer>banana</answer>
+        <answer>pie</answer>
+        <answer>watermelon</answer>
+        <correct>1</correct>
+      </question>
+
+      <question>
+		<difficulty>3</difficulty>
+        <quizquestion>what is kiwis favioute drink?</quizquestion>
+        <answer>Apple sour cocktail</answer>
+        <answer>Haniken</answer>
+        <answer>Whisky</answer>
+        <answer>Water</answer>
+        <correct>4</correct>
+      </question>
+</questions>
+</quiz>
