@@ -64,12 +64,12 @@ public class KiwiCountUI
                  JOptionPane.showOptionDialog(this,game.getAchievement().getSavedKiwiAchievement(),"Hero!",
                  JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);  
             }
-            else if(game.getAchievement().walked){
+            if(game.getAchievement().walked){
                 JOptionPane.showOptionDialog(this,game.getAchievement().getWalkingAchievement(),"Traveller!",
                  JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);  
             }
             
-            else if(game.getAchievement().won3gamesinrow){
+            if(game.getAchievement().won3gamesinrow){
                 JOptionPane.showOptionDialog(this,game.getAchievement().getWon3Achievement(),"Survivor",
                  JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);  
             }

@@ -5,11 +5,11 @@ and open the template in the editor.
 --><Count>
     <Player1>
         <name>player1</name>
-        <savedKiwis>0</savedKiwis>
+        <savedKiwis>1</savedKiwis>
         <gamesWon>0</gamesWon>
-        <squares>8</squares>
+        <squares>32</squares>
         <game3won>f</game3won>
-        <traveller>f</traveller>
-        <hero>f</hero>
+        <traveller>t</traveller>
+        <hero>t</hero>
     </Player1>
 </Count>
