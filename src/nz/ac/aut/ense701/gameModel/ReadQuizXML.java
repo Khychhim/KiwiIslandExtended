@@ -32,6 +32,15 @@ public class ReadQuizXML {
     }
 
     /**
+     * This is will return a ArrayList of Questions
+     *
+     * @return ArrayList<QuizQuestion>
+     */
+    public ArrayList<QuizQuestion> getQuestionArrayList() {
+        return questionArrayList;
+    }
+
+    /**
      * ReadQuizXML method read quizXML.xml and store in questionArrayList
      */
     public ReadQuizXML() {
@@ -64,31 +73,52 @@ public class ReadQuizXML {
 
         //get question
         NodeList questionList = questionsElement.getElementsByTagName("question");
+
+        //getting question contents
         for (int i = 0; i < questionList.getLength(); i++) {
+            String difficulty;
+            String quizQuestion;
+            String[] answers;
+            String correct;
+
             Node questionNode = questionList.item(i);
             Element questionElement = (Element) questionNode;
 
-            //get difficulty
+            //get difficulty content
             Node difficultyNode = questionElement.getElementsByTagName("difficulty").item(0);
             Element difficultyElement = (Element) difficultyNode;
-            System.out.println("Difficulty: " + difficultyElement.getTextContent());
+            difficulty = difficultyElement.getTextContent();
 
-            //get quizquestion
+            //get Quiz Question content
             Node quizquestionNode = questionElement.getElementsByTagName("quizquestion").item(0);
             Element quizquestionElement = (Element) quizquestionNode;
-            System.out.println(quizquestionElement.getTextContent());
+            quizQuestion = quizquestionElement.getTextContent();
 
-            //get aswers (There are 4 answers)
-            for (int j = 0; j < 4; j++) {
-                Node aswerNode = questionElement.getElementsByTagName("answer").item(j);
+            //get aswers contents
+            NodeList answerList = questionElement.getElementsByTagName("answer");
+            answers = new String[answerList.getLength()];
+            for (int j = 0; j < answerList.getLength(); j++) {
+                Node aswerNode = answerList.item(j);
                 Element answerElement = (Element) aswerNode;
-                System.out.println("\tAnswer: " + answerElement.getTextContent());
+                answers[j] = answerElement.getTextContent();
             }
 
-            //get correct answer
+            //get correct answer content
             Node correctNode = questionElement.getElementsByTagName("correct").item(0);
             Element correctElement = (Element) correctNode;
-            System.out.println("Correct: " + correctElement.getTextContent() + "\n");
+            correct = correctElement.getTextContent();
+
+            //setQuestion
+            QuizQuestion question = new QuizQuestion(Integer.parseInt(difficulty), quizQuestion, answers, Integer.parseInt(correct));
+            questionArrayList.add(question);
+
+            //Debug - print all questions
+            StringBuilder builder = new StringBuilder();
+            for (String s : answers) {
+                builder.append(s + ", ");
+            }
+            System.out.println("Difficulty: " + difficulty + "\nQuizQuestion: "
+                    + "\nAnswers: " + builder.toString() + "\nCorrect: " + correct);
 
         }
 
