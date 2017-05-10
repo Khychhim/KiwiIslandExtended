@@ -195,6 +195,28 @@ public class GameTest extends junit.framework.TestCase
     }
     
     @Test
+    public void testPlayerMoveToTrigger(){
+        boolean isaTrigger=false;
+        Island testIsland = new Island(2,1);
+        Position playerPosition = new Position(testIsland,0,0);
+        Position triggerPosition = new Position(testIsland,1,0);
+        
+        Trigger trigger = new Trigger(new Position(island, 0,1), "Trigger", "you have a Quiz");
+        testIsland.addOccupant(triggerPosition, trigger);
+
+        game.setIsland(testIsland);        
+        game.getPlayer().setPosition(playerPosition);
+        //player move
+        if (trigger.getPosition() == triggerPosition) {
+            game.playerMove(MoveDirection.SOUTH);
+            isaTrigger = true;
+        }
+        
+        assertTrue("Move to south, see a trigger and minigame panel pop-up.",isaTrigger);
+        
+    }
+    
+    @Test
     public void testIsPlayerMovePossibleValidMove(){
         //At start of game player has valid moves EAST, West & South
         assertTrue("Move should be valid", game.isPlayerMovePossible(MoveDirection.SOUTH));
