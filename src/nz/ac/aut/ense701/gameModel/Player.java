@@ -357,4 +357,11 @@ public class Player
             reduceStamina(getStaminaNeededToMove(terrain));
         }
     }
+    
+    /**
+     * This method will set the player position
+     */
+    public void setPosition(Position pos){
+        this.position = pos;
+    }
 }
