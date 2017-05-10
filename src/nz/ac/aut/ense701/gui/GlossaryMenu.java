@@ -22,6 +22,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -83,6 +84,7 @@ public class GlossaryMenu extends SubMenu {
         animalInfo = new JTextArea();
         animalInfo.setEditable(false);
         animalInfo.setBackground(new Color(154, 165, 0));
+        animalInfo.setLineWrap(true);
         loadImages();
         init();
         readingGlossary();
@@ -137,35 +139,27 @@ public class GlossaryMenu extends SubMenu {
 
             Document doc = dBuilder.parse(file);
             doc.getDocumentElement().normalize();
-            //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 
             NodeList list = doc.getElementsByTagName("Creature");
-            for (int temp = 0; temp < list.getLength(); temp++) {
+            for(int i = 0; i < list.getLength(); i++) {
+                Node creature = list.item(i);
 
-                Node nNode = list.item(temp);
-
-                //System.out.println("\nCurrent Element :" + nNode.getNodeName());
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-
-                    Element eElement = (Element) nNode;
-
-                    /*
-                    if(Integer.parseInt(eElement.getAttribute("id")) ) {
-                        System.out.println("Rat");
-                        rat = true;
-                        foundCreature = true;
-                    }
-                    */
+                if(creature.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) creature;
+                    int id = Integer.parseInt(element.getAttribute("id"));
+                    animals[id].description = element.getElementsByTagName("Description").item(0).getTextContent();
+                    animals[id].visible = Boolean.parseBoolean(element.getAttribute("Seen"));
+                    animals[id].name = element.getElementsByTagName("Name").item(0).getTextContent();
                 }
             }
         } catch (IOException e) {
             System.err.println("IO error: " + e.getMessage());
         } catch (NumberFormatException e) {
-            System.err.println("IO error: " + e.getMessage());
+            System.err.println("NumberFormatException error: " + e.getMessage());
         } catch (ParserConfigurationException e) {
-            System.err.println("IO error: " + e.getMessage());
+            System.err.println("Parser error: " + e.getMessage());
         } catch (SAXException e) {
-            System.err.println("IO error: " + e.getMessage());
+            System.err.println("SAXException error: " + e.getMessage());
         }
     }
     

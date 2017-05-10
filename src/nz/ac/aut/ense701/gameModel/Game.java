@@ -13,6 +13,23 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 /**
  * This is the class that knows the Kiwi Island game rules and state and
  * enforces those rules.
@@ -32,6 +49,7 @@ public class Game {
       public static final int PREDATOR_TIME = 30;
       public Timer timer;
     public static String playerName = "River Song";
+    public Document glossarydocs;
     
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
@@ -70,6 +88,27 @@ public class Game {
                         movePredators();
                   }
             }, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);
+            //creating XML glossary document.
+            File glossaryXML = new File("glossary.xml");
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = null;
+            try {
+                docBuilder = docFactory.newDocumentBuilder();
+            } catch (ParserConfigurationException ex) {
+                System.err.println("Parser Exception: " + ex.getMessage());
+            }
+            // root elements
+            Document doc = null;
+            try {
+                doc = docBuilder.parse(glossaryXML);
+            } catch (SAXException ex) {
+                System.err.println("SAXEception: " + ex.getMessage());
+            } catch (IOException ex) {
+                System.err.println("IOException: " + ex.getMessage());
+            }
+            doc.getDocumentElement().normalize();
+
+            glossarydocs = doc;
             notifyGameEventListeners();
       }
 
@@ -673,6 +712,9 @@ public class Game {
 
                   // Is there a hazard?
                   checkForHazard();
+                  
+                  //is there an animal?
+                  detectAnimal();
 
                   updateGameState();
             }
@@ -713,18 +755,58 @@ public class Game {
         {
             state = GameState.LOST;
             message = "Sorry, you have lost the game. " + this.getLoseMessage() + endGameBonus();
-            this.setLoseMessage(message);
+            
+             try {    
+                 // write the content into xml file
+                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                 Transformer transformer = transformerFactory.newTransformer();
+                 DOMSource source = new DOMSource(glossarydocs);
+                 StreamResult result = new StreamResult(new File("glossary.xml"));
+                 
+                 transformer.transform(source, result);
+                 
+                 System.out.println("File saved!");
+             } catch (TransformerException ex) {
+                 System.err.println("Transformer Exception: " + ex);
+             }
+             this.setLoseMessage(message);
         }
         else if (!playerCanMove() )
         {
             state = GameState.LOST;
             message = "Sorry, you have lost the game. You do not have sufficient stamina to move." + endGameBonus();
+            try {    
+                 // write the content into xml file
+                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                 Transformer transformer = transformerFactory.newTransformer();
+                 DOMSource source = new DOMSource(glossarydocs);
+                 StreamResult result = new StreamResult(new File("glossary.xml"));
+                 
+                 transformer.transform(source, result);
+                 
+                 System.out.println("File saved!");
+             } catch (TransformerException ex) {
+                 System.err.println("Transformer Exception: " + ex);
+             }
             this.setLoseMessage(message);
         }
         else if(predatorsTrapped == totalPredators)
         {
             state = GameState.WON;
             message = "You win! You have done an excellent job and trapped all the predators." + endGameBonus();
+            try {    
+                 // write the content into xml file
+                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                 Transformer transformer = transformerFactory.newTransformer();
+                 DOMSource source = new DOMSource(glossarydocs);
+                 StreamResult result = new StreamResult(new File("glossary.xml"));
+                 
+                 transformer.transform(source, result);
+                 
+                 System.out.println("File saved!");
+             } catch (TransformerException ex) {
+                 System.err.println("Transformer Exception: " + ex);
+             }
             this.setWinMessage(message);
         }
         else if(kiwiCount == totalKiwis)
@@ -733,12 +815,44 @@ public class Game {
             {
                 state = GameState.WON;
                 message = "You win! You have counted all the kiwi and trapped at least 80% of the predators." + endGameBonus();
+                try {    
+                 // write the content into xml file
+                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                 Transformer transformer = transformerFactory.newTransformer();
+                 DOMSource source = new DOMSource(glossarydocs);
+                 StreamResult result = new StreamResult(new File("glossary.xml"));
+                 
+                 transformer.transform(source, result);
+                 
+                 System.out.println("File saved!");
+             } catch (TransformerException ex) {
+                 System.err.println("Transformer Exception: " + ex);
+             }
                 this.setWinMessage(message);
             }
         }
             // notify listeners about changes
             notifyGameEventListeners();
       }
+          
+    public void detectAnimal() {
+        NodeList creatures = glossarydocs.getElementsByTagName("Creature");
+
+        for (Occupant occupant : island.getOccupants(player.getPosition())) {
+            if (occupant instanceof Predator || occupant instanceof Kiwi || occupant instanceof Fauna) {
+                for(int i = 0; i < creatures.getLength(); i++) {
+                    Node creature = creatures.item(i);
+                    if(creature.getNodeType() == Node.ELEMENT_NODE) {
+                        Element element = (Element) creature;
+                        Node name = element.getElementsByTagName("Name").item(0);
+                        if(name.getTextContent().equalsIgnoreCase(occupant.getName())) {
+                            element.setAttribute("Seen", "true");
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     private String endGameBonus() {
         int kiwisCountedBonus = (int)(Score.KIWIS_COUNTED * ((double) kiwiCount / totalKiwis));

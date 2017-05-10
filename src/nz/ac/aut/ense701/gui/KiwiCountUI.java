@@ -53,7 +53,8 @@ public class KiwiCountUI
                     JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
             
             if(option == JOptionPane.OK_OPTION){
-                  game.createNewGame();
+                  game = null;
+                  this.setVisible(false);
             }  
         }
         else if ( game.getState() == GameState.WON )
@@ -62,7 +63,8 @@ public class KiwiCountUI
                     JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
               
             if(option == JOptionPane.OK_OPTION){
-                  game.createNewGame();
+                  game = null;
+                  this.setVisible(false);
             }  
         }
         else if (game.messageForPlayer())

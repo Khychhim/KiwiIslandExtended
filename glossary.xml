@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Glossary>
+	<Creature Seen="false" id="1">
+		<Name>Kiore</Name>
+		<Description>Kiore are regarded as a valued taonga by some iwi.</Description>
+	</Creature>
+	<Creature Seen="false" id="4">
+		<Name>Stoat</Name>
+		<Description>Stoats are responsible for at least 60 of kiwi chick deaths. Stoats are decimating the kiwi population with six out of ten chicks being killed before they reach breeding age.</Description>
+	</Creature>
+	<Creature Seen="false" id="2">
+		<Name>Possum</Name>
+		<Description>Possums destroy native trees and shrubs, and eat the berries needed by native birds. They eat New Zealand’s native land snail, lizards and insects, and chase birds off their nests to eat the chicks and eggs.</Description>
+	</Creature>
+	<Creature Seen="false" id="0">
+		<Name>Cat</Name>
+		<Description>Wild or abandoned cats are a particular threat to kiwis, especially young chicks. Along with stoats, cats kill 70% of wild-born kiwi chicks before they reach 6 months of age.</Description>
+	</Creature>
+	<Creature Seen="false" id="3">
+		<Name>Rat</Name>
+		<Description>Rats and mice are usually in the bush in large numbers. They pose two problems for kiwi. First, they degrade native forests by eating the fruit that native birds depend on for food and the forest needs for natural regeneration. Second, they are food for the kiwi’s predators  – mustelids and cats – and help keep the populations of those lethal predators high.</Description>
+	</Creature>
+</Glossary>
