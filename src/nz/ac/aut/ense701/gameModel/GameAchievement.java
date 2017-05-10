@@ -38,6 +38,9 @@ public class GameAchievement {
     public boolean won3gamesinrow;
     public boolean walked;
     public boolean savedKiwis;
+    public boolean walkingGUI;
+    public boolean savedGUI;
+    public boolean wonGUI;
     public int amount_of_kiwiSaved = 1;
     public int amount_of_steps = 10;
     
@@ -171,6 +174,7 @@ public class GameAchievement {
                 if(check_if_wonaward()){
                     if(won3gamesinrow && "game3won".equals(node.getNodeName())){
                         node.setTextContent("t");
+                        wonGUI = true;
                         setAchievements(ReadAchievementXML(), true,
                                 false, false);
                         
@@ -345,6 +349,7 @@ public class GameAchievement {
                 if(check_if_kiwiaward()){
                     if(savedKiwis && "hero".equals(node.getNodeName())){
                         node.setTextContent("t");
+                        savedGUI = true;
                         setAchievements(ReadAchievementXML(), false, false, true);
                     }
                 
@@ -395,7 +400,7 @@ public class GameAchievement {
                     System.out.println("Counting steps added to the xml..");
                     node.setTextContent(Integer.toString(count_of_step));
                     walked = false;
-               
+                    
                     if(count_of_step >=amount_of_steps){ //if player walks over 1000 squares.
                             walked = true;
                             
@@ -405,6 +410,7 @@ public class GameAchievement {
                 if(check_if_tavelaward()){
                     if(walked && "traveller".equals(node.getNodeName())){
                         node.setTextContent("t");
+                        walkingGUI = true;
                         setAchievements(ReadAchievementXML(),false, true, false);
                       
                     }
@@ -493,7 +499,10 @@ public class GameAchievement {
     
     
   
-    
+    /**
+     * Checks if kiwi award is unlocked or locked for player achievement.
+     * @return boolean if unlocked then returns true.
+     */
     public boolean check_if_kiwiaward(){
          Document xml = null;
         try{
@@ -545,8 +554,10 @@ public class GameAchievement {
     
     }
     
-    
-       
+     /**
+     * Checks if travel award is unlocked or locked for player achievement.
+     * @return boolean if unlocked then returns true.
+     */
     public boolean check_if_tavelaward(){
          Document xml = null;
         try{
@@ -597,7 +608,10 @@ public class GameAchievement {
     }
     
     
-    
+     /**
+     * Checks if travel award is unlocked or locked for player achievement.
+     * @return boolean if unlocked then returns true.
+     */
     public boolean check_if_wonaward(){
          Document xml = null;
         try{
