@@ -17,6 +17,13 @@ public class QuizQuestion {
     public static final int VALUE_LEVEL2_QUIZ = 2;
     public static final int VALUE_LEVEL3_QUIZ = 3;
 
+    public QuizQuestion(int difficulty, String question, String[] questionOptions, int correctOptionIndex) {
+        this.difficulty = difficulty;
+        this.question = question;
+        this.questionOptions = questionOptions;
+        this.correctOptionIndex = correctOptionIndex;
+    }
+
     public void setQuestion(String question) {
         this.question = question;
     }
