@@ -77,7 +77,6 @@ public final class MapDataTypes {
             } else if(occType.equals("Q")) {
                 triggerTypes.add(new Trigger(null, occName, occDesc));
             }
-            
         }
     }
 }
