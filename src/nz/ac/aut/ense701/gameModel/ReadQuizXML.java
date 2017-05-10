@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
  */
 public class ReadQuizXML {
 
-    private ArrayList<QuizQuestion> questionArrayList;
+    private ArrayList<QuizQuestion> questionArrayList = new ArrayList<QuizQuestion>();
 
     public static void main(String[] args) {
         new ReadQuizXML();
