@@ -55,8 +55,8 @@ public class Game {
        * Starts a new game. At this stage data is being read from a text file
        */
       public void createNewGame() {
-        //    DifferentMap dm = new DifferentMap(15, 15, playerName);
-        //    dm.generateMap();
+            DifferentMap dm = new DifferentMap(15, 15, playerName);
+            dm.generateMap();
             allPredators.clear();
             totalPredators = 0;
             totalKiwis = 0;
