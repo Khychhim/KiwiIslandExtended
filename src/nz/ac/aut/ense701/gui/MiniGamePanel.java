@@ -3,7 +3,11 @@
  */
 package nz.ac.aut.ense701.gui;
 
+import java.util.ArrayList;
+import java.util.Random;
+import javax.swing.JRadioButton;
 import nz.ac.aut.ense701.gameModel.Game;
+import nz.ac.aut.ense701.gameModel.QuizQuestion;
 
 /**
  * @param Game game
@@ -11,17 +15,33 @@ import nz.ac.aut.ense701.gameModel.Game;
  */
 public class MiniGamePanel extends javax.swing.JPanel {
 
+    private ArrayList<QuizQuestion> quizQuestionList;
+    private QuizQuestion question;
     private Game game;
 
     /**
      * Creates new form MiniGamePanel
      */
     public MiniGamePanel(Game game) {
-        this.game = game;
         initComponents();
+        this.game = game;
 
     }
-
+    
+    /**
+     * pick up a new question randomly which is not completed
+     * @param QuizQuestion
+     */
+    public QuizQuestion PickRandomQuestion() {
+        Random rnd = new Random();
+        int questionSize = game.quizQuestionList.size();
+        QuizQuestion theQuestion;
+        do {
+            theQuestion = game.quizQuestionList.get(rnd.nextInt(questionSize));
+        } while (!theQuestion.isComplete());
+        return theQuestion;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,8 +52,23 @@ public class MiniGamePanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jlabelQuestion = new javax.swing.JLabel();
+        jPanelOptions = new javax.swing.JPanel();
 
         jLabel1.setText("Mini Game Quiz");
+
+        jlabelQuestion.setText("Question: ");
+
+        javax.swing.GroupLayout jPanelOptionsLayout = new javax.swing.GroupLayout(jPanelOptions);
+        jPanelOptions.setLayout(jPanelOptionsLayout);
+        jPanelOptionsLayout.setHorizontalGroup(
+            jPanelOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanelOptionsLayout.setVerticalGroup(
+            jPanelOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 132, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -41,20 +76,29 @@ public class MiniGamePanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(314, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanelOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlabelQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(271, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlabelQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanelOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(85, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanelOptions;
+    private javax.swing.JLabel jlabelQuestion;
     // End of variables declaration//GEN-END:variables
 }
