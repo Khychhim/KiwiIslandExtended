@@ -47,6 +47,7 @@ public class Game {
             rand = new Random();
             allPredators = new ArrayList<Occupant>();
             Collections.synchronizedList(allPredators);
+            quizQuestionList = new ReadQuizXML().getQuestionArrayList();
             createNewGame();
       }
 
@@ -1034,7 +1035,7 @@ public class Game {
                 MiniGamePanel minigamePanel = new MiniGamePanel(game);
                 
                 //setup Frame
-                JFrame frame = new JFrame();
+                JFrame frame = new JFrame("Mini Gmae Quiz");
                 frame.add(minigamePanel);
                 frame.setSize(minigamePanel.getSize());
                 
