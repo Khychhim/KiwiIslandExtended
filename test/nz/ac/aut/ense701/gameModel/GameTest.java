@@ -195,7 +195,7 @@ public class GameTest extends junit.framework.TestCase
     }
     
     @Test
-    public void testPlayerMoveToTrigger(){
+    public void testIsQuizLaunch(){
         boolean isPlayerOnTrigger=false;
         boolean isPlayerMoveSuccess = false;
         
