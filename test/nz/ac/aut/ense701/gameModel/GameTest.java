@@ -1,6 +1,16 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.text.Document;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 /**
  * The test class GameTest.
@@ -30,9 +40,15 @@ public class GameTest extends junit.framework.TestCase
     @Override
     protected void setUp()
     {
-        // Create a new game from the data file.
-        // Player is in position 2,0 & has 100 units of stamina
-        game           = new Game();
+        try {
+            // Create a new game from the data file.
+            // Player is in position 2,0 & has 100 units of stamina
+            game           = new Game();
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(GameTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(GameTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         playerPosition = game.getPlayer().getPosition();
         player         = game.getPlayer();
         island = game.getIsland();
@@ -128,6 +144,49 @@ public class GameTest extends junit.framework.TestCase
     public void testGetRandomDirection(){
           MoveDirection direction = game.getRandomDirection();
           assertTrue(direction instanceof MoveDirection);         
+    }
+    
+    
+    @Test
+    public void countreset(){
+        int zero =0;
+        assertEquals(zero, game.count_of_steps);
+    }
+    @Test
+    public void achievementWonGames(){
+        assertTrue(game.achievement.won3gamesinrow);
+    }
+    @Test
+    public void achievementTraveller(){
+        assertTrue(game.achievement.walked);
+    }
+    
+    @Test
+    public void achievementHero(){
+        assertTrue(game.achievement.savedKiwis);
+    }
+    
+    @Test
+    public void AchievementXMLDocument(){
+        
+        try{
+            Document xml = null;
+            File fXmlFile = new File("Achievements.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            xml = (Document) dBuilder.parse(fXmlFile);
+            assertEquals(xml, game.achievement.ReadAchievementXML());
+        }
+        catch(SAXException e){
+            System.out.println("SAXException error");
+                
+        }
+        catch(IOException e){
+            System.out.println("IOException error");
+        }
+        catch(ParserConfigurationException e){
+            System.out.println("Parser Error");
+        }
     }
     
     @Test

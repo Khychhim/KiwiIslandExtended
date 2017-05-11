@@ -2,9 +2,15 @@ package nz.ac.aut.ense701.gui;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.awt.event.KeyEvent;
+
 import javax.swing.JOptionPane;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import nz.ac.aut.ense701.gameModel.Game;
+import nz.ac.aut.ense701.gameModel.GameAchievement;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
 import nz.ac.aut.ense701.gameModel.GameState;
 import nz.ac.aut.ense701.gameModel.MoveDirection;
@@ -35,6 +41,8 @@ public class KiwiCountUI
         update();
     }
     
+
+    
     /**
      * This method is called by the game model every time something changes.
      * Trigger an update.
@@ -51,18 +59,51 @@ public class KiwiCountUI
             game.timer.purge();
             int option = JOptionPane.showOptionDialog(this, game.getLoseMessage(), "Game over!", 
                     JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            //System.out.println("Value of won games is" +game.getAchievement().won3gamesinrow );
+            if(game.getAchievement().savedKiwis && game.getAchievement().savedGUI){
+                 JOptionPane.showOptionDialog(this,game.getAchievement().getSavedKiwiAchievement(),"Hero!",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+            if(game.getAchievement().walked && game.getAchievement().walkingGUI){
+                JOptionPane.showOptionDialog(this,game.getAchievement().getWalkingAchievement(),"Traveller!",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+            
+            if(game.getAchievement().won3gamesinrow && game.getAchievement().wonGUI){
+                JOptionPane.showOptionDialog(this,game.getAchievement().getWon3Achievement(),"Survivor",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+           
             
             if(option == JOptionPane.OK_OPTION){
-                  game.createNewGame();
+                game.createNewGame();
             }  
         }
         else if ( game.getState() == GameState.WON )
         {
               int option = JOptionPane.showOptionDialog(this,  game.getWinMessage(), "Well Done!", 
                     JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                        if(game.getAchievement().savedKiwis){
+                 JOptionPane.showOptionDialog(this,game.getAchievement().getSavedKiwiAchievement(),"Hero!",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+            if(game.getAchievement().savedKiwis && game.getAchievement().savedGUI){
+                 JOptionPane.showOptionDialog(this,game.getAchievement().getSavedKiwiAchievement(),"Hero!",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+            if(game.getAchievement().walked && game.getAchievement().walkingGUI){
+                JOptionPane.showOptionDialog(this,game.getAchievement().getWalkingAchievement(),"Traveller!",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+            
+            if(game.getAchievement().won3gamesinrow && game.getAchievement().wonGUI){
+                JOptionPane.showOptionDialog(this,game.getAchievement().getWon3Achievement(),"Survivor",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+
               
             if(option == JOptionPane.OK_OPTION){
-                  game.createNewGame();
+                game.createNewGame();
             }  
         }
         else if (game.messageForPlayer())
