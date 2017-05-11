@@ -196,24 +196,31 @@ public class GameTest extends junit.framework.TestCase
     
     @Test
     public void testPlayerMoveToTrigger(){
-        boolean isaTrigger=false;
+        boolean isPlayerOnTrigger=false;
+        boolean isPlayerMoveSuccess = false;
+        
+        //set up create testIsland 
+        //create trigger position and Player position where 
+        //position of trigger is one below the player's position
         Island testIsland = new Island(2,1);
         Position playerPosition = new Position(testIsland,0,0);
         Position triggerPosition = new Position(testIsland,1,0);
         
-        Trigger trigger = new Trigger(new Position(island, 0,1), "Trigger", "you have a Quiz");
+        //place trigger in the island
+        Trigger trigger = new Trigger(triggerPosition, "Trigger", "quiz");
         testIsland.addOccupant(triggerPosition, trigger);
 
-        game.setIsland(testIsland);        
+        //set test Island , player position 
+        game.setIsland(testIsland);
         game.getPlayer().setPosition(playerPosition);
+        //--------------------------------------------------------------------
+        
         //player move
-        if (trigger.getPosition() == triggerPosition) {
-            game.playerMove(MoveDirection.SOUTH);
-            isaTrigger = true;
+        if (game.getPlayer().isAlive()) {
+            isPlayerMoveSuccess = game.playerMove(MoveDirection.SOUTH);
         }
         
-        assertTrue("Move to south, see a trigger and minigame panel pop-up.",isaTrigger);
-        
+        assertEquals(true, game.minigamePanel.isVisible());
     }
     
     @Test
