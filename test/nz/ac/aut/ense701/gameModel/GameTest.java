@@ -249,7 +249,7 @@ public class GameTest extends junit.framework.TestCase
             isPlayerMoveSuccess = game.playerMove(MoveDirection.SOUTH);
         }
         
-        assertEquals(false, game.predatorTimertask.hasRunStarted());
+        assertEquals(false, game.predatorTimerTask.hasRunStarted());
     }
     
     @Test
