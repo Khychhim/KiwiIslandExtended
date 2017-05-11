@@ -63,6 +63,7 @@ public final class MiniGamePanel extends javax.swing.JPanel {
         //set up radio button text
         for (int i = 0; i < sizeOfAnswerOption; i++) {
             radioButtions.get(i).setText(questions[i]);
+            radioButtions.get(i).setVisible(true);
         }
     }
 
@@ -116,21 +117,25 @@ public final class MiniGamePanel extends javax.swing.JPanel {
         radioButtions.add(jRadioButton1);
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setSelected(true);
+        jRadioButton1.setVisible(false);
         jRadioButton1.setText("jRadioButton1");
         jRadioButton1.setActionCommand("1");
 
         radioButtions.add(jRadioButton3);
         buttonGroup1.add(jRadioButton3);
+        jRadioButton3.setVisible(false);
         jRadioButton3.setText("jRadioButton3");
         jRadioButton3.setActionCommand("3");
 
         radioButtions.add(jRadioButton4);
         buttonGroup1.add(jRadioButton4);
+        jRadioButton4.setVisible(false);
         jRadioButton4.setText("jRadioButton4");
         jRadioButton4.setActionCommand("4");
 
         radioButtions.add(jRadioButton2);
         buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setVisible(false);
         jRadioButton2.setText("jRadioButton2");
         jRadioButton2.setActionCommand("2");
 
