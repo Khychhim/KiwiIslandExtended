@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +23,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -31,7 +31,7 @@ import org.xml.sax.SAXException;
  *
  * @author joshl
  */
-public class GlossaryMenu extends SubMenu {
+public class GlossaryMenu extends SubMenu implements ComponentListener {
     private final AnimalIcon[] animals;
     private final Image[] glossaryImages;
     private final JLabel infoBox;
@@ -112,6 +112,7 @@ public class GlossaryMenu extends SubMenu {
             menuPane.setLayer(animals[i].animal, 1);
             menuPane.add(animals[i].animal);
         }
+        menu.addComponentListener(this);
         menu.pack();
         menu.validate();
     }
@@ -193,15 +194,29 @@ public class GlossaryMenu extends SubMenu {
             animals[i].resizeIcon(width, height, selectedIndex == i);
         }
     }
+
+    @Override
+    public void componentResized(ComponentEvent e) {}
+
+    @Override
+    public void componentMoved(ComponentEvent e) {}
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+        readingGlossary();
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {}
     
-    private class AnimalIcon {
-        JLabel animal;
-        boolean visible;
-        int animalIndex;
-        String name;
-        String description;
+    public class AnimalIcon {
+        public JLabel animal;
+        public boolean visible;
+        public int animalIndex;
+        public String name;
+        public String description;
         
-        private AnimalIcon(int animalIndex) {
+        public AnimalIcon(int animalIndex) {
             animal = new JLabel();
             name = "Name not loaded";
             description = "Description not loaded";
@@ -268,5 +283,13 @@ public class GlossaryMenu extends SubMenu {
                 }
             }
         }
+    }
+    
+    public Image[] getGlossaryImages() {
+        return glossaryImages;
+    }
+    
+    public AnimalIcon[] getAnimals() {
+        return animals;
     }
 }
