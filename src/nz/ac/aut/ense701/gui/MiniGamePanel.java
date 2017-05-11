@@ -17,6 +17,7 @@ public final class MiniGamePanel extends javax.swing.JPanel {
 
     private ArrayList<JRadioButton> radioButtions = new ArrayList<JRadioButton>();
     private QuizQuestion currentQuestion;
+    private int currentQuestionIndex;
     private final Game game;
 
     /**
@@ -33,7 +34,7 @@ public final class MiniGamePanel extends javax.swing.JPanel {
         setUpRadioButtons(currentQuestion);
     }
 
-    public boolean isCorrectAnswerOption() {
+    public boolean isOptionCorrectAnswer() {
         boolean isCorrectAnswer = false;
 
         //get selected option index
@@ -86,6 +87,7 @@ public final class MiniGamePanel extends javax.swing.JPanel {
         int questionSize = game.quizQuestionList.size();
         QuizQuestion theQuestion;
         do {
+            currentQuestionIndex = rnd.nextInt(questionSize);
             theQuestion = game.quizQuestionList.get(rnd.nextInt(questionSize));
         } while (theQuestion.isComplete());
         return theQuestion;
@@ -208,7 +210,14 @@ public final class MiniGamePanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnterActionPerformed
-        System.out.println(isCorrectAnswerOption());
+        //set question is complete
+        if (isOptionCorrectAnswer()) {
+            game.quizQuestionList.get(currentQuestionIndex).setComplete(true);
+        }
+        //add Score
+        game.score.addScore(currentQuestion.getPointGain());
+
+        this.disable();
     }//GEN-LAST:event_jButtonEnterActionPerformed
 
 
