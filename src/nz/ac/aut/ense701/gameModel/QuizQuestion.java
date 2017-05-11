@@ -11,6 +11,7 @@ public class QuizQuestion {
     private String question;
     private String questionOptions[];
     private int correctOptionIndex;
+    private boolean complete;
 
     //Score Value for different level of quiz
     public static final int VALUE_LEVEL1_QUIZ = 1;
@@ -22,6 +23,7 @@ public class QuizQuestion {
         this.question = question;
         this.questionOptions = questionOptions;
         this.correctOptionIndex = correctOptionIndex;
+        this.complete = false;
     }
 
     public void setQuestion(String question) {
@@ -54,6 +56,10 @@ public class QuizQuestion {
 
     public int getCorrectOptionIndex() {
         return correctOptionIndex;
+    }
+
+    public boolean isComplete() {
+        return this.complete;
     }
 
 }
