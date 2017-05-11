@@ -38,6 +38,7 @@ public class Game {
       public Timer timer;
     public static String playerName = "River Song";
     public MiniGamePanel minigamePanel;
+    public TimerTask predatorTimertask;
     
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
@@ -70,13 +71,8 @@ public class Game {
             playerMessage = "";
             // timer for predator movement
             timer = new Timer();
-            timer.scheduleAtFixedRate(new TimerTask() {
-                  @Override
-                  public void run() {
-                        movePredators();
-                        System.out.println("Predator move: "+  PREDATOR_TIME * 1000);
-                  }
-            }, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);
+            predatorTimertask = new PredatorTimerTask(this);
+            timer.scheduleAtFixedRate(predatorTimertask, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);
             notifyGameEventListeners();
       }
 
