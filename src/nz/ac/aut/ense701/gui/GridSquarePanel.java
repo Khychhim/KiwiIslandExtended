@@ -29,6 +29,12 @@ public class GridSquarePanel extends javax.swing.JPanel
         initComponents();
     }
 
+    public void set(int row, int coloumn){
+          this.row = row;
+          this.column = coloumn;
+          update();
+    }
+    
     /**
      * Updates the representation of the grid square panel.
      */
@@ -101,7 +107,7 @@ public class GridSquarePanel extends javax.swing.JPanel
     // End of variables declaration//GEN-END:variables
     
     private Game game;
-    private int row, column;
+    public int row, column;
     
     private static final Border normalBorder = new LineBorder(Color.BLACK, 1);
     private static final Border activeBorder = new LineBorder(Color.RED, 3);
