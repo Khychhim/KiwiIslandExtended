@@ -16,6 +16,7 @@ import nz.ac.aut.ense701.gameModel.QuizQuestion;
 public final class MiniGamePanel extends javax.swing.JPanel {
 
     private ArrayList<JRadioButton> radioButtions = new ArrayList<JRadioButton>();
+    private QuizQuestion currentQuestion;
     private final Game game;
 
     /**
@@ -25,15 +26,30 @@ public final class MiniGamePanel extends javax.swing.JPanel {
         initComponents();
         this.game = game;
         //select a random question
-        QuizQuestion theQuestion = pickRandomQuestion();
+        currentQuestion = pickRandomQuestion();
         //set Question text label
-        setQuestionLabel(theQuestion.getQuestion());
+        setQuestionLabel(currentQuestion.getQuestion());
         //set up radio buttons
-        setUpRadioButtons(theQuestion);
+        setUpRadioButtons(currentQuestion);
+    }
+
+    public boolean isCorrectAnswerOption() {
+        boolean isCorrectAnswer = false;
+
+        //get selected option index
+        String optionStr = buttonGroup1.getSelection().getActionCommand();
+        int selectedIndex = Integer.parseInt(optionStr);
+
+        //Current question index
+        int correctIndex = currentQuestion.getCorrectOptionIndex();
+        if (selectedIndex == correctIndex) {
+            isCorrectAnswer = true;
+        }
+        return isCorrectAnswer;
     }
 
     /**
-     * set up Radio buttons radio buttons depends on how many option answer the
+     * set up Radio buttons radio buttons depends on how many options answer the
      * question has
      *
      * @param quizquestion
@@ -187,8 +203,7 @@ public final class MiniGamePanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnterActionPerformed
-        String cmd = buttonGroup1.getSelection().getActionCommand();
-        System.out.println(cmd);
+        System.out.println(isCorrectAnswerOption());
     }//GEN-LAST:event_jButtonEnterActionPerformed
 
 
