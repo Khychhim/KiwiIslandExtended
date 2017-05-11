@@ -1,9 +1,6 @@
 package nz.ac.aut.ense701.main;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import nz.ac.aut.ense701.gameModel.Game;
-import nz.ac.aut.ense701.gui.KiwiCountUI;
+import nz.ac.aut.ense701.gui.MainMenu;
 
 /**
  * Kiwi Count Project
@@ -18,7 +15,7 @@ public class Main
      * 
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws ParserConfigurationException, TransformerException 
+    public static void main(String[] args)
     {
         //Create the main menu
         final MainMenu mainMenu  = new MainMenu();
