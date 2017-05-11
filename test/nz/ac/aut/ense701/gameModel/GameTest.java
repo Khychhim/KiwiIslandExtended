@@ -223,6 +223,35 @@ public class GameTest extends junit.framework.TestCase
         assertEquals(true, game.minigamePanel.isVisible());
     }
     
+        @Test
+    public void testQuizLaunchStopPredatorTimer(){
+        boolean isPlayerOnTrigger=false;
+        boolean isPlayerMoveSuccess = false;
+        
+        //set up create testIsland 
+        //create trigger position and Player position where 
+        //position of trigger is one below the player's position
+        Island testIsland = new Island(2,1);
+        Position playerPosition = new Position(testIsland,0,0);
+        Position triggerPosition = new Position(testIsland,1,0);
+        
+        //place trigger in the island
+        Trigger trigger = new Trigger(triggerPosition, "Trigger", "quiz");
+        testIsland.addOccupant(triggerPosition, trigger);
+
+        //set test Island , player position 
+        game.setIsland(testIsland);
+        game.getPlayer().setPosition(playerPosition);
+        //--------------------------------------------------------------------
+        
+        //player move
+        if (game.getPlayer().isAlive()) {
+            isPlayerMoveSuccess = game.playerMove(MoveDirection.SOUTH);
+        }
+        
+        assertEquals(false, game.predatorTimertask.hasRunStarted());
+    }
+    
     @Test
     public void testIsPlayerMovePossibleValidMove(){
         //At start of game player has valid moves EAST, West & South
