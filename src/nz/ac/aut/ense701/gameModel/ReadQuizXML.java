@@ -117,7 +117,7 @@ public class ReadQuizXML {
             for (String s : answers) {
                 builder.append(s + ", ");
             }
-            System.out.println("Difficulty: " + difficulty + "\nQuizQuestion: "
+            System.out.println("Difficulty: " + difficulty + "\nQuizQuestion: " + quizQuestion
                     + "\nAnswers: " + builder.toString() + "\nCorrect: " + correct);
 
         }
