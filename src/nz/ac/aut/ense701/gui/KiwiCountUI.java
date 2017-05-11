@@ -76,7 +76,8 @@ public class KiwiCountUI
            
             
             if(option == JOptionPane.OK_OPTION){
-                game.createNewGame();
+                  game = null;
+                  this.setVisible(false);
             }  
         }
         else if ( game.getState() == GameState.WON )
@@ -103,7 +104,8 @@ public class KiwiCountUI
 
               
             if(option == JOptionPane.OK_OPTION){
-                game.createNewGame();
+                  game = null;
+                  this.setVisible(false);
             }  
         }
         else if (game.messageForPlayer())
