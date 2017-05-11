@@ -14,9 +14,9 @@ public class QuizQuestion {
     private boolean complete;
 
     //Score Value for different level of quiz
-    public static final int VALUE_LEVEL1_QUIZ = 1;
-    public static final int VALUE_LEVEL2_QUIZ = 2;
-    public static final int VALUE_LEVEL3_QUIZ = 3;
+    public static final int VALUE_LEVEL1_QUIZ = 10;
+    public static final int VALUE_LEVEL2_QUIZ = 20;
+    public static final int VALUE_LEVEL3_QUIZ = 30;
 
     public QuizQuestion(int difficulty, String question, String[] questionOptions, int correctOptionIndex) {
         this.difficulty = difficulty;
@@ -42,6 +42,10 @@ public class QuizQuestion {
         this.correctOptionIndex = correctOptionIndex;
     }
 
+    public void setComplete(boolean complete) {
+        this.complete = complete;
+    }
+
     public String getQuestion() {
         return question;
     }
@@ -60,6 +64,22 @@ public class QuizQuestion {
 
     public boolean isComplete() {
         return this.complete;
+    }
+
+    /**
+     * get score point you can earn from this question
+     * @return score
+     */
+    public int getPointGain() {
+        int score;
+        if (this.difficulty == 1) {
+            score = VALUE_LEVEL1_QUIZ;
+        } else if (this.difficulty == 2) {
+            score = VALUE_LEVEL2_QUIZ;
+        } else {
+            score = VALUE_LEVEL3_QUIZ;
+        }
+        return score;
     }
 
 }
