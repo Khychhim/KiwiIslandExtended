@@ -37,6 +37,7 @@ public class Game {
       public static final int PREDATOR_TIME = 30;
       public Timer timer;
     public static String playerName = "River Song";
+    public MiniGamePanel minigamePanel;
     
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
@@ -1037,7 +1038,7 @@ public class Game {
        */
       private void miniGameStart(Game game){
                 //setup Mini game panel
-                MiniGamePanel minigamePanel = new MiniGamePanel(game);
+                minigamePanel = new MiniGamePanel(game);
                 
                 //setup Frame
                 JFrame frame = new JFrame();
