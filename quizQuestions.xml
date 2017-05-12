@@ -1,34 +1,93 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <quiz>
     <questions>
-      <question> 
-        <difficulty>2</difficulty> 
-        <quizquestion>Where do kiwi live?</quizquestion> 
-        <answer>exotic plantation forests,</answer> 
-        <answer>mangroves</answer> 
-        <answer>sand dunes</answer> 
-        <answer>places where they can get straight to the dirt</answer> 
-        <correct>4</correct> 
-      </question>
-
-      <question>
-	<difficulty>2</difficulty>
-        <quizquestion>What is kiwi favioute fruit?></quizquestion>
-        <answer>apple</answer>
-        <answer>banana</answer>
-        <answer>pie</answer>
-        <answer>watermelon</answer>
-        <correct>1</correct>
-      </question>
-
-      <question>
-	<difficulty>3</difficulty>
-        <quizquestion>what is kiwis favioute drink?</quizquestion>
-        <answer>Apple sour cocktail</answer>
-        <answer>Haniken</answer>
-        <answer>Whisky</answer>
-        <answer>Water</answer>
-        <correct>4</correct>
-      </question>
-</questions>
+        <question> 
+            <difficulty>2</difficulty> 
+            <quizquestion>Where do kiwi prefer for playground?</quizquestion> 
+            <answer>exotic plantation forests</answer> 
+            <answer>mangroves</answer> 
+            <answer>sand dunes</answer> 
+            <answer>dirt</answer> 
+            <correct>4</correct> 
+        </question>
+        <question>
+            <difficulty>1</difficulty>
+            <quizquestion>?>The Kiwi is _______ national icon</quizquestion>
+            <answer>Australia</answer>
+            <answer>American</answer>
+            <answer>Spain</answer>
+            <answer>New Zealand</answer>
+            <correct>4</correct>
+        </question>
+        <question>
+            <difficulty>1</difficulty>
+            <quizquestion>what is kiwis favioute drink?</quizquestion>
+            <answer>Apple sour cocktail</answer>
+            <answer>Haniken</answer>
+            <answer>Whisky</answer>
+            <answer>Water</answer>
+            <correct>4</correct>
+        </question>	  
+        <question>
+            <difficulty>3</difficulty>
+            <quizquestion>The kiwi is an _______ and will eat fruit and seed of native forest trees.</quizquestion>
+            <answer>human</answer>
+            <answer>omnivore</answer>
+            <answer>Mammals</answer>
+            <answer>Insects</answer>
+            <correct>3</correct>
+        </question>	  
+        <question>
+            <difficulty>1</difficulty>
+            <quizquestion>What is wiki's favioute food? </quizquestion>
+            <answer></answer>
+            <answer>spray</answer>
+            <answer>twig</answer>
+            <answer>Worms</answer>
+            <correct>4</correct>
+        </question>
+        <question>
+            <difficulty>2</difficulty>
+            <quizquestion>How do wiki drink?</quizquestion>
+            <answer>Dive in Water</answer>
+            <answer>Immerses its beak</answer>
+            <answer>with a straw</answer>
+            <answer>with its foot</answer>
+            <correct>2</correct>
+        </question>
+        <question>
+            <difficulty>3</difficulty>
+            <quizquestion>How deep can wiki sense insects and worms underground, using long beaks? </quizquestion>
+            <answer> 5 cm</answer>
+            <answer> 7 cm</answer>
+            <answer>10 cm</answer>
+            <answer>15 cm</answer>
+            <correct></correct>
+        </question>        
+        <question>
+            <difficulty>2</difficulty>
+            <quizquestion>How long do wiki need for sleep?</quizquestion>
+            <answer>Less 10 hours</answer>
+            <answer>19 hours</answer>
+            <answer>20 hours</answer>
+            <answer>24 hours</answer>
+            <correct>3</correct>
+        </question>        
+        <question>
+            <difficulty>1</difficulty>
+            <quizquestion>Kiwi has ______ beaks.</quizquestion>
+            <answer>Long</answer>
+            <answer>Short</answer>
+            <correct>1</correct>
+        </question>        
+        <question>
+            <difficulty>3</difficulty>
+            <quizquestion>What is the average of kiwi killed by predators every week?</quizquestion>
+            <answer>10</answer>
+            <answer>14</answer>
+            <answer>27</answer>
+            <answer>35</answer>
+            <correct>3</correct>
+        </question>
+    </questions>
 </quiz>
