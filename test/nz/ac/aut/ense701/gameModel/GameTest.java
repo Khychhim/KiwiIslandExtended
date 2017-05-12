@@ -40,15 +40,11 @@ public class GameTest extends junit.framework.TestCase
     @Override
     protected void setUp()
     {
-        try {
+ 
             // Create a new game from the data file.
             // Player is in position 2,0 & has 100 units of stamina
-            game           = new Game();
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(GameTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerException ex) {
-            Logger.getLogger(GameTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        game           = new Game();
+    
         playerPosition = game.getPlayer().getPosition();
         player         = game.getPlayer();
         island = game.getIsland();
