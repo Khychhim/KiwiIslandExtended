@@ -12,7 +12,7 @@ import java.util.Timer;
  */
 public class NotificationPanel extends javax.swing.JPanel {
 
-    public MiniGamePanel miniGamePanel;
+    public MiniGameQuizPanel miniGamePanel;
     public KiwiCountUI gui;
     public boolean res;
     /**
@@ -20,7 +20,7 @@ public class NotificationPanel extends javax.swing.JPanel {
        * @param miniGamePanel MiniGamePanel object to use
        * @param gui KiwiCountUI object to use
      */
-    public NotificationPanel(MiniGamePanel miniGamePanel, KiwiCountUI gui) {
+    public NotificationPanel(MiniGameQuizPanel miniGamePanel, KiwiCountUI gui) {
         initComponents();
         this.miniGamePanel = miniGamePanel;
         this.gui = gui;

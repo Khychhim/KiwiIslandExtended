@@ -88,8 +88,7 @@ public class KiwiCountUI
        */
       private void miniGameStart(KiwiCountUI gui, Game game){
                 //setup Mini game panel
-                MiniGamePanel minigamePanel = new MiniGamePanel(gui,game);
-                
+                MiniGameQuizPanel minigamePanel = new MiniGameQuizPanel(gui,game);                
                 //setup Frame
                 miniQuizFrame = new JFrame("Mini Game Quiz");
                 miniQuizFrame.add(minigamePanel);
