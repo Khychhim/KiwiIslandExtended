@@ -1,22 +1,112 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><Glossary>
-	<Creature Seen="false" id="1">
+	<Creature Seen="true" id="1">
 		<Name>Kiore</Name>
-		<Description>Kiore are regarded as a valued taonga by some iwi.</Description>
+		<Description>Kiore are predators of rare weta, snails, frogs, lizards, tuatara, birds and bats, as well as other insects and the flowers, fruits and seeds of plants. 
+
+Kiore is the Māori name for a species of rat (Rattus exulans). Kiore are unique because of their association with the migration of Polynesians throughout the Pacific, and their cultural and spiritual values to some iwi Māori.
+Recognising that iwi Māori sometimes have a cultural interest in kiore, as well as the ecological health and well-being of plants, forests and wildlife, DOC consults before starting eradication programmes.</Description>
 	</Creature>
-	<Creature Seen="false" id="4">
+	<Creature Seen="true" id="4">
 		<Name>Stoat</Name>
-		<Description>Stoats are responsible for at least 60 of kiwi chick deaths. Stoats are decimating the kiwi population with six out of ten chicks being killed before they reach breeding age.</Description>
+		<Description>It was introduced to New Zealand in the 1880s to control rabbits and hares but is now a fierce predator of our native species.  
+
+Predation of young kiwi, chiefly by stoats, is currently the most important factor contributing to the continuing decline of mainland kiwi populations.
+Stoats are agile climbers, and hunt at any time, day or night. They are also strong swimmers, known to have crossed water gaps of up to 1.1 km to reach islands.
+
+Stoats and weasels are similar in colour and general appearance, but stoats are larger, have longer tails and a straight line where the brown fur on their backs meets the white belly fur.
+The stoat is reddish-brown above, white to yellowish underneath, and has a long tail relative to weasels, with a distinctive and obvious bushy black tip. In very cold, snow-prone areas some stoats develop a pure white winter fur, though this is rare in New Zealand.
+
+It is 350-400 mm long from nose to tip of tail. Males are generally larger than females. Average weight of males is around 325 g and females 205 g, though this may vary from region to region.</Description>
 	</Creature>
-	<Creature Seen="false" id="2">
+	<Creature Seen="true" id="2">
 		<Name>Possum</Name>
-		<Description>Possums destroy native trees and shrubs, and eat the berries needed by native birds. They eat New Zealand’s native land snail, lizards and insects, and chase birds off their nests to eat the chicks and eggs.</Description>
+		<Description>In New Zealand, possums have no predators and lots of palatable vegetation. As a result, possums have a huge impact on our ecosystems.
+The Australian brush tailed possum was introduced into New Zealand in 1837 to establish a fur trade.
+
+Possums compete with native birds for habitat and for food such as insects and berries. They also disturb nesting birds, eat their eggs and chicks and may impact on native land snails.
+The damage to native forests is clear. Possums ignore old leaves and select the best new growth. In some areas they have eaten whole canopies of rata, totara, titoki, kowhai and kohekohe.
+
+The possum has a thick, bushy tail, a pointed snout and long, fox-like tapering ears.
+Size and weight of possums varies greatly across New Zealand. Adult possums are typically 65 to 95 cm long and weigh 1.4 to 6.4 kg.</Description>
 	</Creature>
-	<Creature Seen="false" id="0">
+	<Creature Seen="true" id="0">
 		<Name>Cat</Name>
-		<Description>Wild or abandoned cats are a particular threat to kiwis, especially young chicks. Along with stoats, cats kill 70% of wild-born kiwi chicks before they reach 6 months of age.</Description>
+		<Description>WUncontrolled, wild or abandoned cats are a threat and kill kiwi chicks. Tests with radio collars on pet cats have shown their ability to wander up to 20 kilometres from home. 
+
+Along with stoats, cats kill 70% of wild-born kiwi chicks before they reach 6 months of age. </Description>
 	</Creature>
-	<Creature Seen="false" id="3">
+	<Creature Seen="true" id="3">
 		<Name>Rat</Name>
-		<Description>Rats and mice are usually in the bush in large numbers. They pose two problems for kiwi. First, they degrade native forests by eating the fruit that native birds depend on for food and the forest needs for natural regeneration. Second, they are food for the kiwi’s predators  – mustelids and cats – and help keep the populations of those lethal predators high.</Description>
+		<Description>Rats have a major impact on New Zealand’s wildlife because they eat native animals and their eggs. They also eat a wide range of native fruit and plants, which puts them in competition with native wildlife for food. 
+
+The ship rat is the most commonly found rat in New Zealand and is the smaller of the two European rats. It has a tail is larger than its body, and ears that cover the eyes when pressed forward.
+The Norway rat is different from the ship rat in that the tail, which is about 180 mm long, is thick and shorter than the body, which is about 200 mm long, and its ear doesn't reach the eye when pressed forward.
+
+Methods used to eradicate rodents from offshore islands include trapping, 1080 and talon-type baits. Recent advances, including the development of more effective anticoagulant poisons and new application methods, mean it is now possible to consider rodent eradication operations on larger islands. </Description>
+	</Creature>
+	<Creature Seen="true" id="5">
+		<Name>Brown Kiwi</Name>
+		<Description>The brown kiwi is one of our most common kiwi species; however, the population is steadly declining by about 2–3% a year. Without ongoing support, experts estimate brown kiwi will be extinct in the wild within two generations.
+
+For many New Zealanders,brown kiwi is the species we think of when kiwi are talked about. It is the species that lives closest to human habitation.
+
+This proximity of people to kiwi has created its own risks to birds through increased contact with dogs, cats and cars. However, it has also been a great advantage to the recovery of the species - hours and hours of effort from community initiatives in restoration benefit brown kiwi populations in many locations.
+
+The brown kiwi is faster at breeding than other kiwi, producing up to two eggs a clutch, and one to two clutches a year, as opposed to the more usual one egg per year in other kiwi species. </Description>
+	</Creature>
+	<Creature Seen="true" id="6">
+		<Name>Little Spotted Kiwi</Name>
+		<Description>The little spotted kiwi is the only species to become extinct on the mainland. The population strong-hold of 1,400 birds is on Kapiti Island, to where a small number were translocated in the early 20th century. Through more recent successful translocations, little spotted kiwi are also now found on several other predator-free offshore islands and in the Zealandia Sanctuary, Wellington.
+
+Adventurous and raring to go, little spotted kiwi chicks leave home to feed themselves when just 5-7 days old. However, the male parent does stay near the young chick and both return to the nest burrow to sleep for up to 60 days after hatching.</Description>
+	</Creature>
+	<Creature Seen="true" id="7">
+		<Name>Fernbird</Name>
+		<Description>Fernbirds inhabit wetlands throughout New Zealand, but are rarely seen because of their secretive behaviour and excellent camouflage. More often heard than seen, fernbirds are skulking sparrow-sized birds that on the three main islands are found mainly in dense, low wetland vegetation. 
+
+Fernbirds have declined significantly since humans began draining wetlands and are now classed globally as at risk, declining. 
+
+Fernbirds are small (18 cm, 35 g), long-tailed songbirds that are predominantly streaked brown above and pale below. The mainland subspecies have a chestnut cap and a prominent pale superciliary stripe. The loosely-barbed plain brown tail feathers have a distinctive tattered appearance. </Description>
+	</Creature>
+	<Creature Seen="true" id="8">
+		<Name>Oyster Catcher</Name>
+		<Description>Variable oystercatcher occur around most of the coastline of New Zealand, and breed most commonly on sandy beaches, sandspits and in dunes.
+They are very vocal; loud piping is used in territorial interactions and when alarmed. Chicks are warned of danger with a sharp, loud ‘chip’ or ‘click’.
+
+Variable oystercatchers eat a wide range of coastal invertebrates, including molluscs and crustaceans which they open either by pushing the tip of the bill between shells and twisting, or by hammering. They occasionally eat small fish and a range of terrestrial invertebrates, including earthworms. 
+
+They breed in monogamous pairs and defend territories vigorously against neighbours. Nests are normally simple scrapes in the sand and the 2–3 eggs are laid from October onwards. Incubation is shared and takes about 28 days.
+The chicks fly at 6–7 weeks old and late chicks may not fledge until March. Chicks are vigorously protected by both parents, often well after fledging. Adults show high fidelity to their mate and the site.</Description>
+	</Creature>
+	<Creature Seen="true" id="9">
+		<Name>Heron</Name>
+		<Description>The white heron has always been rare in New Zealand and it has gained almost mythical status. 
+
+The white heron is common in Australia, the South Pacific and Asia.
+In New Zealand it only breeds near Whataroa, South Westland, between September and January. This colony is in the Waitangiroto Nature Reserve and guided jet boat tours take visitors to view the birds from an observation hide.
+During the breeding season time, the birds feed in the large coastal lagoons in the area, particularly the nearby Ōkārito Lagoon.
+After breeding, the birds disperse widely and may be seen at coastal freshwater wetlands or estuaries throughout the country.
+During breeding seasons, they grow long, loose breeding plumes from its back and wings. The normally yellow bill turns dull black, and the facial skin between the eye and bill brightens to a bluish-green.</Description>
+	</Creature>
+	<Creature Seen="true" id="10">
+		<Name>Tui</Name>
+		<Description>Tūī are common throughout New Zealand in forests, towns and on off-shore islands. They are found in native forests, bush reserves and bush remnants.
+They are adaptable birds, and can also be found in suburban areas, particularly in winter if there is a flowering gum about.
+These attractive birds can often be heard singing their beautiful melodies long before they are spotted.
+If you are fortunate to glimpse one you will recognise them by their distinctive white tuft under their throat. This tuft contrasts dramatically with the metallic blue-green sheen to their underlying black colour.
+
+For Tui's breeding courting takes place between September and October when they sing high up in the trees in the early morning and late afternoon.
+Display dives, where the bird will fly up in a sweeping arch and then dive at speed almost vertically, are also associated with breeding.
+Only females build nests, which are constructed from twigs, fine grasses and moss.</Description>
+	</Creature>
+	<Creature Seen="true" id="11">
+		<Name>Robin</Name>
+		<Description>The black robin is a small songbird with completely black plumage.They are about 10 cm high, have a short black bill, long thin dark legs and an upright stance. The sexes are alike, although the female is slightly smaller. Females usually lay two eggs, and often re-lay if a clutch is lost.
+This little black bird is only found on the Chatham Islands. They currently live on Rangatira (South East) Island and Mangere Island in the Chatham Islands group.
+Attempts made to establish another population in a fenced convenant on Pitt Island have failed, possibly due to competition for food with introduced mice.
+Black robins live in woody vegetation, beneath the canopy of trees. They spend a lot of time in the lower branches of the forest in order to shelter from the strong winds that buffet the Chatham Islands group.
+They also like foraging for insects in the deep layers of litter found on flat areas of the forest floor.
+
+By 1900, the introduction of rats and cats following human settlement had wiped out the birds from everywhere apart from Little Mangere Island. The accidental introduction of predators to the two islands where it presently survives is still a threat. </Description>
 	</Creature>
 </Glossary>

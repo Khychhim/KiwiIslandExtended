@@ -1053,6 +1053,7 @@ public class Game {
                 island.removeOccupant(current, trigger);
                 //change gamestate to quiz
                 state = GameState.QUIZ;
+                island.removeOccupant(current, occupant);
             }
         }
     
