@@ -1,8 +1,5 @@
 package nz.ac.aut.ense701.gameModel;
 
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,6 +35,7 @@ public class Game {
       public Timer timer;
     public static String playerName = "River Song";
     public ArrayList<QuizQuestion> quizQuestionList;
+    public JFrame miniQuizFrame;
     
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
@@ -1035,9 +1033,9 @@ public class Game {
                 MiniGamePanel minigamePanel = new MiniGamePanel(game);
                 
                 //setup Frame
-                JFrame frame = new JFrame("Mini Gmae Quiz");
-                frame.add(minigamePanel);
-                frame.setSize(minigamePanel.getSize());
+                miniQuizFrame = new JFrame("Mini Gmae Quiz");
+                miniQuizFrame.add(minigamePanel);
+                miniQuizFrame.setSize(minigamePanel.getSize());
                 
                 //set frame location (Centre of the screen)
 //                Toolkit toolkit = frame.getToolkit();
@@ -1045,8 +1043,8 @@ public class Game {
 //                frame.setLocation(dimension.width/2 - frame.getWidth()/2,
 //                dimension.height/2 - frame.getHeight()/2);
                 
-                frame.setVisible(true);
-                frame.pack();
+                miniQuizFrame.setVisible(true);
+                miniQuizFrame.pack();
       }
       
       private Island island;

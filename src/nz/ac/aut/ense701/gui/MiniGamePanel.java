@@ -5,6 +5,7 @@ package nz.ac.aut.ense701.gui;
 
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.QuizQuestion;
@@ -16,9 +17,11 @@ import nz.ac.aut.ense701.gameModel.QuizQuestion;
 public final class MiniGamePanel extends javax.swing.JPanel {
 
     private ArrayList<JRadioButton> radioButtions = new ArrayList<JRadioButton>();
-    private QuizQuestion currentQuestion;
+    public QuizQuestion currentQuestion;
     private int currentQuestionIndex;
     private final Game game;
+    public JFrame resultFrame;
+    public int score = 0;
 
     /**
      * Creates new form MiniGamePanel
@@ -88,9 +91,21 @@ public final class MiniGamePanel extends javax.swing.JPanel {
         QuizQuestion theQuestion;
         do {
             currentQuestionIndex = rnd.nextInt(questionSize);
-            theQuestion = game.quizQuestionList.get(rnd.nextInt(questionSize));
+            theQuestion = game.quizQuestionList.get(currentQuestionIndex);
         } while (theQuestion.isComplete());
         return theQuestion;
+    }
+
+    public void launchNotification() {
+        //setup Mini game panel
+        NotificationPanel notificationPanel = new NotificationPanel(this);
+
+        //setup Frame
+        resultFrame = new JFrame("Result");
+        resultFrame.add(notificationPanel);
+        resultFrame.setSize(notificationPanel.getSize());
+        resultFrame.setVisible(true);
+        resultFrame.pack();
     }
 
     /**
@@ -103,25 +118,28 @@ public final class MiniGamePanel extends javax.swing.JPanel {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jLabel1 = new javax.swing.JLabel();
         jLabelQuestion = new javax.swing.JLabel();
         jPanelAnswerOptions = new javax.swing.JPanel();
         jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
         jRadioButton4 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
         jButtonEnter = new javax.swing.JButton();
-
-        jLabel1.setText("Quiz");
 
         jLabelQuestion.setText("Question: ");
 
         radioButtions.add(jRadioButton1);
-        buttonGroup1.add(jRadioButton1);
         jRadioButton1.setSelected(true);
+        buttonGroup1.add(jRadioButton1);
         jRadioButton1.setVisible(false);
         jRadioButton1.setText("jRadioButton1");
         jRadioButton1.setActionCommand("1");
+
+        radioButtions.add(jRadioButton2);
+        buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setVisible(false);
+        jRadioButton2.setText("jRadioButton2");
+        jRadioButton2.setActionCommand("2");
 
         radioButtions.add(jRadioButton3);
         buttonGroup1.add(jRadioButton3);
@@ -135,12 +153,6 @@ public final class MiniGamePanel extends javax.swing.JPanel {
         jRadioButton4.setText("jRadioButton4");
         jRadioButton4.setActionCommand("4");
 
-        radioButtions.add(jRadioButton2);
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setVisible(false);
-        jRadioButton2.setText("jRadioButton2");
-        jRadioButton2.setActionCommand("2");
-
         jButtonEnter.setText("Enter");
         jButtonEnter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,30 +165,32 @@ public final class MiniGamePanel extends javax.swing.JPanel {
         jPanelAnswerOptionsLayout.setHorizontalGroup(
             jPanelAnswerOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelAnswerOptionsLayout.createSequentialGroup()
-                .addGap(136, 136, 136)
+                .addContainerGap()
                 .addGroup(jPanelAnswerOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton2)
                     .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton2)
                     .addComponent(jRadioButton3)
-                    .addComponent(jRadioButton4)
-                    .addGroup(jPanelAnswerOptionsLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jButtonEnter)))
-                .addContainerGap(146, Short.MAX_VALUE))
+                    .addComponent(jRadioButton4))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelAnswerOptionsLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonEnter)
+                .addGap(22, 22, 22))
         );
         jPanelAnswerOptionsLayout.setVerticalGroup(
             jPanelAnswerOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelAnswerOptionsLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jRadioButton1)
-                .addGap(6, 6, 6)
+                .addGap(18, 18, 18)
                 .addComponent(jRadioButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jRadioButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jRadioButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jButtonEnter)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -186,45 +200,41 @@ public final class MiniGamePanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanelAnswerOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelQuestion)
-                            .addComponent(jLabel1))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jLabelQuestion))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(98, 98, 98)
+                        .addComponent(jPanelAnswerOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(21, 21, 21)
+                .addGap(50, 50, 50)
                 .addComponent(jLabelQuestion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelAnswerOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(27, 27, 27))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnterActionPerformed
-        //set question is complete
+        //set question is complete and add score
         if (isOptionCorrectAnswer()) {
             game.quizQuestionList.get(currentQuestionIndex).setComplete(true);
+            //add Score
+            this.score = currentQuestion.getPointGain();
+            game.score.addScore(this.score);
         }
-        //add Score
-        game.score.addScore(currentQuestion.getPointGain());
 
-        this.disable();
+        launchNotification();
+        this.game.miniQuizFrame.dispose();
     }//GEN-LAST:event_jButtonEnterActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonEnter;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelQuestion;
     private javax.swing.JPanel jPanelAnswerOptions;
     private javax.swing.JRadioButton jRadioButton1;
