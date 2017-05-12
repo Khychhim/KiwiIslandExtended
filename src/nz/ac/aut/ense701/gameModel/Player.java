@@ -360,8 +360,9 @@ public class Player
     
     /**
      * This method will set the player position
+     * @param Position - position
      */
-    public void setPosition(Position pos){
-        this.position = pos;
+    public void setPosition(Position position){
+        this.position = position;
     }
 }

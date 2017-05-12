@@ -196,9 +196,9 @@ public class GameTest extends junit.framework.TestCase
     
     @Test
     public void testIsQuizLaunch(){
-        boolean isPlayerOnTrigger=false;
         boolean isPlayerMoveSuccess = false;
-        
+        boolean isValid = false;
+
         //set up create testIsland 
         //create trigger position and Player position where 
         //position of trigger is one below the player's position
@@ -218,16 +218,18 @@ public class GameTest extends junit.framework.TestCase
         //player move
         if (game.getPlayer().isAlive()) {
             isPlayerMoveSuccess = game.playerMove(MoveDirection.SOUTH);
+            
         }
         
-        assertEquals(true, game.minigamePanel.isVisible());
+        isValid = isPlayerMoveSuccess & game.minigamePanel.isVisible();
+        assertEquals(true, isValid);
     }
     
         @Test
     public void testQuizLaunchStopPredatorTimer(){
-        boolean isPlayerOnTrigger=false;
         boolean isPlayerMoveSuccess = false;
-        
+        boolean isValid = false;
+
         //set up create testIsland 
         //create trigger position and Player position where 
         //position of trigger is one below the player's position
@@ -249,7 +251,9 @@ public class GameTest extends junit.framework.TestCase
             isPlayerMoveSuccess = game.playerMove(MoveDirection.SOUTH);
         }
         
-        assertEquals(false, game.predatorTimerTask.hasRunStarted());
+        isValid = isPlayerMoveSuccess & game.predatorTimerTask.hasRunStarted();
+        
+        assertEquals(false, isValid);
     }
     
     @Test
