@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <quiz>
     <questions>
-      <question>
-		<difficulty>1</difficulty>
-        <quizquestion>What is kiwi taste like?</quizquestion>
-        <answer>pork</answer>
-        <answer>beef</answer>
-        <answer>bird</answer>
-        <answer>chicken</answer>
-        <correct>4</correct>
+      <question> 
+        <difficulty>2</difficulty> 
+        <quizquestion>Where do kiwi live?</quizquestion> 
+        <answer>exotic plantation forests,</answer> 
+        <answer>mangroves</answer> 
+        <answer>sand dunes</answer> 
+        <answer>places where they can get straight to the dirt</answer> 
+        <correct>4</correct> 
       </question>
 
       <question>
-		<difficulty>2</difficulty>
+	<difficulty>2</difficulty>
         <quizquestion>What is kiwi favioute fruit?></quizquestion>
         <answer>apple</answer>
         <answer>banana</answer>
@@ -22,7 +22,7 @@
       </question>
 
       <question>
-		<difficulty>3</difficulty>
+	<difficulty>3</difficulty>
         <quizquestion>what is kiwis favioute drink?</quizquestion>
         <answer>Apple sour cocktail</answer>
         <answer>Haniken</answer>

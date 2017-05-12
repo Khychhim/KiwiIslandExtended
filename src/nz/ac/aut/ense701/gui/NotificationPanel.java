@@ -19,10 +19,11 @@ public class NotificationPanel extends javax.swing.JPanel {
     public NotificationPanel(MiniGamePanel miniGamePanel) {
         initComponents();
         this.miniGamePanel = miniGamePanel;
-        this.jLabelQuizLevel.setText("Quiz Level: " + miniGamePanel.currentQuestion.getDifficulty());
-        this.jLabelScoreEarn.setText("Score Earn: " + miniGamePanel.score);
+        this.jLabelQuizLevel.setText("Quiz Level: \t" + miniGamePanel.currentQuestion.getDifficulty());
+        this.jLabelScoreEarn.setText("Score Earn: \t" + miniGamePanel.score);
+        this.jLabelPlayerAnswer.setText("Your Answer: \t" + miniGamePanel.getPlayerChosenAnswer());
         int correctAnswerIndex = this.miniGamePanel.currentQuestion.getCorrectOptionIndex() - 1;
-        this.jLabelAnswer.setText("Correct Answer: " + miniGamePanel.currentQuestion.getQuestionOptions()[correctAnswerIndex]);
+        this.jLabelAnswer.setText("Correct Answer: \t" + miniGamePanel.currentQuestion.getQuestionOptions()[correctAnswerIndex]);
         miniGamePanel.setVisible(false);
     }
 
@@ -39,13 +40,17 @@ public class NotificationPanel extends javax.swing.JPanel {
         jLabelAnswer = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabelQuizLevel = new javax.swing.JLabel();
+        jLabelPlayerAnswer = new javax.swing.JLabel();
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        jLabelScoreEarn.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabelScoreEarn.setText("Score Earn: ");
 
+        jLabelAnswer.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabelAnswer.setText("Correct Answer:");
 
+        jButton1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jButton1.setText("Exit");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -53,7 +58,11 @@ public class NotificationPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabelQuizLevel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabelQuizLevel.setText("Quiz Level: ");
+
+        jLabelPlayerAnswer.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabelPlayerAnswer.setText("Your Answer: ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -62,26 +71,27 @@ public class NotificationPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelAnswer)
-                            .addComponent(jLabelQuizLevel)
-                            .addComponent(jLabelScoreEarn)))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(89, 89, 89)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(123, Short.MAX_VALUE))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 111, Short.MAX_VALUE))
+                    .addComponent(jLabelPlayerAnswer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelAnswer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelScoreEarn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelQuizLevel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(30, 30, 30)
                 .addComponent(jLabelQuizLevel)
+                .addGap(52, 52, 52)
+                .addComponent(jLabelPlayerAnswer)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabelScoreEarn)
-                .addGap(12, 12, 12)
                 .addComponent(jLabelAnswer)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 150, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelScoreEarn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -96,6 +106,7 @@ public class NotificationPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabelAnswer;
+    private javax.swing.JLabel jLabelPlayerAnswer;
     private javax.swing.JLabel jLabelQuizLevel;
     private javax.swing.JLabel jLabelScoreEarn;
     // End of variables declaration//GEN-END:variables
