@@ -30,7 +30,7 @@ public class Game {
       public static final int WEIGHT_INDEX = 3;
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
-      public static final int PREDATOR_TIME = 2;
+      public static final int PREDATOR_TIME = 30;
       public Timer timer;
     public static String playerName = "River Song";
     public ArrayList<QuizQuestion> quizQuestionList;
@@ -52,8 +52,8 @@ public class Game {
        * Starts a new game. At this stage data is being read from a text file
        */
       public void createNewGame() {
-        //    DifferentMap dm = new DifferentMap(15, 15, playerName);
-        //    dm.generateMap();
+            DifferentMap dm = new DifferentMap(15, 15, playerName);
+            dm.generateMap();
             allPredators.clear();
             totalPredators = 0;
             totalKiwis = 0;
