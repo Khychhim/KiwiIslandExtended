@@ -843,7 +843,7 @@ public class Game {
       
       /**
        * Check if the player has met a trigger
-       * pause game timer
+       * stop game timer
        * remove trigger
        * launch mini game quiz
        */
@@ -865,6 +865,14 @@ public class Game {
             }
         }
     
+    /**
+     * This method start predator timer
+     */
+    public void startPredatorTimer(){
+        timer = new Timer();
+        predatorTimerTask = new PredatorTimerTask(this);
+    }
+
     /**
      * Apply impact of hazard
        *
