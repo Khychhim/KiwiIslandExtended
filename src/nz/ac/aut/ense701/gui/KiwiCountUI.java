@@ -2,9 +2,15 @@ package nz.ac.aut.ense701.gui;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.awt.event.KeyEvent;
+
 import javax.swing.JOptionPane;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import nz.ac.aut.ense701.gameModel.Game;
+import nz.ac.aut.ense701.gameModel.GameAchievement;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
 import nz.ac.aut.ense701.gameModel.GameState;
 import nz.ac.aut.ense701.gameModel.MoveDirection;
@@ -35,6 +41,8 @@ public class KiwiCountUI
         update();
     }
     
+
+    
     /**
      * This method is called by the game model every time something changes.
      * Trigger an update.
@@ -49,20 +57,80 @@ public class KiwiCountUI
         {
             game.timer.cancel();
             game.timer.purge();
-            int option = JOptionPane.showOptionDialog(this, game.getLoseMessage(), "Game over!", 
-                    JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            int option = JOptionPane.showOptionDialog(this, 
+                    game.getLoseMessage(), "Game over!", 
+                    JOptionPane.PLAIN_MESSAGE,JOptionPane.
+                            INFORMATION_MESSAGE, null, options, options[0]);
+            //System.out.println("Value of won games is" +
+            //game.getAchievement().won3gamesinrow );
+            if(game.getAchievement().savedKiwis && game.
+                    getAchievement().savedGUI){
+                 JOptionPane.showOptionDialog(this,game.
+                         getAchievement().getSavedKiwiAchievement(),"Hero!",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.
+                         INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+            if(game.getAchievement().walked && game.
+                    getAchievement().walkingGUI){
+                JOptionPane.showOptionDialog(this,game.
+                        getAchievement().getWalkingAchievement(),"Traveller!",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.
+                         INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+            
+            if(game.getAchievement().won3gamesinrow && game.
+                    getAchievement().wonGUI){
+                JOptionPane.showOptionDialog(this,game.
+                        getAchievement().getWon3Achievement(),"Survivor",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.
+                         INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+           
             
             if(option == JOptionPane.OK_OPTION){
-                  game.createNewGame();
+                  game = null;
+                  this.setVisible(false);
             }  
         }
         else if ( game.getState() == GameState.WON )
         {
-              int option = JOptionPane.showOptionDialog(this,  game.getWinMessage(), "Well Done!", 
-                    JOptionPane.PLAIN_MESSAGE,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+              int option = JOptionPane.showOptionDialog(this
+                      ,  game.getWinMessage(), "Well Done!", 
+                    JOptionPane.PLAIN_MESSAGE,JOptionPane
+                            .INFORMATION_MESSAGE, null, options, options[0]);
+                        if(game.getAchievement().savedKiwis){
+                 JOptionPane.showOptionDialog(this,game.
+                         getAchievement().getSavedKiwiAchievement(),"Hero!",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.
+                         INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+            if(game.getAchievement().savedKiwis && 
+                    game.getAchievement().savedGUI){
+                 JOptionPane.showOptionDialog(this,game.
+                         getAchievement().getSavedKiwiAchievement(),"Hero!",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.
+                         INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+            if(game.getAchievement().walked && game.
+                    getAchievement().walkingGUI){
+                JOptionPane.showOptionDialog(this,game.
+                        getAchievement().getWalkingAchievement(),"Traveller!",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.
+                         INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+            
+            if(game.getAchievement().won3gamesinrow && 
+                    game.getAchievement().wonGUI){
+                JOptionPane.showOptionDialog(this,game.
+                        getAchievement().getWon3Achievement(),"Survivor",
+                 JOptionPane.PLAIN_MESSAGE, JOptionPane.
+                         INFORMATION_MESSAGE, null, options, options[0]);  
+            }
+
               
             if(option == JOptionPane.OK_OPTION){
-                  game.createNewGame();
+                  game = null;
+                  this.setVisible(false);
             }  
         }
         else if (game.messageForPlayer())
@@ -84,6 +152,9 @@ public class KiwiCountUI
      */
     private void update()
     {
+        //create a new grid square panel each time player move  
+        createGridPanel();
+        
         // update the grid square panels
         Component[] components = pnlIsland.getComponents();
         for ( Component c : components )
@@ -654,22 +725,36 @@ public class KiwiCountUI
     private void initIslandGrid()
     {
         // Add the grid
-        int rows    = game.getNumRows();
-        int columns = game.getNumColumns();
+        int rows    = game.getViewSizeOfMap();
+        int columns = game.getViewSizeOfMap();
         // set up the layout manager for the island grid panel
         pnlIsland.setLayout(new GridLayout(rows, columns));
         // create all the grid square panels and add them to the panel
         // the layout manager of the panel takes care of assigning them to the
         // the right position
-        for ( int row = 0 ; row < rows ; row++ )
-        {
-            for ( int col = 0 ; col < columns ; col++ )
-            {
-                pnlIsland.add(new GridSquarePanel(game, row, col));
-            }
-        }
     }
     
+    /**
+     * create all the grid square panels and add them to the panel
+     * the layout manager of the panel takes care of assigning them to the
+     * the right position
+     */
+    private void createGridPanel(){
+          //if grid square panel has been create, remove all the component then add them again
+          //else just create a new grid square panel
+          if(gsp != null){
+                pnlIsland.removeAll();
+          }
+          
+          for ( int row = game.getStartRow() ; row < game.getEndRow() ; row++ )
+          {
+                for ( int col = game.getStartCol() ; col < game.getEndCol() ; col++ )
+                {
+                      gsp = new GridSquarePanel(game, row, col);
+                      pnlIsland.add(gsp);
+                }
+          }
+    }
       // Variables declaration - do not modify//GEN-BEGIN:variables
       private javax.swing.JButton btnCollect;
       private javax.swing.JButton btnCount;
@@ -693,6 +778,7 @@ public class KiwiCountUI
       private javax.swing.JLabel txtPlayerName;
       private javax.swing.JLabel txtPredatorsLeft;
       // End of variables declaration//GEN-END:variables
-
+    
+      private GridSquarePanel gsp;
     private Game game;
 }
