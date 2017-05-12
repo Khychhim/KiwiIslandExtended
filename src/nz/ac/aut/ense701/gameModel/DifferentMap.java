@@ -97,7 +97,7 @@ public class DifferentMap {
         generateFauna(pw, numberFauna, tempMap);
         generateHazards(pw, numberHazards, tempMap);
         generateKiwis(pw, numberKiwis, tempMap);        
-        generateTriggers(pw, numberKiwis, tempMap);
+        generateTriggers(pw, numberTriggers, tempMap);
         int failedPredGens = generatePredators(pw, numberPredators, tempMap);
         generateFood(pw, numberFood+failedPredGens, tempMap);
         //Close the stream after generation is finished
@@ -112,18 +112,17 @@ public class DifferentMap {
             int col = rand.nextInt(mapCols);
             int randomTrigger = rand.nextInt(mapDataTypes.triggerTypes.size());
             Trigger trigger = mapDataTypes.triggerTypes.get(randomTrigger);
-            //Dont spawn a trigger in the hazard or player position
+            //Dont spawn a trigger in grid square more than 3, the hazard or player position
             if(tempMap[row][col] == null || 
-                    (tempMap[row][col].length() < 3 && !tempMap[row][col].contains("H") && !tempMap[row][col].contains("Q"))) {
-            if(tempMap[row][col] == null) tempMap[row][col] = "Q";
-                else tempMap[row][col] += "Q";
+                    (tempMap[row][col].length() < 3 && !tempMap[row][col].contains("H") && !tempMap[row][col].contains("Q") && playerRow != row && playerCol != col)) {
                 pw.println("Q," + trigger.getName() + "," + trigger.getDescription() + ", " +
                         row + ", " + col + ", ");
                 generatedCount++;
+            
             }
         }
     }
-    
+     
     private void generateFood(PrintWriter pw, int numberOfFood, String[][] tempMap) {
         int generatedCount = 0;
         Random rand = new Random();
