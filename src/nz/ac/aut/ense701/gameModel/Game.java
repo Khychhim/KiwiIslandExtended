@@ -46,7 +46,7 @@ public class Game {
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
       public static final int PREDATOR_TIME = 30;
-      public static final int MAP_SIZE = 20;
+      public static final int MAP_SIZE = 15;
       public Timer timer;
       GameAchievement counting = new GameAchievement();
       public int count_of_steps = counting.readCount();
@@ -89,7 +89,6 @@ public class Game {
             playerMessage = "";
             // timer for predator movement
             timer = new Timer();
-            predatorTimerTask = new PredatorTimerTask(this);
             startTimer();
 
             //creating XML glossary document.
@@ -151,6 +150,7 @@ public class Game {
       }
 
       public void startTimer(){
+            predatorTimerTask = new PredatorTimerTask(this);
             timer.scheduleAtFixedRate(predatorTimerTask, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);            
             notifyGameEventListeners();
       }
@@ -1046,14 +1046,13 @@ public class Game {
             {
                 //pause game timer
                 timer.cancel();
-                
+                timer.purge();
                 //remove trigger
                 Occupant trigger = island.getTrigger(current);
                 //remove launched trigger
                 island.removeOccupant(current, trigger);
                 //change gamestate to quiz
                 state = GameState.QUIZ;
-                island.removeOccupant(current, occupant);
             }
         }
     

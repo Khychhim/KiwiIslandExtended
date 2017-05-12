@@ -25,7 +25,6 @@ public class PredatorTimerTask extends TimerTask {
     public void run() {
         this.hasStarted = true;
         game.movePredators();
-        System.out.println("Predator move: " + PREDATOR_TIME * 1000);
     }
 
     public boolean hasRunStarted() {
