@@ -1048,8 +1048,8 @@ public class Game {
                 //remove launched trigger
                 island.removeOccupant(current, occupant);
                 
-                //Launtch mini game panel 
-                miniGameStart(this);
+                //Launtch mini game panel
+                //TODO: miniGameStart(this);
             }
         }
     
