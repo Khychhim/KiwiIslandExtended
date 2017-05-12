@@ -3,91 +3,163 @@
     <questions>
         <question> 
             <difficulty>2</difficulty> 
-            <quizquestion>Where do kiwi prefer for playground?</quizquestion> 
-            <answer>exotic plantation forests</answer> 
-            <answer>mangroves</answer> 
-            <answer>sand dunes</answer> 
-            <answer>dirt</answer> 
-            <correct>4</correct> 
+            <quizquestion>Stoats where introduced to NZ in the 1880's but are now a Predator of our native species. What were the originally meant to control?</quizquestion> 
+            <answer>Rats</answer> 
+            <answer>Rabbits</answer> 
+            <answer>Deer</answer> 
+            <answer>Possums</answer> 
+            <correct>2</correct> 
         </question>
         <question>
             <difficulty>1</difficulty>
-            <quizquestion>?>The Kiwi is _______ national icon</quizquestion>
-            <answer>Australia</answer>
-            <answer>American</answer>
-            <answer>Spain</answer>
-            <answer>New Zealand</answer>
-            <correct>4</correct>
+            <quizquestion>When do Stoats hunt?</quizquestion>
+            <answer>Day</answer>
+            <answer>Night</answer>
+            <answer>Day and Night</answer>
+            <answer>They don't</answer>
+            <correct>3</correct>
         </question>
         <question>
             <difficulty>1</difficulty>
-            <quizquestion>what is kiwis favioute drink?</quizquestion>
-            <answer>Apple sour cocktail</answer>
-            <answer>Haniken</answer>
-            <answer>Whisky</answer>
-            <answer>Water</answer>
+            <quizquestion>How do Possums impact our native birds?</quizquestion>
+            <answer>Competing for food</answer>
+            <answer>Disturbing nesting birds</answer>
+            <answer>Eating the birds eggs</answer>
+            <answer>All of the Above</answer>
             <correct>4</correct>
         </question>	  
         <question>
             <difficulty>3</difficulty>
-            <quizquestion>The kiwi is an _______ and will eat fruit and seed of native forest trees.</quizquestion>
-            <answer>human</answer>
-            <answer>omnivore</answer>
-            <answer>Mammals</answer>
-            <answer>Insects</answer>
+            <quizquestion>Although the size and weight of Possums varies greatly, adult Possums are typically</quizquestion>
+            <answer>20 to 45cm long</answer>
+            <answer>35 to 60cm long</answer>
+            <answer>65 to 95cm long</answer>
+            <answer>80 to 115cm long</answer>
             <correct>3</correct>
         </question>	  
         <question>
-            <difficulty>1</difficulty>
-            <quizquestion>What is wiki's favioute food? </quizquestion>
-            <answer></answer>
-            <answer>spray</answer>
-            <answer>twig</answer>
-            <answer>Worms</answer>
-            <correct>4</correct>
+            <difficulty>3</difficulty>
+            <quizquestion>What are the two types of European rat found in New Zealand</quizquestion>
+            <answer>Ship Rats and Norway Rats</answer>
+            <answer>Turkestan Rats and Norway Rats</answer>
+            <answer>Moss-forest Rats and Turkestan Rats</answer>
+            <answer>Pale field Rats and Ship Rats</answer>
+            <correct>1</correct>
         </question>
         <question>
             <difficulty>2</difficulty>
-            <quizquestion>How do wiki drink?</quizquestion>
-            <answer>Dive in Water</answer>
-            <answer>Immerses its beak</answer>
-            <answer>with a straw</answer>
-            <answer>with its foot</answer>
+            <quizquestion>Which is not a method used to eradicate rodents on New Zealands offshore islands</quizquestion>
+            <answer>Trapping</answer>
+            <answer>Hunting with Dogs</answer>
+            <answer>1080 and talon-type baits</answer>
+            <answer>All of the above are used</answer>
             <correct>2</correct>
         </question>
         <question>
-            <difficulty>3</difficulty>
-            <quizquestion>How deep can wiki sense insects and worms underground, using long beaks? </quizquestion>
-            <answer> 5 cm</answer>
-            <answer> 7 cm</answer>
-            <answer>10 cm</answer>
-            <answer>15 cm</answer>
-            <correct>3</correct>
+            <difficulty>1</difficulty>
+            <quizquestion>Kiore is the Māori name for a species of rat but are unique because they are associated with</quizquestion>
+            <answer>Migration of Polynesians throughout the Pacific</answer>
+            <answer>Cultural values to some iwi Māori</answer>
+            <answer>Spiritual values to some iwi Māori</answer>
+            <answer>All of the above</answer>
+            <correct>4</correct>
         </question>        
         <question>
             <difficulty>2</difficulty>
-            <quizquestion>How long do wiki need for sleep?</quizquestion>
-            <answer>Less 10 hours</answer>
-            <answer>19 hours</answer>
-            <answer>20 hours</answer>
-            <answer>24 hours</answer>
-            <correct>3</correct>
+            <quizquestion>Even pet cats can be a threat to Kiwi, how far have tests with radio collars shown these cats can wander?</quizquestion>
+            <answer> 5 kilometers</answer>
+            <answer>10 kilometers</answer>
+            <answer>15 kilometers</answer>
+            <answer>20 kilometers</answer>
+            <correct>4</correct>
+        </question>        
+        <question>
+            <difficulty>2</difficulty>
+            <quizquestion>The brown kiwi population is steadily decreasing by about</quizquestion>
+            <answer>1-2% per year</answer>
+            <answer>2-3% per year</answer>
+			<answer>3-4% per year</answer>
+			<answer>4-5% per year</answer>
+            <correct>2</correct>
         </question>        
         <question>
             <difficulty>1</difficulty>
-            <quizquestion>Kiwi has ______ beaks.</quizquestion>
-            <answer>Long</answer>
-            <answer>Short</answer>
+            <quizquestion>The brown kiwi produces up to how many eggs per clutch?</quizquestion>
+            <answer>2</answer>
+            <answer>3</answer>
+            <answer>4</answer>
+            <answer>5</answer>
             <correct>1</correct>
-        </question>        
-        <question>
-            <difficulty>3</difficulty>
-            <quizquestion>What is the average of kiwi killed by predators every week?</quizquestion>
-            <answer>10</answer>
-            <answer>14</answer>
-            <answer>27</answer>
-            <answer>35</answer>
+        </question>
+		<question>
+            <difficulty>2</difficulty>
+            <quizquestion>What is the only species of Kiwi to become extinct on the mainland?</quizquestion>
+            <answer>Brown Kiwi</answer>
+            <answer>Rowi</answer>
+            <answer>Little Spotted Kiwi</answer>
+            <answer>Great Spotted Kiwi</answer>
             <correct>3</correct>
+        </question>
+		<question>
+            <difficulty>2</difficulty>
+            <quizquestion>Fernbirds have declined significantly since humans began draining wetlands and are now classed globally as at risk and</quizquestion>
+            <answer>Declining (population declining but still common)</answer>
+            <answer>Relict (small population stabilised after declining)</answer>
+            <answer>Naturally Uncommon (population is naturally small)</answer>
+            <answer>Recovering (population is small but increasing)</answer>
+            <correct>1</correct>
+        </question>
+		<question>
+            <difficulty>1</difficulty>
+            <quizquestion>Where do Oyster catchers breed most commonly</quizquestion>
+            <answer>Mountains</answer>
+            <answer>Forests and wetlands</answer>
+            <answer>Treetops</answer>
+            <answer>Sandy beaches, sandspits and in dunes</answer>
+            <correct>4</correct>
+        </question>
+		<question>
+            <difficulty>2</difficulty>
+            <quizquestion>How old are Oyster chicks when they fly</quizquestion>
+            <answer>3-4 weeks</answer>
+            <answer>6-7 weeks</answer>
+            <answer>4-5 months</answer>
+            <answer>They don't</answer>
+            <correct>2</correct>
+        </question>
+		<question>
+            <difficulty>3</difficulty>
+            <quizquestion>During breeding seasons what colour does the White Herons normally yellow bill turn?</quizquestion>
+            <answer>Red</answer>
+            <answer>White</answer>
+            <answer>Black</answer>
+            <answer>It doesn't change Colour</answer>
+            <correct>3</correct>
+        </question>
+		<question>
+            <difficulty>2</difficulty>
+            <quizquestion>When Tui are breeding between what months does their courting take place</quizquestion>
+            <answer>March and April</answer>
+            <answer>May and June</answer>
+            <answer>July and August</answer>
+            <answer>September and October</answer>
+            <correct>4</correct>
+        </question>
+		<question>
+            <difficulty>1</difficulty>
+            <quizquestion>Among Tui do the males or females build the nests</quizquestion>
+            <answer>Males</answer>
+            <answer>Females</answer>
+            <answer>Either</answer>
+            <correct>2</correct>
+        </question>
+		<question>
+            <difficulty>2</difficulty>
+            <quizquestion>By 1900 the introduction of rats and cats wiped out Black Robins from everywhere except</quizquestion>
+            <answer>Little Mangere Island</answer>
+            <answer>Motuopao Island</answer>
+            <answer>Cuvier Island</answer>
+            <correct>1</correct>
         </question>
     </questions>
 </quiz>
