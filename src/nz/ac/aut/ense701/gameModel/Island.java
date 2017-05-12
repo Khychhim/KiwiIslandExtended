@@ -175,9 +175,9 @@ public class Island
     } 
     
      /**
-     * Checks if this position contains a predator.
+     * Checks if this position contains a trigger.
      * @param position which position 
-     * @return true if contains a predator, false if not
+     * @return true if contains a trigger, false if not
      */
     public boolean hasTrigger(Position position) 
     {

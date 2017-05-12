@@ -27,6 +27,7 @@ public class DifferentMap {
     private static final int MIN_TOOLS = 1; //Min number of each tool
     private static final int MIN_FAUNA = 3;
     private static final int MIN_HAZARDS = 5;
+    private static final int MIN_TRIGGERS = 3;
     //Sets the range of the random value to be added to each type
     private static final int RAND_KIWIS = 2;
     private static final int RAND_PREDATORS = 3;
@@ -34,6 +35,7 @@ public class DifferentMap {
     private static final int RAND_TOOLS = 3; //Up to an addional X of each tool
     private static final int RAND_FAUNA = 3;
     private static final int RAND_HAZARDS = 4;
+    private static final int RAND_TRIGGERS = 2;
     //Minimum distances between spawns
     private static final int PRED_MIN_DIST = 3; //Min Distance between predator and kiwi
     private static final int HAZARD_MIN_DIST = 1; //Min Distance between other hazards
@@ -85,7 +87,8 @@ public class DifferentMap {
         }
         int numberFauna = rand.nextInt(RAND_FAUNA) + MIN_FAUNA + 1;
         int numberHazards = rand.nextInt(RAND_HAZARDS) + MIN_HAZARDS + 1;
-        totalOccupants += numberKiwis + numberPredators + numberFood + numberFauna + numberHazards;
+        int numberTriggers = rand.nextInt(RAND_TRIGGERS) + MIN_TRIGGERS + 1;
+        totalOccupants += numberKiwis + numberPredators + numberFood + numberFauna + numberHazards + numberTriggers;
         pw.println(totalOccupants + ",");
         //Create a temporary map representation to track occupant positions and counts for viability
         String[][] tempMap = new String[mapRows][mapCols];
@@ -93,13 +96,33 @@ public class DifferentMap {
         generateTools(pw, numberTools, tempMap);
         generateFauna(pw, numberFauna, tempMap);
         generateHazards(pw, numberHazards, tempMap);
-        generateKiwis(pw, numberKiwis, tempMap);
+        generateKiwis(pw, numberKiwis, tempMap);        
+        generateTriggers(pw, numberTriggers, tempMap);
         int failedPredGens = generatePredators(pw, numberPredators, tempMap);
         generateFood(pw, numberFood+failedPredGens, tempMap);
         //Close the stream after generation is finished
         pw.close();
     }
     
+    private void generateTriggers(PrintWriter pw, int numberOfTriggers, String[][] tempMap) {
+        int generatedCount = 0;
+        Random rand = new Random();
+        while(generatedCount < numberOfTriggers) {
+            int row = rand.nextInt(mapRows);
+            int col = rand.nextInt(mapCols);
+            int randomTrigger = rand.nextInt(mapDataTypes.triggerTypes.size());
+            Trigger trigger = mapDataTypes.triggerTypes.get(randomTrigger);
+            //Dont spawn a trigger in grid square more than 3, the hazard or player position
+            if(tempMap[row][col] == null || 
+                    (tempMap[row][col].length() < 3 && !tempMap[row][col].contains("H") && !tempMap[row][col].contains("Q") && playerRow != row && playerCol != col)) {
+                pw.println("Q," + trigger.getName() + "," + trigger.getDescription() + ", " +
+                        row + ", " + col + ", ");
+                generatedCount++;
+            
+            }
+        }
+    }
+     
     private void generateFood(PrintWriter pw, int numberOfFood, String[][] tempMap) {
         int generatedCount = 0;
         Random rand = new Random();

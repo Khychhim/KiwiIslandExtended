@@ -61,6 +61,7 @@ public class DifferentMapTest extends junit.framework.TestCase {
         assertFalse("Tiles should not be empty", mapDataTypes.tileTypes.isEmpty());
         assertFalse("Tool should not be null", mapDataTypes.toolTypes == null);
         assertFalse("Tool should not be empty", mapDataTypes.toolTypes.isEmpty());
+        assertFalse("Trigger should not be empty", mapDataTypes.triggerTypes.isEmpty());
     }
     
     @Test

@@ -14,6 +14,21 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JFrame;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 /**
  * This is the class that knows the Kiwi Island game rules and state and
  * enforces those rules.
@@ -31,10 +46,16 @@ public class Game {
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
       public static final int PREDATOR_TIME = 30;
+      public static final int MAP_SIZE = 20;
       public Timer timer;
-    public static String playerName = "River Song";
-    public ArrayList<QuizQuestion> quizQuestionList;
-    public JFrame miniQuizFrame;
+      GameAchievement counting = new GameAchievement();
+      public int count_of_steps = counting.readCount();
+      GameAchievement achievement;
+      public static String playerName = "River Song";
+      public ArrayList<QuizQuestion> quizQuestionList;
+      public JFrame miniQuizFrame;
+      public PredatorTimerTask predatorTimerTask;
+      public Document glossarydocs;
     
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
@@ -51,8 +72,8 @@ public class Game {
       /**
        * Starts a new game. At this stage data is being read from a text file
        */
-      public void createNewGame() {
-            DifferentMap dm = new DifferentMap(15, 15, playerName);
+      public void createNewGame() {            
+            DifferentMap dm = new DifferentMap(MAP_SIZE, MAP_SIZE, playerName);
             dm.generateMap();
             allPredators.clear();
             totalPredators = 0;
@@ -68,7 +89,33 @@ public class Game {
             playerMessage = "";
             // timer for predator movement
             timer = new Timer();
+            predatorTimerTask = new PredatorTimerTask(this);
             startTimer();
+
+            //creating XML glossary document.
+            File glossaryXML = new File("glossary.xml");
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = null;
+            try {
+                docBuilder = docFactory.newDocumentBuilder();
+            } catch (ParserConfigurationException ex) {
+                System.err.println("Parser Exception: " + ex.getMessage());
+            }
+            // root elements
+            Document doc = null;
+            try {
+                doc = docBuilder.parse(glossaryXML);
+            } catch (SAXException ex) {
+                System.err.println("SAXEception: " + ex.getMessage());
+            } catch (IOException ex) {
+                System.err.println("IOException: " + ex.getMessage());
+            }
+            doc.getDocumentElement().normalize();
+
+            glossarydocs = doc;
+            calculateMapDimension();
+
+            notifyGameEventListeners();
       }
 
       /**
@@ -104,14 +151,7 @@ public class Game {
       }
 
       public void startTimer(){
-            timer.scheduleAtFixedRate(new TimerTask() {
-                  @Override
-                  public void run() {
-                        movePredators();
-                        System.out.println("Predator move: "+  PREDATOR_TIME * 1000);
-                  }
-            }, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);
-            
+            timer.scheduleAtFixedRate(predatorTimerTask, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);            
             notifyGameEventListeners();
       }
       
@@ -678,6 +718,10 @@ public class Game {
             if (isPlayerMovePossible(direction)) {
                   Position newPosition = player.getPosition().getNewPosition(direction);
                   Terrain terrain = island.getTerrain(newPosition);
+                  count_of_steps++;
+  
+                  
+                  
 
                   // move the player to new position
                   player.moveToPosition(newPosition, terrain);
@@ -686,10 +730,16 @@ public class Game {
 
                   // Is there a hazard?
                   checkForHazard();
+                  
+                  //is there an animal?
+                  detectAnimal();
+
 
                   //Is there a trigger
                   checkForTrigger();
 
+                  this.calculateMapDimension();
+              
                   updateGameState();
             }
             return successfulMove;
@@ -712,7 +762,22 @@ public class Game {
       public void removeGameEventListener(GameEventListener listener) {
             eventListeners.remove(listener);
       }
+      
+      public GameAchievement setAchievement(GameAchievement game){
+          return this.achievement = game;
+      }
+      
+      public GameAchievement getAchievement(){
+          return this.achievement;
+      }
 
+      /**
+       * This method set the island
+       * @param Island
+       */
+      public void setIsland(Island island){
+          this.island = island;
+      }
       /**
        * *******************************************************************************************************************************
        * Private methods
@@ -728,33 +793,146 @@ public class Game {
         if ( !player.isAlive() )
         {
             state = GameState.LOST;
+            //creates achievement object to reset counter of total games won.
+            GameAchievement achievement = new GameAchievement();
+            achievement.lossGameResetCounter();
+
+            achievement.write_to_count(count_of_steps);
+            achievement.read_kiwiCount(kiwiCount);
+
+            setAchievement(achievement);
+            
+
+           
             message = "Sorry, you have lost the game. " + this.getLoseMessage() + endGameBonus();
-            this.setLoseMessage(message);
+            
+             try {    
+                 // write the content into xml file
+                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                 Transformer transformer = transformerFactory.newTransformer();
+                 DOMSource source = new DOMSource(glossarydocs);
+                 StreamResult result = new StreamResult(new File("glossary.xml"));
+                 
+                 transformer.transform(source, result);
+                 
+                 System.out.println("File saved!");
+             } catch (TransformerException ex) {
+                 System.err.println("Transformer Exception: " + ex);
+             }
+             this.setLoseMessage(message);
         }
         else if (!playerCanMove() )
         {
+
             state = GameState.LOST;
+            //creates achievement object to reset counter of total games won.
+            GameAchievement achievement = new GameAchievement();
+            
+
+            achievement.lossGameResetCounter();
+            achievement.write_to_count(count_of_steps);
+            achievement.read_kiwiCount(kiwiCount);
+            setAchievement(achievement);//setter or getter for achievement instance.
+            
+    
             message = "Sorry, you have lost the game. You do not have sufficient stamina to move." + endGameBonus();
+            try {    
+                 // write the content into xml file
+                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                 Transformer transformer = transformerFactory.newTransformer();
+                 DOMSource source = new DOMSource(glossarydocs);
+                 StreamResult result = new StreamResult(new File("glossary.xml"));
+                 
+                 transformer.transform(source, result);
+                 
+                 System.out.println("File saved!");
+             } catch (TransformerException ex) {
+                 System.err.println("Transformer Exception: " + ex);
+             }
             this.setLoseMessage(message);
+      
+
         }
         else if(predatorsTrapped == totalPredators)
         {
             state = GameState.WON;
+            //adds to count for assigning achievement for winning 3 games in a row.
+            GameAchievement achievement = new GameAchievement();
+            achievement.Won3Games();
+            achievement.write_to_count(count_of_steps);
+            achievement.read_kiwiCount(kiwiCount);
             message = "You win! You have done an excellent job and trapped all the predators." + endGameBonus();
+            try {    
+                 // write the content into xml file
+                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                 Transformer transformer = transformerFactory.newTransformer();
+                 DOMSource source = new DOMSource(glossarydocs);
+                 StreamResult result = new StreamResult(new File("glossary.xml"));
+                 
+                 transformer.transform(source, result);
+                 
+                 System.out.println("File saved!");
+             } catch (TransformerException ex) {
+                 System.err.println("Transformer Exception: " + ex);
+             }
             this.setWinMessage(message);
+
+
+            
+         
         }
         else if(kiwiCount == totalKiwis)
         {
             if(predatorsTrapped >= totalPredators * MIN_REQUIRED_CATCH)
             {
                 state = GameState.WON;
+                //adds to count for assigning achievement for winning 3 games in a row.
+                GameAchievement achievement = new GameAchievement();
+                achievement.Won3Games();
+                achievement.write_to_count(count_of_steps);
+                achievement.read_kiwiCount(kiwiCount);
                 message = "You win! You have counted all the kiwi and trapped at least 80% of the predators." + endGameBonus();
+                try {    
+                 // write the content into xml file
+                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                 Transformer transformer = transformerFactory.newTransformer();
+                 DOMSource source = new DOMSource(glossarydocs);
+                 StreamResult result = new StreamResult(new File("glossary.xml"));
+                 
+                 transformer.transform(source, result);
+                 
+                 System.out.println("File saved!");
+             } catch (TransformerException ex) {
+                 System.err.println("Transformer Exception: " + ex);
+             }
                 this.setWinMessage(message);
+                
+                
+                
             }
         }
             // notify listeners about changes
             notifyGameEventListeners();
       }
+          
+    public void detectAnimal() {
+        NodeList creatures = glossarydocs.getElementsByTagName("Creature");
+
+        for (Occupant occupant : island.getOccupants(player.getPosition())) {
+            if (occupant instanceof Predator || occupant instanceof Kiwi || occupant instanceof Fauna) {
+                for(int i = 0; i < creatures.getLength(); i++) {
+                    Node creature = creatures.item(i);
+                    if(creature.getNodeType() == Node.ELEMENT_NODE) {
+                        Element element = (Element) creature;
+                        Node name = element.getElementsByTagName("Name").item(0);
+                        if(name.getTextContent().equalsIgnoreCase(occupant.getName())) {
+                            element.setAttribute("Seen", "true");
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     private String endGameBonus() {
         int kiwisCountedBonus = (int)(Score.KIWIS_COUNTED * ((double) kiwiCount / totalKiwis));
@@ -807,6 +985,8 @@ public class Game {
             playerMessage = message;
 
       }
+      
+
 
       /**
        * Check if player able to move
@@ -818,6 +998,7 @@ public class Game {
                     || isPlayerMovePossible(MoveDirection.EAST) || isPlayerMovePossible(MoveDirection.WEST));
 
       }
+      
 
       /**
        * Trap a predator in this position
@@ -855,7 +1036,7 @@ public class Game {
       
       /**
        * Check if the player has met a trigger
-       * pause game timer
+       * stop game timer
        * remove trigger
        */
         private void checkForTrigger() {
@@ -875,6 +1056,14 @@ public class Game {
             }
         }
     
+    /**
+     * This method start predator timer
+     */
+    public void startPredatorTimer(){
+        timer = new Timer();
+        predatorTimerTask = new PredatorTimerTask(this);
+    }
+
     /**
      * Apply impact of hazard
        *
@@ -1034,21 +1223,101 @@ public class Game {
                   }
             }
       }
+  
+      /**
+       * set the start and end position for row and column which will be 
+       * used to display the view of the map 
+       */
+      public void calculateMapDimension(){
+            //get player current position
+            int playerPositionCol = player.getPosition().getColumn();
+            int playerPositionRow = player.getPosition().getRow();
+            
+            //calculate the view size which player will see the map
+            viewSizeOfMap = (int)Math.round(MAP_SIZE*PLAYER_VIEW_PERCENTAGE_OF_MAP);
+            int start = 0;
+            int end = 0;
+            //if view size is an even number, then there is a one grid square difference between the left/top end to player position and
+            //from player position to right/bottom end. 
+            if(viewSizeOfMap % 2 == 0){                              
+                  start = (viewSizeOfMap/2) -1; //for left and top
+                  end = (viewSizeOfMap/2)+1; // for right and bottom
+
+            }else{
+                  start = (viewSizeOfMap/2); //for left and top
+                  end = (viewSizeOfMap/2)+1; // for right and bottom
+            }
+            
+            //set the column of start and end position
+            int[] mapColumn = setMapViewDimension(playerPositionCol,start,end);
+            startMapCol = mapColumn[0];
+            endMapCol = mapColumn[1];
+             //set the row of start and end position
+             int[] mapRow = setMapViewDimension(playerPositionRow,start,end);
+             startMapRow= mapRow[0];
+             endMapRow= mapRow[1];
+      }
       
-      private Island island;
-      private Player player;
-      private GameState state;
-      private int kiwiCount;
-      private int totalPredators;
-      private int totalKiwis;
-      private int predatorsTrapped;
-      private Set<GameEventListener> eventListeners;
-      private Random rand;
-      private ArrayList<Occupant> allPredators;
+      /**
+       * set the variable of row and column for map view size
+       * @param playerPosition row or column position of the player
+       * @param start the distance from player position to map start view
+       * @param end the distance from player position to map end view
+       * @return the start and end position of the map view in an array
+       */
+     public int[] setMapViewDimension(int playerPosition, int start, int end){
+            int startMap = playerPosition-start;
+            int endMap = playerPosition+end;
+            if(startMap >=0){                  
+                   if(endMap >=MAP_SIZE){
+                        endMap = MAP_SIZE;
+                        startMap = MAP_SIZE-viewSizeOfMap;
+                  }
+            }else{
+                  startMap = 0;
+                  endMap = viewSizeOfMap;
+            }
+            
+           return (new int[]{startMap, endMap});
+     }
+      
+     public int getStartRow(){
+           return this.startMapRow;
+     }
+     public int getEndRow(){
+           return this.endMapRow;
+     }
+     public int getStartCol(){
+           return this.startMapCol;
+     }
+     public int getEndCol(){
+           return this.endMapCol;
+     }
+     public int getViewSizeOfMap(){
+           return viewSizeOfMap;
+     }
+     
+    private int viewSizeOfMap; 
+    private int startMapRow;
+    private int endMapRow;
+    private int startMapCol;
+    private int endMapCol;
+    private Island island;
+    public Player player;
+    private GameState state;
+    private int kiwiCount;
+    private int totalPredators;
+    private int totalKiwis;
+    private int predatorsTrapped;
+    private Set<GameEventListener> eventListeners;
+    private Random rand;
+    private ArrayList<Occupant> allPredators;
     public Score score; 
     private final double MIN_REQUIRED_CATCH = 0.8;
-    private final int IMPACT_SCORE_MULTIPLIER = 100;   
+    private final int IMPACT_SCORE_MULTIPLIER = 100;
+    private final double PLAYER_VIEW_PERCENTAGE_OF_MAP = 0.6;
     private String winMessage = "";
     private String loseMessage  = "";
     private String playerMessage  = "";   
+
 }

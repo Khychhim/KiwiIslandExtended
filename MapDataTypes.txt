@@ -1,7 +1,7 @@
 5,
 .,*,#,^,~,
 
-38,
+39,
 E,Sandwich,A nice and healthy sandwich, 2.0, 1.0, 50.0,
 E,Muesli Bar,A juicy and nutricious muesli bar, 1.0, 1.0, 50.0,
 E,Apple,A juicy apple, 2.0, 3.0, 50.0,
@@ -40,3 +40,4 @@ H,Sunburn,Too much sun has given you bad sunburn and,0.3,
 H,Fall,Tripping on roots hurt your ankle and,0.5,
 H,Cliff,A fall down a small cliff,0.3,
 H,Broken trap,Your predator trap has broken,0.0,
+Q,Trigger,You have a quiz,

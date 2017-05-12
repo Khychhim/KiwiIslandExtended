@@ -45,7 +45,7 @@ public class QuizQuestion {
     public void setComplete(boolean complete) {
         this.complete = complete;
     }
-
+  
     public String getQuestion() {
         return question;
     }
@@ -81,5 +81,4 @@ public class QuizQuestion {
         }
         return score;
     }
-
 }
