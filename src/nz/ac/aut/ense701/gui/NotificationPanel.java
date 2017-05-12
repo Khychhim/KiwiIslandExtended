@@ -5,6 +5,7 @@
  */
 package nz.ac.aut.ense701.gui;
 
+import java.util.Timer;
 /**
  *
  * @author Logan
@@ -12,21 +13,42 @@ package nz.ac.aut.ense701.gui;
 public class NotificationPanel extends javax.swing.JPanel {
 
     public MiniGamePanel miniGamePanel;
-
+    public KiwiCountUI gui;
+    public boolean res;
     /**
      * Creates new form NotificationPanel
+       * @param miniGamePanel MiniGamePanel object to use
+       * @param gui KiwiCountUI object to use
      */
-    public NotificationPanel(MiniGamePanel miniGamePanel) {
+    public NotificationPanel(MiniGamePanel miniGamePanel, KiwiCountUI gui) {
         initComponents();
         this.miniGamePanel = miniGamePanel;
-        this.jLabelQuizLevel.setText("Quiz Level: \t" + miniGamePanel.currentQuestion.getDifficulty());
-        this.jLabelScoreEarn.setText("Score Earn: \t" + miniGamePanel.score);
-        this.jLabelPlayerAnswer.setText("Your Answer: \t" + miniGamePanel.getPlayerChosenAnswer());
-        int correctAnswerIndex = this.miniGamePanel.currentQuestion.getCorrectOptionIndex() - 1;
-        this.jLabelAnswer.setText("Correct Answer: \t" + miniGamePanel.currentQuestion.getQuestionOptions()[correctAnswerIndex]);
-        miniGamePanel.setVisible(false);
+        this.gui = gui;
     }
 
+    /**
+     * Display text to panel
+     */
+    public void displayToPanel(){
+
+        int correctAnswerIndex = miniGamePanel.currentQuestion.getCorrectOptionIndex() - 1;
+        
+        String playerAnswer = miniGamePanel.getPlayerChosenAnswer();
+        String correctAnswer = miniGamePanel.currentQuestion.getQuestionOptions()[correctAnswerIndex];
+
+        this.jLabelQuizLevel.setText("Quiz Level: \t" + miniGamePanel.currentQuestion.getDifficulty());
+        this.jLabelScoreEarn.setText("Score Earn: \t" + miniGamePanel.score);
+        this.jLabelPlayerAnswer.setText("Your Answer: \t" + playerAnswer);
+        
+        if(playerAnswer.equalsIgnoreCase(correctAnswer)){
+              this.jLabelAnswer.setText("Correct Answer!! \t");
+        }else{
+              this.jLabelAnswer.setText("Wrong Answer!! \t");
+        }
+        
+        miniGamePanel.setVisible(false);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -100,9 +122,11 @@ public class NotificationPanel extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //Close the Notification Panel
         this.miniGamePanel.resultFrame.dispose();
-        //start predtor timer
-        //game.startPredatorTimer(); 
-        //!!!! This method is written in mini-game trigger Branch and its not merge so cant be use yet
+        gui.miniQuizFrame.dispose();
+        gui.setEnabled(true);
+        gui.toFront();
+        gui.game.timer =  new Timer();
+        gui.game.startTimer();        
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JFrame;
-import nz.ac.aut.ense701.gui.MiniGamePanel;
 
 /**
  * This is the class that knows the Kiwi Island game rules and state and
@@ -31,7 +30,7 @@ public class Game {
       public static final int WEIGHT_INDEX = 3;
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
-      public static final int PREDATOR_TIME = 30;
+      public static final int PREDATOR_TIME = 2;
       public Timer timer;
     public static String playerName = "River Song";
     public ArrayList<QuizQuestion> quizQuestionList;
@@ -69,14 +68,7 @@ public class Game {
             playerMessage = "";
             // timer for predator movement
             timer = new Timer();
-            timer.scheduleAtFixedRate(new TimerTask() {
-                  @Override
-                  public void run() {
-                        movePredators();
-                        System.out.println("Predator move: "+  PREDATOR_TIME * 1000);
-                  }
-            }, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);
-            notifyGameEventListeners();
+            startTimer();
       }
 
       /**
@@ -111,6 +103,18 @@ public class Game {
             return state;
       }
 
+      public void startTimer(){
+            timer.scheduleAtFixedRate(new TimerTask() {
+                  @Override
+                  public void run() {
+                        movePredators();
+                        System.out.println("Predator move: "+  PREDATOR_TIME * 1000);
+                  }
+            }, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);
+            
+            notifyGameEventListeners();
+      }
+      
       /**
        * Get arraylist of all predator on island
        *
@@ -195,6 +199,8 @@ public class Game {
       /**
        * move the predators in a random position at a set interval
        *
+       * @param predator predator to move
+       * @return predator with its update state
        */
       public synchronized Occupant movePredatorRandomly(Predator predator) {
             boolean success = false;
@@ -274,6 +280,7 @@ public class Game {
        * predator move toward kiwi position one grid square at a time
        * 
        * @param predator the predator that will move to kiwi
+       * @return predator with its update position
        */
       public synchronized Predator predatorMoveToKiwi(Predator predator) {
             
@@ -763,7 +770,16 @@ public class Game {
 
         return bonusString;
     }
-       
+   
+      /**
+       * Sets state of the game
+       *
+       * @param state the state to set
+       */
+      public void setGameState(GameState state) {
+            this.state = state;
+      }
+    
     /**
      * Sets details about players win
        *
@@ -841,7 +857,6 @@ public class Game {
        * Check if the player has met a trigger
        * pause game timer
        * remove trigger
-       * launch mini game quiz
        */
         private void checkForTrigger() {
             Position current = player.getPosition();
@@ -852,12 +867,11 @@ public class Game {
                 timer.cancel();
                 
                 //remove trigger
-                Occupant occupant = island.getTrigger(current);
+                Occupant trigger = island.getTrigger(current);
                 //remove launched trigger
-                island.removeOccupant(current, occupant);
-                
-                //Launtch mini game panel 
-                miniGameStart(this);
+                island.removeOccupant(current, trigger);
+                //change gamestate to quiz
+                state = GameState.QUIZ;
             }
         }
     
@@ -955,8 +969,6 @@ public class Game {
             }
       }
       
-      
-
       /**
        * Reads player data and creates the player.
        *
@@ -1021,30 +1033,6 @@ public class Game {
                         island.addOccupant(occPos, occupant);
                   }
             }
-      }
-      
-      /**
-       * Set up the frame
-       * set up mini game panel instance
-       * @param game 
-       */
-      private void miniGameStart(Game game){
-                //setup Mini game panel
-                MiniGamePanel minigamePanel = new MiniGamePanel(game);
-                
-                //setup Frame
-                miniQuizFrame = new JFrame("Mini Gmae Quiz");
-                miniQuizFrame.add(minigamePanel);
-                miniQuizFrame.setSize(minigamePanel.getSize());
-                
-                //set frame location (Centre of the screen)
-//                Toolkit toolkit = frame.getToolkit();
-//                Dimension dimension=toolkit.getScreenSize();
-//                frame.setLocation(dimension.width/2 - frame.getWidth()/2,
-//                dimension.height/2 - frame.getHeight()/2);
-                
-                miniQuizFrame.setVisible(true);
-                miniQuizFrame.pack();
       }
       
       private Island island;

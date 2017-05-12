@@ -11,7 +11,7 @@ import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.QuizQuestion;
 
 /**
- * @param Game game
+ * 
  * @author Sean Chang
  */
 public final class MiniGamePanel extends javax.swing.JPanel {
@@ -22,13 +22,16 @@ public final class MiniGamePanel extends javax.swing.JPanel {
     private final Game game;
     public JFrame resultFrame;
     public int score = 0;
-
+    public KiwiCountUI gui;
     /**
      * Creates new form MiniGamePanel
+       * @param gui KiwiCountUI object to use
+       * @param game game object to use
      */
-    public MiniGamePanel(Game game) {
+    public MiniGamePanel(KiwiCountUI gui, Game game) {
         initComponents();
         this.game = game;
+        this.gui = gui;
         //select a random question
         currentQuestion = pickRandomQuestion();
         //set Question text label
@@ -82,8 +85,8 @@ public final class MiniGamePanel extends javax.swing.JPanel {
 
     /**
      * pick up a new question randomly which is not completed
-     *
-     * @param QuizQuestion
+     * 
+       * @return a quiz question
      */
     public QuizQuestion pickRandomQuestion() {
         Random rnd = new Random();
@@ -96,9 +99,9 @@ public final class MiniGamePanel extends javax.swing.JPanel {
         return theQuestion;
     }
 
-    public void launchNotification() {
+    public void launchResult() {
         //setup Mini game panel
-        NotificationPanel notificationPanel = new NotificationPanel(this);
+        NotificationPanel notificationPanel = new NotificationPanel(this, gui);
 
         //setup Frame
         resultFrame = new JFrame("Result");
@@ -106,6 +109,9 @@ public final class MiniGamePanel extends javax.swing.JPanel {
         resultFrame.setSize(notificationPanel.getSize());
         resultFrame.setVisible(true);
         resultFrame.pack();
+        resultFrame.setDefaultCloseOperation(0);
+        
+        notificationPanel.displayToPanel();
     }
 
     /**
@@ -238,9 +244,7 @@ public final class MiniGamePanel extends javax.swing.JPanel {
             this.score = currentQuestion.getPointGain();
             game.score.addScore(this.score);
         }
-
-        launchNotification();
-        this.game.miniQuizFrame.dispose();
+        launchResult();
     }//GEN-LAST:event_jButtonEnterActionPerformed
 
 

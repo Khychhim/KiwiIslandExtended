@@ -3,6 +3,7 @@ package nz.ac.aut.ense701.gui;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
@@ -72,7 +73,31 @@ public class KiwiCountUI
                     game.getPlayerMessage(), "Important Information",
                     JOptionPane.INFORMATION_MESSAGE);   
         }
+        else if(game.getState() == GameState.QUIZ){
+              this.setEnabled(false);
+              miniGameStart(this, game);
+             game.setGameState(GameState.PLAYING);
+              
+        }
     }
+    
+     /**
+       * Set up the frame
+       * set up mini game panel instance
+       * @param game 
+       */
+      private void miniGameStart(KiwiCountUI gui, Game game){
+                //setup Mini game panel
+                MiniGamePanel minigamePanel = new MiniGamePanel(gui,game);
+                
+                //setup Frame
+                miniQuizFrame = new JFrame("Mini Game Quiz");
+                miniQuizFrame.add(minigamePanel);
+                miniQuizFrame.setSize(minigamePanel.getSize());
+                miniQuizFrame.setDefaultCloseOperation(0);
+                miniQuizFrame.setVisible(true);
+                miniQuizFrame.pack();
+      }
     
      private void setAsGameListener()
     {
@@ -693,6 +718,6 @@ public class KiwiCountUI
       private javax.swing.JLabel txtPlayerName;
       private javax.swing.JLabel txtPredatorsLeft;
       // End of variables declaration//GEN-END:variables
-
-    private Game game;
+      public JFrame miniQuizFrame;
+    public Game game;
 }

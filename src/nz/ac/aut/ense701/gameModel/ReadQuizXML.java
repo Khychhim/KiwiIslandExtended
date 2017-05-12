@@ -107,7 +107,7 @@ public class ReadQuizXML {
             Node correctNode = questionElement.getElementsByTagName("correct").item(0);
             Element correctElement = (Element) correctNode;
             correct = correctElement.getTextContent();
-
+            
             //setQuestion
             QuizQuestion question = new QuizQuestion(Integer.parseInt(difficulty), quizQuestion, answers, Integer.parseInt(correct));
             questionArrayList.add(question);
@@ -119,7 +119,6 @@ public class ReadQuizXML {
             }
             System.out.println("Difficulty: " + difficulty + "\nQuizQuestion: " + quizQuestion
                     + "\nAnswers: " + builder.toString() + "\nCorrect: " + correct);
-
         }
 
     }
