@@ -1,8 +1,5 @@
 package nz.ac.aut.ense701.gameModel;
 
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,7 +13,6 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JFrame;
-import nz.ac.aut.ense701.gui.MiniGamePanel;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -55,15 +51,11 @@ public class Game {
       GameAchievement counting = new GameAchievement();
       public int count_of_steps = counting.readCount();
       GameAchievement achievement;
-      
-     
-    public static String playerName = "River Song";
-
-    public MiniGamePanel minigamePanel;
-    public PredatorTimerTask predatorTimerTask;
-
-    public Document glossarydocs;
-
+      public static String playerName = "River Song";
+      public ArrayList<QuizQuestion> quizQuestionList;
+      public JFrame miniQuizFrame;
+      public PredatorTimerTask predatorTimerTask;
+      public Document glossarydocs;
     
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
@@ -73,6 +65,7 @@ public class Game {
             rand = new Random();
             allPredators = new ArrayList<Occupant>();
             Collections.synchronizedList(allPredators);
+            quizQuestionList = new ReadQuizXML().getQuestionArrayList();
             createNewGame();
       }
 
@@ -90,19 +83,14 @@ public class Game {
             score = new Score();
             initialiseIslandFromFile("IslandData.txt");
             drawIsland();
-
-
-
-  
             state = GameState.PLAYING;
             winMessage = "";
             loseMessage = "";
             playerMessage = "";
             // timer for predator movement
             timer = new Timer();
-
             predatorTimerTask = new PredatorTimerTask(this);
-            timer.scheduleAtFixedRate(predatorTimerTask, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);
+            startTimer();
 
             //creating XML glossary document.
             File glossaryXML = new File("glossary.xml");
@@ -162,6 +150,11 @@ public class Game {
             return state;
       }
 
+      public void startTimer(){
+            timer.scheduleAtFixedRate(predatorTimerTask, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);            
+            notifyGameEventListeners();
+      }
+      
       /**
        * Get arraylist of all predator on island
        *
@@ -246,6 +239,8 @@ public class Game {
       /**
        * move the predators in a random position at a set interval
        *
+       * @param predator predator to move
+       * @return predator with its update state
        */
       public synchronized Occupant movePredatorRandomly(Predator predator) {
             boolean success = false;
@@ -325,6 +320,7 @@ public class Game {
        * predator move toward kiwi position one grid square at a time
        * 
        * @param predator the predator that will move to kiwi
+       * @return predator with its update position
        */
       public synchronized Predator predatorMoveToKiwi(Predator predator) {
             
@@ -952,7 +948,16 @@ public class Game {
 
         return bonusString;
     }
-       
+   
+      /**
+       * Sets state of the game
+       *
+       * @param state the state to set
+       */
+      public void setGameState(GameState state) {
+            this.state = state;
+      }
+    
     /**
      * Sets details about players win
        *
@@ -1033,7 +1038,6 @@ public class Game {
        * Check if the player has met a trigger
        * stop game timer
        * remove trigger
-       * launch mini game quiz
        */
         private void checkForTrigger() {
             Position current = player.getPosition();
@@ -1044,12 +1048,12 @@ public class Game {
                 timer.cancel();
                 
                 //remove trigger
-                Occupant occupant = island.getTrigger(current);
+                Occupant trigger = island.getTrigger(current);
                 //remove launched trigger
+                island.removeOccupant(current, trigger);
+                //change gamestate to quiz
+                state = GameState.QUIZ;
                 island.removeOccupant(current, occupant);
-                
-                //Launtch mini game panel
-                //TODO: miniGameStart(this);
             }
         }
     
@@ -1155,8 +1159,6 @@ public class Game {
             }
       }
       
-      
-
       /**
        * Reads player data and creates the player.
        *
@@ -1222,7 +1224,7 @@ public class Game {
                   }
             }
       }
-
+  
       /**
        * set the start and end position for row and column which will be 
        * used to display the view of the map 
@@ -1301,16 +1303,16 @@ public class Game {
     private int endMapRow;
     private int startMapCol;
     private int endMapCol;
-      private Island island;
-      public Player player;
-      private GameState state;
-      private int kiwiCount;
-      private int totalPredators;
-      private int totalKiwis;
-      private int predatorsTrapped;
-      private Set<GameEventListener> eventListeners;
-      private Random rand;
-      private ArrayList<Occupant> allPredators;
+    private Island island;
+    public Player player;
+    private GameState state;
+    private int kiwiCount;
+    private int totalPredators;
+    private int totalKiwis;
+    private int predatorsTrapped;
+    private Set<GameEventListener> eventListeners;
+    private Random rand;
+    private ArrayList<Occupant> allPredators;
     public Score score; 
     private final double MIN_REQUIRED_CATCH = 0.8;
     private final int IMPACT_SCORE_MULTIPLIER = 100;
