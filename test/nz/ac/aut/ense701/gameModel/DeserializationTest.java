@@ -12,22 +12,20 @@ import org.junit.Test;
 
 public class DeserializationTest {
 
+    private Game game;
+    private Game loadGame;
+
     /**
      * Default constructor for test class DeserializationTest
      */
     public DeserializationTest() {
-
     }
 
-    /*
-     * Test Game object is serializable
+    /**
+     * Setup a save data file and ready for testing
      */
-    @Test
-    public void testSavedGameIsLoaded() {
-        boolean expResult = true;
-
+    public void setup() {
         Game game = new Game();
-        Deserialization deserialization = new Deserialization();
 
         //CREATE SAVE DATA
         try {
@@ -43,13 +41,20 @@ public class DeserializationTest {
         } catch (IOException ex) {
             Logger.getLogger(SerializationTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
 
-        //CHECK FILE EXISTS
-        Game loaded = deserialization.deserialize();
+    @Test
+    public void testGameIsLoaded() {
+        boolean expResult = true;
+        boolean isLoaded = false;
+        Deserialization load = new Deserialization();
 
-        boolean isloaded;
-        isloaded = (loaded != null);
-        
-        assertEquals(expResult, isloaded);
+        loadGame = load.Load();
+
+        if (loadGame != null) {
+            isLoaded = true;
+        }
+
+        assertEquals(expResult, isLoaded);
     }
 }
