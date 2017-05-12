@@ -239,6 +239,68 @@ public class GameTest extends junit.framework.TestCase
     }
     
     @Test
+    public void testIsQuizLaunch(){
+        boolean isPlayerMoveSuccess = false;
+        boolean isValid = false;
+
+        //set up create testIsland 
+        //create trigger position and Player position where 
+        //position of trigger is one below the player's position
+        Island testIsland = new Island(2,1);
+        Position playerPosition = new Position(testIsland,0,0);
+        Position triggerPosition = new Position(testIsland,1,0);
+        
+        //place trigger in the island
+        Trigger trigger = new Trigger(triggerPosition, "Trigger", "quiz");
+        testIsland.addOccupant(triggerPosition, trigger);
+
+        //set test Island , player position 
+        game.setIsland(testIsland);
+        game.getPlayer().setPosition(playerPosition);
+        //--------------------------------------------------------------------
+        
+        //player move
+        if (game.getPlayer().isAlive()) {
+            isPlayerMoveSuccess = game.playerMove(MoveDirection.SOUTH);
+            
+        }
+        
+        isValid = isPlayerMoveSuccess & game.minigamePanel.isVisible();
+        assertEquals(true, isValid);
+    }
+    
+        @Test
+    public void testQuizLaunchStopPredatorTimer(){
+        boolean isPlayerMoveSuccess = false;
+        boolean isValid = false;
+
+        //set up create testIsland 
+        //create trigger position and Player position where 
+        //position of trigger is one below the player's position
+        Island testIsland = new Island(2,1);
+        Position playerPosition = new Position(testIsland,0,0);
+        Position triggerPosition = new Position(testIsland,1,0);
+        
+        //place trigger in the island
+        Trigger trigger = new Trigger(triggerPosition, "Trigger", "quiz");
+        testIsland.addOccupant(triggerPosition, trigger);
+
+        //set test Island , player position 
+        game.setIsland(testIsland);
+        game.getPlayer().setPosition(playerPosition);
+        //--------------------------------------------------------------------
+        
+        //player move
+        if (game.getPlayer().isAlive()) {
+            isPlayerMoveSuccess = game.playerMove(MoveDirection.SOUTH);
+        }
+        
+        isValid = isPlayerMoveSuccess & game.predatorTimerTask.hasRunStarted();
+        
+        assertEquals(false, isValid);
+    }
+    
+    @Test
     public void testIsPlayerMovePossibleValidMove(){
           Position pos = new Position(island, 0,0);
           game.player = new Player(pos, "JOH",50,50,100);

@@ -18,6 +18,7 @@ public final class MapDataTypes {
     public ArrayList<Kiwi> kiwiTypes = new ArrayList<Kiwi>();
     public ArrayList<Predator> predatorTypes = new ArrayList<Predator>();
     public ArrayList<Hazard> hazardTypes = new ArrayList<Hazard>();
+    public ArrayList<Trigger> triggerTypes = new ArrayList<Trigger>();
     
     private static final String FILE_NAME = "MapDataTypes.txt";
     
@@ -73,6 +74,8 @@ public final class MapDataTypes {
                 predatorTypes.add(new Predator(null, occName, occDesc));
             } else if(occType.equals("F")) {
                 faunaTypes.add(new Fauna(null, occName, occDesc));
+            } else if(occType.equals("Q")) {
+                triggerTypes.add(new Trigger(null, occName, occDesc));
             }
         }
     }

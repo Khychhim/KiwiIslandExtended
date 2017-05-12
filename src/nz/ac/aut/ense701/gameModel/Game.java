@@ -1,5 +1,8 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,6 +15,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.JFrame;
+import nz.ac.aut.ense701.gui.MiniGamePanel;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -53,7 +58,12 @@ public class Game {
       
      
     public static String playerName = "River Song";
+
+    public MiniGamePanel minigamePanel;
+    public PredatorTimerTask predatorTimerTask;
+
     public Document glossarydocs;
+
     
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
@@ -90,12 +100,10 @@ public class Game {
             playerMessage = "";
             // timer for predator movement
             timer = new Timer();
-            timer.scheduleAtFixedRate(new TimerTask() {
-                  @Override
-                  public void run() {
-                        movePredators();
-                  }
-            }, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);
+
+            predatorTimerTask = new PredatorTimerTask(this);
+            timer.scheduleAtFixedRate(predatorTimerTask, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);
+
             //creating XML glossary document.
             File glossaryXML = new File("glossary.xml");
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -118,6 +126,7 @@ public class Game {
 
             glossarydocs = doc;
             calculateMapDimension();
+
             notifyGameEventListeners();
       }
 
@@ -729,6 +738,10 @@ public class Game {
                   //is there an animal?
                   detectAnimal();
 
+
+                  //Is there a trigger
+                  checkForTrigger();
+
                   this.calculateMapDimension();
               
                   updateGameState();
@@ -762,6 +775,13 @@ public class Game {
           return this.achievement;
       }
 
+      /**
+       * This method set the island
+       * @param Island
+       */
+      public void setIsland(Island island){
+          this.island = island;
+      }
       /**
        * *******************************************************************************************************************************
        * Private methods
@@ -1008,7 +1028,39 @@ public class Game {
                   }
         }
     }
+      
+      /**
+       * Check if the player has met a trigger
+       * stop game timer
+       * remove trigger
+       * launch mini game quiz
+       */
+        private void checkForTrigger() {
+            Position current = player.getPosition();
+            boolean hadTrigger = island.hasTrigger(current);
+            if (hadTrigger) //can delete the trigger
+            {
+                //pause game timer
+                timer.cancel();
+                
+                //remove trigger
+                Occupant occupant = island.getTrigger(current);
+                //remove launched trigger
+                island.removeOccupant(current, occupant);
+                
+                //Launtch mini game panel 
+                miniGameStart(this);
+            }
+        }
     
+    /**
+     * This method start predator timer
+     */
+    public void startPredatorTimer(){
+        timer = new Timer();
+        predatorTimerTask = new PredatorTimerTask(this);
+    }
+
     /**
      * Apply impact of hazard
        *
@@ -1102,6 +1154,8 @@ public class Game {
                   }
             }
       }
+      
+      
 
       /**
        * Reads player data and creates the player.
@@ -1160,6 +1214,8 @@ public class Game {
                         totalPredators++;
                   } else if (occType.equals("F")) {
                         occupant = new Fauna(occPos, occName, occDesc);
+                  } else if (occType.equals("Q")) {
+                        occupant = new Trigger(occPos, occName, occDesc);
                   }
                   if (occupant != null) {
                         island.addOccupant(occPos, occupant);
@@ -1245,7 +1301,6 @@ public class Game {
     private int endMapRow;
     private int startMapCol;
     private int endMapCol;
-    
       private Island island;
       public Player player;
       private GameState state;

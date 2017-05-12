@@ -21,4 +21,4 @@ Occupant type [String]:
 "F": Fauna: name [string], description [string], position row [int], position column [int],
 "K": Kiwi: name [string], description [string], position row [int], position column [int], 
 "H": Hazard: name [string], description [string], position row [int], position column [int], impact [double],
-
+"Q": Trigger: name [string], description [string], position row [int], position column [int],
