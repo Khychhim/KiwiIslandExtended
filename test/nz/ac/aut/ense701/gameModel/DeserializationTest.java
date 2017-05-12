@@ -1,13 +1,11 @@
 package nz.ac.aut.ense701.gameModel;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static junit.framework.TestCase.assertEquals;
 import org.junit.Test;
 import static junit.framework.TestCase.assertEquals;
 
@@ -155,6 +153,104 @@ public class DeserializationTest {
                 }
             }
         }
+        assertEquals(expResult, isSame);
+    }
+
+    @Test
+    public void testGameHasSamePlayerInventory() {
+        boolean expResult = true;
+        boolean isSame = false;
+
+        //Load game
+        Deserialization load = new Deserialization();
+        loadedGame = load.Load();
+
+        //compare player
+        if (Arrays.equals(game.getPlayerInventory(), loadedGame.getPlayerInventory())) {
+            isSame = true;
+        }
+
+        assertEquals(expResult, isSame);
+    }
+
+    @Test
+    public void testGameHasSamePlayerMessage() {
+        boolean expResult = true;
+        boolean isSame = true;
+
+        //Load game
+        Deserialization load = new Deserialization();
+        loadedGame = load.Load();
+
+        //compare player
+        String playerMsg = game.getPlayerMessage();
+        String loadedPlayerMsg = loadedGame.getPlayerMessage();
+        if (playerMsg.compareTo(loadedPlayerMsg) != 0) {//if not equal
+            isSame = false;
+        }
+
+        assertEquals(expResult, isSame);
+    }
+
+    @Test
+    public void testGameHasSamePlayerPosition() {
+        boolean expResult = true;
+        boolean isSame = true;
+
+        //Load game
+        Deserialization load = new Deserialization();
+        loadedGame = load.Load();
+
+        //compare player
+        Position position = game.getPlayer().getPosition();
+        Position loadedPosition = loadedGame.getPlayer().getPosition();
+        if (position.getRow() != loadedPosition.getRow()) {//if not equal
+            isSame = false;
+        } else if (position.getColumn() != loadedPosition.getColumn()) {
+            isSame = false;
+
+        }
+
+        assertEquals(expResult, isSame);
+    }
+
+    @Test
+    public void testGameHasSamePlayerName() {
+        boolean expResult = true;
+        boolean isSame = true;
+
+        //Load game
+        Deserialization load = new Deserialization();
+        loadedGame = load.Load();
+
+        //compare player
+        String name = game.getPlayer().getName();
+        String loadedName = loadedGame.getPlayer().getName();
+
+        if (name.compareTo(loadedName) != 0) {//if not equal
+            isSame = false;
+        }
+
+        assertEquals(expResult, isSame);
+    }
+
+    @Test
+    public void testGameHasSamePlayerStamina() {
+        boolean expResult = true;
+        boolean isSame = true;
+
+        //Load game
+        Deserialization load = new Deserialization();
+        loadedGame = load.Load();
+
+        //compare player
+        double stamina = game.getPlayer().getStaminaLevel();
+        double loadedStamina = game.getPlayer().getStaminaLevel();
+
+        if (stamina != loadedStamina) {//if not equal
+            isSame = false;
+        }
+
         assertEquals(expResult, isSame);
     }
 }
