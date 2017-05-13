@@ -520,6 +520,11 @@ public class KiwiCountUI
             });
             listInventory.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
             listInventory.setVisibleRowCount(3);
+            listInventory.addKeyListener(new java.awt.event.KeyAdapter() {
+                  public void keyPressed(java.awt.event.KeyEvent evt) {
+                        listInventoryKeyPressed(evt);
+                  }
+            });
             listInventory.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
                   public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                         listInventoryValueChanged(evt);
@@ -741,6 +746,10 @@ public class KiwiCountUI
       private void listObjectsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listObjectsKeyPressed
             this.pnlIsland.requestFocusInWindow();
       }//GEN-LAST:event_listObjectsKeyPressed
+
+      private void listInventoryKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listInventoryKeyPressed
+            this.pnlIsland.requestFocusInWindow();
+      }//GEN-LAST:event_listInventoryKeyPressed
     
     /**
      * Creates and initialises the island grid.
