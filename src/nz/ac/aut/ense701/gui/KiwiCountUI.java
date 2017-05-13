@@ -688,10 +688,12 @@ public class KiwiCountUI
     private void btnCollectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCollectActionPerformed
         Object obj = listObjects.getSelectedValue();
         game.collectItem(obj);
+         this.pnlIsland.requestFocusInWindow();
     }//GEN-LAST:event_btnCollectActionPerformed
 
     private void btnDropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDropActionPerformed
         game.dropItem(listInventory.getSelectedValue());
+         this.pnlIsland.requestFocusInWindow();
     }//GEN-LAST:event_btnDropActionPerformed
 
     private void listObjectsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listObjectsValueChanged
@@ -706,6 +708,7 @@ public class KiwiCountUI
 
     private void btnUseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseActionPerformed
         game.useItem( listInventory.getSelectedValue());
+         this.pnlIsland.requestFocusInWindow();
     }//GEN-LAST:event_btnUseActionPerformed
 
     private void listInventoryValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listInventoryValueChanged
@@ -720,6 +723,7 @@ public class KiwiCountUI
 
     private void btnCountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCountActionPerformed
         game.countKiwi();
+         this.pnlIsland.requestFocusInWindow();
     }//GEN-LAST:event_btnCountActionPerformed
 
       private void pnlIslandKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlIslandKeyPressed
