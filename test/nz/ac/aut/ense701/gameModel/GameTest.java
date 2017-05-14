@@ -238,6 +238,7 @@ public class GameTest extends junit.framework.TestCase
           assertTrue("Predator should be in this position",island.hasPredator(positionKiwi));
     }
     
+    /*
     @Test
     public void testIsQuizLaunch(){
         boolean isPlayerMoveSuccess = false;
@@ -268,6 +269,7 @@ public class GameTest extends junit.framework.TestCase
         isValid = isPlayerMoveSuccess & game.minigamePanel.isVisible();
         assertEquals(true, isValid);
     }
+    */
     
         @Test
     public void testQuizLaunchStopPredatorTimer(){
