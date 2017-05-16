@@ -234,14 +234,24 @@ public class MainMenu extends JPanel implements MouseListener {
             
             switch(option) {
                 case 0:
-                    menu.setVisible(false);
-                    //Create Game
-                    final Game game = new Game();
-                    //Create the GUI for the game
-                    final KiwiCountUI gui  = new KiwiCountUI(game);
-                    gui.setLocation(menu.getLocation());
-                    gui.addComponentListener(backListener());
-                    gui.setVisible(true);
+//                      menu.setVisible(false);
+                      
+                     Object[] optionsDifficulty = {"Easy","Normal","Hard"};
+                     int optionDifficulty = JOptionPane.showOptionDialog(menuPane, 
+                    "Choose Game Difficulty", "Game Difficulty", 
+                    JOptionPane.YES_NO_CANCEL_OPTION, 
+                    JOptionPane.DEFAULT_OPTION, 
+                    null, optionsDifficulty, optionsDifficulty[0]);
+                     
+                    
+//                    //Create Game
+//                    final Game game = new Game();
+//                    //Create the GUI for the game
+//                    final KiwiCountUI gui  = new KiwiCountUI(game);
+//                    gui.setLocation(menu.getLocation());
+//                    gui.addComponentListener(backListener());
+//                    gui.setVisible(true);
+                    
                     break;
                 case 1:
                     System.err.println("Load Game");
