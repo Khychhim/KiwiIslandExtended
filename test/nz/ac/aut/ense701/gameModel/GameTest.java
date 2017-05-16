@@ -24,7 +24,7 @@ public class GameTest extends junit.framework.TestCase
     Player     player;
     Position   playerPosition;
     Island island ;
-    
+    DifferentMap dm;
     /**
      * Default constructor for test class GameTest
      */
@@ -40,10 +40,10 @@ public class GameTest extends junit.framework.TestCase
     @Override
     protected void setUp()
     {
- 
+        dm = new DifferentMap(15, 15, "River Song");
             // Create a new game from the data file.
             // Player is in position 2,0 & has 100 units of stamina
-        game           = new Game();
+        game           = new Game(dm);
     
         playerPosition = game.getPlayer().getPosition();
         player         = game.getPlayer();

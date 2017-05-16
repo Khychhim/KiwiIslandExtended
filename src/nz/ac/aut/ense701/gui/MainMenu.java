@@ -243,7 +243,19 @@ public class MainMenu extends JPanel implements MouseListener {
                     JOptionPane.DEFAULT_OPTION, 
                     null, optionsDifficulty, optionsDifficulty[0]);
                      
-                    
+                    switch(optionDifficulty){
+                          case 0:
+                                
+                          break;
+                          
+                          case 1:
+                                
+                          break;
+                          
+                          case 2:
+                                
+                          break;
+                    }
 //                    //Create Game
 //                    final Game game = new Game();
 //                    //Create the GUI for the game

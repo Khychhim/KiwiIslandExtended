@@ -46,7 +46,7 @@ public class Game {
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
       public static final int PREDATOR_TIME = 30;
-      public static final int MAP_SIZE = 15;
+      public  int MAP_SIZE;
       public Timer timer;
       GameAchievement counting = new GameAchievement();
       public int count_of_steps = counting.readCount();
@@ -56,16 +56,20 @@ public class Game {
       public JFrame miniQuizFrame;
       public PredatorTimerTask predatorTimerTask;
       public Document glossarydocs;
+      private DifferentMap dm;
     
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
+       * @param dm differentMap object for different game difficulty
      */
-      public Game() {
+      public Game(DifferentMap dm) {
             eventListeners = new HashSet<GameEventListener>();
             rand = new Random();
             allPredators = new ArrayList<Occupant>();
             Collections.synchronizedList(allPredators);
             quizQuestionList = new ReadQuizXML().getQuestionArrayList();
+            this.dm = dm;
+            MAP_SIZE = dm.getMapCols();
             createNewGame();
       }
 
@@ -73,7 +77,7 @@ public class Game {
        * Starts a new game. At this stage data is being read from a text file
        */
       public void createNewGame() {            
-            DifferentMap dm = new DifferentMap(MAP_SIZE, MAP_SIZE, playerName);
+//            DifferentMap dm = new DifferentMap(MAP_SIZE, MAP_SIZE, playerName);
             dm.generateMap();
             allPredators.clear();
             totalPredators = 0;
