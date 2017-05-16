@@ -45,13 +45,12 @@ public class Game {
       public static final int WEIGHT_INDEX = 3;
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
-      public static final int PREDATOR_TIME = 30;
+      //public  int PREDATOR_TIME = 30;
       public  int MAP_SIZE;
       public Timer timer;
       GameAchievement counting = new GameAchievement();
       public int count_of_steps = counting.readCount();
       GameAchievement achievement;
-      public static String playerName = "River Song";
       public ArrayList<QuizQuestion> quizQuestionList;
       public JFrame miniQuizFrame;
       public PredatorTimerTask predatorTimerTask;
@@ -62,22 +61,20 @@ public class Game {
      * A new instance of Kiwi island that reads data from "IslandData.txt".
        * @param dm differentMap object for different game difficulty
      */
-      public Game(DifferentMap dm) {
+      public Game(GameDifficulty gameDifficulty) {
             eventListeners = new HashSet<GameEventListener>();
             rand = new Random();
             allPredators = new ArrayList<Occupant>();
             Collections.synchronizedList(allPredators);
-            quizQuestionList = new ReadQuizXML().getQuestionArrayList();
-            this.dm = dm;
-            MAP_SIZE = dm.getMapCols();
-            createNewGame();
+            quizQuestionList = new ReadQuizXML().getQuestionArrayList();            
+            createNewGame(gameDifficulty);
       }
 
       /**
        * Starts a new game. At this stage data is being read from a text file
        */
-      public void createNewGame() {            
-//            DifferentMap dm = new DifferentMap(MAP_SIZE, MAP_SIZE, playerName);
+      public void createNewGame(GameDifficulty gameDifficulty) {            
+            dm = new DifferentMap(gameDifficulty);
             dm.generateMap();
             allPredators.clear();
             totalPredators = 0;
@@ -118,6 +115,7 @@ public class Game {
             glossarydocs = doc;
             calculateMapDimension();
 
+            MAP_SIZE = dm.getMapCols();
             notifyGameEventListeners();
       }
 
@@ -155,7 +153,7 @@ public class Game {
 
       public void startTimer(){
             predatorTimerTask = new PredatorTimerTask(this);
-            timer.scheduleAtFixedRate(predatorTimerTask, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);            
+            timer.scheduleAtFixedRate(predatorTimerTask, dm.getPredatorMoveTime() * 1000, dm.getPredatorMoveTime() * 1000);            
             notifyGameEventListeners();
       }
       

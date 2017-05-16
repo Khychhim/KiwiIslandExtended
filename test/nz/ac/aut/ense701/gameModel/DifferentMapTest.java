@@ -18,8 +18,6 @@ public class DifferentMapTest extends junit.framework.TestCase {
     MapDataTypes mapDataTypes;
     DifferentMap differentMap;
     
-    public final int MAP_SIZE = 15;
-    
     public DifferentMapTest() {
     }
 
@@ -32,7 +30,7 @@ public class DifferentMapTest extends junit.framework.TestCase {
     @Override
     protected void setUp() {
         mapDataTypes = new MapDataTypes();
-        differentMap = new DifferentMap(MAP_SIZE, MAP_SIZE, "River Song");
+        differentMap = new DifferentMap(GameDifficulty.EASY);
     }
 
     /**

@@ -242,7 +242,7 @@ public class MainMenu extends JPanel implements MouseListener {
                     JOptionPane.YES_NO_CANCEL_OPTION, 
                     JOptionPane.DEFAULT_OPTION, 
                     null, optionsDifficulty, optionsDifficulty[0]);
-                     
+                    
                     switch(optionDifficulty){
                           case 0:
                                 
@@ -254,6 +254,9 @@ public class MainMenu extends JPanel implements MouseListener {
                           
                           case 2:
                                 
+                          break;
+                          
+                          default:
                           break;
                     }
 //                    //Create Game

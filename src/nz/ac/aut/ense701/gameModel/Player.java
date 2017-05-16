@@ -33,7 +33,7 @@ public class Player
      * @param maxBackpackWeight the most weight that can be in a backpack
      * @param maxBackpackSize the maximum size items that will fit in the backpack     
      */    
-    public Player(Position position, String name, double maxStamina,
+    public Player(Position position, String name, double maxStamina, 
                   double maxBackpackWeight, double maxBackpackSize)
     {
        this.position          = position;
