@@ -21,21 +21,58 @@ import javax.imageio.ImageIO;
 public class Tileset {
     
     //Tileset Identifiers
-    public static final int CLIFF = 0;
+    public static final int CLIFF  = 0;
     public static final int GROUND = 1;
-    public static final int ROCKS = 2;
-    public static final int TREES = 3;
+    public static final int ROCKS  = 2;
+    public static final int TREES  = 3;
+    //Cliff Tiles
+    public static final int CLIFF_TOP_LEFT      = 0;
+    public static final int CLIFF_TOP_MIDDLE    = 1;
+    public static final int CLIFF_TOP_RIGHT     = 2;
+    public static final int CLIFF_MIDDLE_LEFT   = 3;
+    public static final int CLIFF_MIDDLE_RIGHT  = 5;
+    public static final int CLIFF_BOTTOM_LEFT   = 6;
+    public static final int CLIFF_BOTTOM_MIDDLE = 7;
+    public static final int CLIFF_BOTTOM_RIGHT  = 8;
+    public static final int CLIFF_BASE_LEFT     = 9;
+    public static final int CLIFF_BASE_MIDDLE   = 10;
+    public static final int CLIFF_BASE_RIGHT    = 11;
+    //Ground Tiles
+    //Plain Grass
+    public static final int GRASS_TOP_LEFT      = 0;
+    public static final int GRASS_TOP_RIGHT     = 1;
+    public static final int GRASS_BOTTOM_LEFT   = 10;
+    public static final int GRASS_BOTTOM_RIGHT  = 11;
+    //Plain Sand
+    public static final int SAND_TOP_LEFT       = 2;
+    public static final int SAND_TOP_MIDDLE     = 3;
+    public static final int SAND_TOP_RIGHT      = 4;
+    public static final int SAND_MIDDLE_LEFT    = 12;
+    public static final int SAND_MIDDLE_MIDDLE  = 13;
+    public static final int SAND_MIDDLE_RIGHT   = 14;
+    public static final int SAND_BOTTOM_LEFT    = 22;
+    public static final int SAND_BOTTOM_MIDDLE  = 23;
+    public static final int SAND_BOTTOM_RIGHT   = 24;
+    //Grass Next to Water
+    public static final int G_AND_W_TOP_LEFT        = 5;
+    public static final int G_AND_W_TOP_MIDDLE      = 6;
+    public static final int G_AND_W_TOP_RIGHT       = 7;
+    public static final int G_AND_W_MIDDLE_LEFT     = 15;
+    public static final int G_AND_W_MIDDLE_RIGHT    = 17;
+    public static final int G_AND_W_BOTTOM_LEFT     = 25;
+    public static final int G_AND_W_BOTTOM_MIDDLE   = 26;
+    public static final int G_AND_W_BOTTOM_RIGHT    = 27;
     
     //Array containing paths to tilesets
     private final String[] tileSets = {
-        "/nz/ac/aut/ense701/gameImages/Cliff_tileset.png",
+        "/nz/ac/aut/ense701/gameImages/Cliff_tileset_smaller.png",
         "/nz/ac/aut/ense701/gameImages/ground_tiles.png",
         "/nz/ac/aut/ense701/gameImages/rocks.png",
         "/nz/ac/aut/ense701/gameImages/trees.png"
     };
     
     //Array of tileset Images
-    private BufferedImage[] tileSetsImages;
+    private final BufferedImage[] tileSetsImages;
     
     //Array of the tiles in each tileset
     private final Image[][] tiles;
