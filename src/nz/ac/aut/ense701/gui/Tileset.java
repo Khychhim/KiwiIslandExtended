@@ -46,6 +46,7 @@ public class Tileset {
     
     public Tileset() {
         tiles = new Image[tileSets.length][];
+        tileSetsImages = new BufferedImage[tileSets.length];
         loadTileSets();
         setupTiles();
     }
@@ -54,6 +55,7 @@ public class Tileset {
     private void loadTileSets() {
         for(int i = 0; i < tileSets.length; i++) {
             try {
+                System.out.println("Loading " + tileSets[i]);
                 tileSetsImages[i] = ImageIO.read(this.getClass().getResource(tileSets[i]));
             } catch(IOException ex) {
                 System.err.println("Failed to load " + tileSets[i] + ", " + ex.getMessage());
@@ -64,9 +66,10 @@ public class Tileset {
     //Setup the tiles array
     private void setupTiles() {
         for(int i = 0; i < tileSets.length; i++) {
-            //The width/height of the tileset over the tiles size +1 for safety
-            int tilesHorizontal = (tileSetsImages[i].getWidth(null)/TILE_WIDTH)+1;
-            int tilesVertical = (tileSetsImages[i].getHeight(null)/TILE_HEIGHT)+1;
+            //The width/height of the tileset over the tiles size
+            int imageHeight = tileSetsImages[i].getHeight(null);
+            int tilesHorizontal = (tileSetsImages[i].getWidth(null)/TILE_WIDTH);
+            int tilesVertical = (imageHeight/TILE_HEIGHT);
             int totalTiles = tilesHorizontal*tilesVertical;
             tiles[i] = new Image[totalTiles];
             //Split tileset Image into tiles
