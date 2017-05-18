@@ -14,12 +14,17 @@ public class DifferentMap {
     private static final String MAP_FILE_NAME = "IslandData.txt";
     private static final String TEXT_FORMAT = "UTF-8";
     public static final String playerName = "River Song";
-    private final int mapRows;
-    private final int mapCols;
+    private final int MAP_SIZE_EASY = 10;
+    private final int NUMBER_PREDATOR_EASY = 3;
+    private final int MIN__HAZARD_EASY = 3;
+    private final int PREDATOR_MOVE_TIME_EASY = 60;
+    
+    private int mapRows;
+    private int mapCols;
     private int playerRow;
     private int playerCol;
     private final MapDataTypes mapDataTypes;
-    private int predatorMoveTime;
+    private int predatorMoveTime = 30;
     private static final int MIN_HAZARDS = 5;
     private static final int MIN_PREDATORS = 3;
     private static final int RAND_HAZARDS = 4;
@@ -28,29 +33,31 @@ public class DifferentMap {
     
     //Sets the minimum number of each type to be generated
     private static final int MIN_KIWIS = 5;
-    private static final int MIN_FOOD = 3;
+    private static final int MIN_FOOD = 4;
     private static final int MIN_TOOLS = 1; //Min number of each tool
     private static final int MIN_FAUNA = 3;
     private static final int MIN_TRIGGERS = 3;
     //Sets the range of the random value to be added to each type
     private static final int RAND_KIWIS = 2;
-    private static final int RAND_FOOD = 5;
+    private static final int RAND_FOOD = 4;
     private static final int RAND_TOOLS = 3; //Up to an addional X of each tool
     private static final int RAND_FAUNA = 3;
     private static final int RAND_TRIGGERS = 2;
     //Minimum distances between spawns
     private static final int PRED_MIN_DIST = 3; //Min Distance between predator and kiwi
     private static final int HAZARD_MIN_DIST = 1; //Min Distance between other hazards
+    private GameDifficulty gameDifficulty;
     
     //For testing map Generation
     public static void main(String args[]) {
-        DifferentMap test = new DifferentMap(GameDifficulty.EASY);
-        test.generateMap();
+//        DifferentMap test = new DifferentMap(GameDifficulty.EASY);
+//        test.generateMap();
     }     
     
     public DifferentMap(GameDifficulty gameDifficulty) {
-        this.mapRows = 10;
-        this.mapCols = 10;
+          mapRows = 15;
+          mapCols = 15;
+        this.gameDifficulty = gameDifficulty;
         mapDataTypes = new MapDataTypes();
         mapDataTypes.loadTypesFromFile();
     }
@@ -103,6 +110,10 @@ public class DifferentMap {
         generateFood(pw, numberFood+failedPredGens, tempMap);
         //Close the stream after generation is finished
         pw.close();
+    }
+    
+    private void generateDifficulty(){
+          
     }
     
     private void generateTriggers(PrintWriter pw, int numberOfTriggers, String[][] tempMap) {

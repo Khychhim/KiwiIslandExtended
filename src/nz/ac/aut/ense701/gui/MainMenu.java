@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import nz.ac.aut.ense701.gameModel.Game;
+import nz.ac.aut.ense701.gameModel.GameDifficulty;
 
 /**
  *
@@ -232,10 +233,10 @@ public class MainMenu extends JPanel implements MouseListener {
                     JOptionPane.DEFAULT_OPTION, 
                     null, options, options[1]);
             
+           Game game = null;
+           
             switch(option) {
-                case 0:
-//                      menu.setVisible(false);
-                      
+                case 0:                      
                      Object[] optionsDifficulty = {"Easy","Normal","Hard"};
                      int optionDifficulty = JOptionPane.showOptionDialog(menuPane, 
                     "Choose Game Difficulty", "Game Difficulty", 
@@ -245,27 +246,35 @@ public class MainMenu extends JPanel implements MouseListener {
                     
                     switch(optionDifficulty){
                           case 0:
-                                
+                              //Create Game
+                              game = new Game(GameDifficulty.EASY);
                           break;
                           
                           case 1:
-                                
+                              //Create Game
+                              game = new Game(GameDifficulty.NORMAL);
                           break;
                           
                           case 2:
-                                
+                              //Create Game
+                              game = new Game(GameDifficulty.HARD);
+                              
                           break;
                           
                           default:
+                                System.out.println("No option selected");
                           break;
                     }
-//                    //Create Game
-//                    final Game game = new Game();
-//                    //Create the GUI for the game
-//                    final KiwiCountUI gui  = new KiwiCountUI(game);
-//                    gui.setLocation(menu.getLocation());
-//                    gui.addComponentListener(backListener());
-//                    gui.setVisible(true);
+                    
+                    if(game != null){
+                          menu.setVisible(false);
+                          KiwiCountUI gui = null;
+                          //Create the GUI for the game
+                          gui  = new KiwiCountUI(game);
+                          gui.setLocation(menu.getLocation());
+                          gui.addComponentListener(backListener());
+                          gui.setVisible(true);   
+                    }
                     
                     break;
                 case 1:

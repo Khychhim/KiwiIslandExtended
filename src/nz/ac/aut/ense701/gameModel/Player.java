@@ -23,7 +23,7 @@ public class Player
     private Set<Item> backpack;
     private final double    maxBackpackWeight;
     private final double    maxBackpackSize;   
-    
+    private GameDifficulty gameDifficulty;
     /**
      * Constructs a new player object.
      * 
@@ -132,6 +132,11 @@ public class Player
      */
     public double getCurrentBackpackSize(){
         double totalSize = 0.0;
+        
+        if(gameDifficulty == GameDifficulty.HARD){
+              totalSize = 1.0;
+        }
+        
         for ( Item item : backpack ) 
         {
             totalSize += item.getSize();
@@ -148,7 +153,6 @@ public class Player
     {
         return maxBackpackSize;
     }
-
     
     /**
      * Get current weight of backpack.
@@ -158,6 +162,13 @@ public class Player
     public double getCurrentBackpackWeight()
     {
         double totalWeight = 0.0;
+        
+        if(gameDifficulty == GameDifficulty.HARD){
+              totalWeight = 4.0;
+        }else if(gameDifficulty == GameDifficulty.NORMAL){
+              totalWeight = 2.0;
+        }
+        
         for ( Item item : backpack ) 
         {
             totalWeight += item.getWeight();
@@ -360,9 +371,17 @@ public class Player
     
     /**
      * This method will set the player position
-     * @param Position - position
+       * @param position position to set
      */
     public void setPosition(Position position){
         this.position = position;
+    }
+    
+    /**
+     * This method set the game difficulty variable
+     * @param gameDifficulty GameDifficulty object to set
+     */
+    public void setGameDifficulty(GameDifficulty gameDifficulty){
+          this.gameDifficulty = gameDifficulty;
     }
 }

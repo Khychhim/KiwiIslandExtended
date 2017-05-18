@@ -763,6 +763,8 @@ public class KiwiCountUI
         // Add the grid
         int rows    = game.getViewSizeOfMap();
         int columns = game.getViewSizeOfMap();
+        System.out.println(rows);
+        System.out.println(columns);
         // set up the layout manager for the island grid panel
         pnlIsland.setLayout(new GridLayout(rows, columns));
         // create all the grid square panels and add them to the panel

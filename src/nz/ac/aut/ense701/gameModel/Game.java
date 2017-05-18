@@ -45,7 +45,6 @@ public class Game {
       public static final int WEIGHT_INDEX = 3;
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
-      //public  int PREDATOR_TIME = 30;
       public  int MAP_SIZE;
       public Timer timer;
       GameAchievement counting = new GameAchievement();
@@ -56,24 +55,25 @@ public class Game {
       public PredatorTimerTask predatorTimerTask;
       public Document glossarydocs;
       private DifferentMap dm;
-    
+      private GameDifficulty gameDifficulty;
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
        * @param dm differentMap object for different game difficulty
      */
       public Game(GameDifficulty gameDifficulty) {
+            this.gameDifficulty= gameDifficulty;
             eventListeners = new HashSet<GameEventListener>();
             rand = new Random();
             allPredators = new ArrayList<Occupant>();
             Collections.synchronizedList(allPredators);
             quizQuestionList = new ReadQuizXML().getQuestionArrayList();            
-            createNewGame(gameDifficulty);
+            createNewGame();
       }
 
       /**
        * Starts a new game. At this stage data is being read from a text file
        */
-      public void createNewGame(GameDifficulty gameDifficulty) {            
+      private void createNewGame() {            
             dm = new DifferentMap(gameDifficulty);
             dm.generateMap();
             allPredators.clear();
@@ -113,9 +113,8 @@ public class Game {
             doc.getDocumentElement().normalize();
 
             glossarydocs = doc;
-            calculateMapDimension();
-
             MAP_SIZE = dm.getMapCols();
+            calculateMapDimension();
             notifyGameEventListeners();
       }
 
@@ -1172,11 +1171,11 @@ public class Game {
             double playerMaxStamina = input.nextDouble();
             double playerMaxBackpackWeight = input.nextDouble();
             double playerMaxBackpackSize = input.nextDouble();
-
             Position pos = new Position(island, playerPosRow, playerPosCol);
             player = new Player(pos, playerName,
                     playerMaxStamina,
                     playerMaxBackpackWeight, playerMaxBackpackSize);
+           player.setGameDifficulty(gameDifficulty);
             island.updatePlayerPosition(player);
       }
 
