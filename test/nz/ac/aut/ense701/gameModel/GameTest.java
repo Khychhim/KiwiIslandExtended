@@ -184,16 +184,6 @@ public class GameTest extends junit.framework.TestCase
     }
     
     @Test
-    public void testMovePredatorRandomly(){
-          //one of the position which predator is on previously
-          Position position = new Position(island, 6,4);
-            //method to move predator out of the current position
-          game.movePredators();
-          //check if predator is still on that same position
-          assertFalse("Predator should not be in this position", island.hasPredator(position));
-    }
-    
-    @Test
     public void testIsKiwiNearPredator(){          
           Position positionPredator = new Position(island, 0,2);
           Position positionKiwi = new Position(island,0,0);
