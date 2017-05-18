@@ -11,9 +11,6 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
-import javax.swing.JFrame;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -53,7 +50,6 @@ public class Game {
       GameAchievement achievement;
       public static String playerName = "River Song";
       public ArrayList<QuizQuestion> quizQuestionList;
-      public JFrame miniQuizFrame;
       public PredatorTimerTask predatorTimerTask;
       public Document glossarydocs;
     

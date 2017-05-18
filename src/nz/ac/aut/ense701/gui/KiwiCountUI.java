@@ -142,28 +142,34 @@ public class KiwiCountUI
         }
         else if(game.getState() == GameState.QUIZ){
               this.setEnabled(false);
-              miniGameStart(this, game);
+              quizGameStart(this, game);
              game.setGameState(GameState.PLAYING);
-              
+        }
+        else if(game.getState() == GameState.GUESS){
+            this.setEnabled(false);
+            guessGamesStart(this,game);
+            game.setGameState(GameState.PLAYING);
         }
     }
     
-     /**
-       * Set up the frame
-       * set up mini game panel instance
-       * @param game 
-       */
-      private void miniGameStart(KiwiCountUI gui, Game game){
-                //setup Mini game panel
-                MiniGameQuizPanel minigamePanel = new MiniGameQuizPanel(gui,game);                
-                //setup Frame
-                miniQuizFrame = new JFrame("Mini Game Quiz");
-                miniQuizFrame.add(minigamePanel);
-                miniQuizFrame.setSize(minigamePanel.getSize());
-                miniQuizFrame.setDefaultCloseOperation(0);
-                miniQuizFrame.setVisible(true);
-                miniQuizFrame.pack();
-      }
+    /**
+     * This will launch mini game quiz
+     * @param gui
+     * @param game 
+     */
+    private void quizGameStart(KiwiCountUI gui, Game game) {
+        miniGameQuiz = new MiniGameQuiz(gui, game);
+        miniGameQuiz.start();
+    }
+    
+    /**
+     *
+     * @param gui
+     * @param game
+     */
+    private void guessGamesStart(KiwiCountUI gui, Game game) {
+
+    }
     
      private void setAsGameListener()
     {
@@ -816,6 +822,6 @@ public class KiwiCountUI
       // End of variables declaration//GEN-END:variables
 
       private GridSquarePanel gsp;
-      public JFrame miniQuizFrame;
+      public MiniGameQuiz miniGameQuiz;
       public Game game;
 }
