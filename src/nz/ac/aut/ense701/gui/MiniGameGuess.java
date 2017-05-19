@@ -5,28 +5,12 @@
  */
 package nz.ac.aut.ense701.gui;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.Polygon;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.geom.Area;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.border.AbstractBorder;
 
 /**
  *
@@ -41,9 +25,14 @@ public class MiniGameGuess extends javax.swing.JFrame {
      */
     public MiniGameGuess() {
         initComponents();
-        //random pick 3 loadSilohuetteImages
         
+        //if unlock glossary image greater than 0
+        //pick on unlock glossary image
+        //randomly pick 3 loadSilohuetteImages
+        //set up images
+        //jLabel1.setIcon(new ImageIcon(image));
         
+        //add listener to them
         
         start();
     }
@@ -62,6 +51,11 @@ public class MiniGameGuess extends javax.swing.JFrame {
     /**
      * This method will load Images
      */
+    /**
+     * 
+     * @param animal
+     * @return image - BufferedImage
+     */
     private BufferedImage loadimage(String animal) {
         BufferedImage image = null;
 
@@ -75,6 +69,13 @@ public class MiniGameGuess extends javax.swing.JFrame {
         return image;
     }
 
+    /**
+     * This return unlock glossary image
+     * @return image
+     */
+    public String getUnlockGlossaryImage(){
+        return null;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -93,16 +94,16 @@ public class MiniGameGuess extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(425, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(146, 146, 146))
+                .addGap(44, 44, 44)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(543, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(398, Short.MAX_VALUE))
+                .addGap(45, 45, 45)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(458, Short.MAX_VALUE))
         );
 
         pack();
