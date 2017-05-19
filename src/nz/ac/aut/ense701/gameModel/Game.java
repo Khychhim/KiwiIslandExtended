@@ -52,6 +52,7 @@ public class Game {
       public ArrayList<QuizQuestion> quizQuestionList;
       public PredatorTimerTask predatorTimerTask;
       public Document glossarydocs;
+      public final int NUMBER_OF_MINIGAMES = 2;
     
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
@@ -1276,6 +1277,17 @@ public class Game {
             
            return (new int[]{startMap, endMap});
      }
+     
+    /**
+     * This method return a random numver for mini game
+     * 1 for quiz game, 2 for guess game
+     * @return number
+     */
+    public int getRandomMiniGame() {
+        Random rnd = new Random();
+        int number = rnd.nextInt(NUMBER_OF_MINIGAMES + 1);
+        return number;
+    }
       
      public int getStartRow(){
            return this.startMapRow;
