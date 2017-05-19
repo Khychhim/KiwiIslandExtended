@@ -160,10 +160,8 @@ public class KiwiCountUI
     private void miniGameStart(KiwiCountUI gui, Game game, GameState state) {
         if (state == GameState.QUIZ) {
             miniGameQuiz = new MiniGameQuiz(gui, game);
-            miniGameQuiz.start();
         }else if (state == GameState.GUESS) {
             miniGameGuess = new MiniGameGuess();
-            miniGameGuess.start();
         }
     }
     

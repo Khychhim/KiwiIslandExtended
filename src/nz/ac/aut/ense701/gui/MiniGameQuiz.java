@@ -42,6 +42,7 @@ public final class MiniGameQuiz extends javax.swing.JPanel {
         setQuestionLabel(currentQuestion.getQuestion());
         //set up radio buttons
         setUpRadioButtons(currentQuestion);
+        start();
     }
 
     public boolean isOptionCorrectAnswer() {
