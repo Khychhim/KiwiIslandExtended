@@ -1048,8 +1048,8 @@ public class Game {
                 Occupant trigger = island.getTrigger(current);
                 //remove launched trigger
                 island.removeOccupant(current, trigger);
-                //change gamestate to quiz
-                state = GameState.QUIZ;
+                //change gamestate
+                state = getRandomMiniGameState();
             }
         }
     
@@ -1279,14 +1279,20 @@ public class Game {
      }
      
     /**
-     * This method return a random numver for mini game
-     * 1 for quiz game, 2 for guess game
-     * @return number
+     * This method return a mini game state
+     * @return state
      */
-    public int getRandomMiniGame() {
+    public GameState getRandomMiniGameState() {
         Random rnd = new Random();
-        int number = rnd.nextInt(NUMBER_OF_MINIGAMES + 1);
-        return number;
+        GameState state = null;
+        
+        int number = rnd.nextInt(NUMBER_OF_MINIGAMES);
+        if (number == 0) {
+            state = GameState.QUIZ;
+        }else if (number == 1) {
+            state = GameState.GUESS;
+        }
+        return state;
     }
       
      public int getStartRow(){
