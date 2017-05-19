@@ -32,6 +32,8 @@ import javax.swing.border.AbstractBorder;
  */
 public class MiniGameGuess extends javax.swing.JFrame {
 
+    private static final long serialVersionUID = 1L;
+
      private BufferedImage image;
     /**
      * Creates new form MiniGameGuess

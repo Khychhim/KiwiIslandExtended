@@ -12,17 +12,17 @@ import java.util.Timer;
  */
 public class NotificationPanel extends javax.swing.JPanel {
 
-    public MiniGameQuiz miniGamePanel;
+    public MiniGameQuiz miniGameQuiz;
     public KiwiCountUI gui;
     public boolean res;
     /**
      * Creates new form NotificationPanel
-       * @param miniGamePanel MiniGamePanel object to use
+       * @param miniGameQuiz MiniGamePanel object to use
        * @param gui KiwiCountUI object to use
      */
-    public NotificationPanel(MiniGameQuiz miniGamePanel, KiwiCountUI gui) {
+    public NotificationPanel(MiniGameQuiz miniGameQuiz, KiwiCountUI gui) {
         initComponents();
-        this.miniGamePanel = miniGamePanel;
+        this.miniGameQuiz = miniGameQuiz;
         this.gui = gui;
     }
 
@@ -31,13 +31,13 @@ public class NotificationPanel extends javax.swing.JPanel {
      */
     public void displayToPanel(){
 
-        int correctAnswerIndex = miniGamePanel.currentQuestion.getCorrectOptionIndex() - 1;
+        int correctAnswerIndex = miniGameQuiz.currentQuestion.getCorrectOptionIndex() - 1;
         
-        String playerAnswer = miniGamePanel.getPlayerChosenAnswer();
-        String correctAnswer = miniGamePanel.currentQuestion.getQuestionOptions()[correctAnswerIndex];
+        String playerAnswer = miniGameQuiz.getPlayerChosenAnswer();
+        String correctAnswer = miniGameQuiz.currentQuestion.getQuestionOptions()[correctAnswerIndex];
 
-        this.jLabelQuizLevel.setText("Quiz Level: \t" + miniGamePanel.currentQuestion.getDifficulty());
-        this.jLabelScoreEarn.setText("Score Earn: \t" + miniGamePanel.score);
+        this.jLabelQuizLevel.setText("Quiz Level: \t" + miniGameQuiz.currentQuestion.getDifficulty());
+        this.jLabelScoreEarn.setText("Score Earn: \t" + miniGameQuiz.score);
         this.jLabelPlayerAnswer.setText("Your Answer: \t" + playerAnswer);
         
         if(playerAnswer.equalsIgnoreCase(correctAnswer)){
@@ -46,7 +46,7 @@ public class NotificationPanel extends javax.swing.JPanel {
               this.jLabelAnswer.setText("Wrong Answer!! \t");
         }
         
-        miniGamePanel.setVisible(false);
+        miniGameQuiz.setVisible(false);
     }
     
     /**
@@ -121,7 +121,7 @@ public class NotificationPanel extends javax.swing.JPanel {
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         //Close the Notification Panel
-        this.miniGamePanel.resultFrame.dispose();
+        this.miniGameQuiz.resultFrame.dispose();
         gui.miniGameQuiz.dispose();
         gui.setEnabled(true);
         gui.toFront();

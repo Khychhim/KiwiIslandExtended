@@ -140,14 +140,13 @@ public class KiwiCountUI
                     game.getPlayerMessage(), "Important Information",
                     JOptionPane.INFORMATION_MESSAGE);   
         }
-        else if(game.getState() == GameState.QUIZ){
-              this.setEnabled(false);
-              quizGameStart(this, game);
-             game.setGameState(GameState.PLAYING);
-        }
-        else if(game.getState() == GameState.GUESS){
+        else if (game.getState() == GameState.QUIZ) {
             this.setEnabled(false);
-            guessGamesStart(this,game);
+            miniGameStart(this, game, GameState.QUIZ);
+            game.setGameState(GameState.PLAYING);
+        } else if (game.getState() == GameState.GUESS) {
+            this.setEnabled(false);
+            miniGameStart(this, game, GameState.GUESS);
             game.setGameState(GameState.PLAYING);
         }
     }
@@ -157,7 +156,7 @@ public class KiwiCountUI
      * @param gui
      * @param game 
      */
-    private void quizGameStart(KiwiCountUI gui, Game game) {
+    private void miniGameStart(KiwiCountUI gui, Game game, GameState state) {
         miniGameQuiz = new MiniGameQuiz(gui, game);
         miniGameQuiz.start();
     }
