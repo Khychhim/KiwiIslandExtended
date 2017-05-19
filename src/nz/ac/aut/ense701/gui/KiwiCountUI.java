@@ -152,13 +152,19 @@ public class KiwiCountUI
     }
     
     /**
-     * This will launch mini game quiz
+     * This method start mini game
      * @param gui
-     * @param game 
+     * @param game
+     * @param state 
      */
     private void miniGameStart(KiwiCountUI gui, Game game, GameState state) {
-        miniGameQuiz = new MiniGameQuiz(gui, game);
-        miniGameQuiz.start();
+        if (state == GameState.QUIZ) {
+            miniGameQuiz = new MiniGameQuiz(gui, game);
+            miniGameQuiz.start();
+        }else if (state == GameState.GUESS) {
+            miniGameGuess = new MiniGameGuess();
+            miniGameGuess.start();
+        }
     }
     
     /**
@@ -822,5 +828,6 @@ public class KiwiCountUI
 
       private GridSquarePanel gsp;
       public MiniGameQuiz miniGameQuiz;
+      public MiniGameGuess miniGameGuess;
       public Game game;
 }
