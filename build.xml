@@ -9,6 +9,17 @@
 <!-- in the project's Project Properties dialog box.-->
 <project name="KiwiIsland" default="default" basedir=".">
     <description>Builds, tests, and runs the project KiwiIsland.</description>
+    <path id="classpath">
+    <pathelement location="build/classes"/>
+    <pathelement location="build/test/classes"/>
+    <fileset dir="lib">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir=".">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
     <import file="nbproject/build-impl.xml"/>
     <!--
 
