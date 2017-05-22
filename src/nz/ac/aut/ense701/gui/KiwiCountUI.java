@@ -51,7 +51,7 @@ public class KiwiCountUI
     public void gameStateChanged()
     {
         update();
-        Object[] options = {"OK"};
+        Object[] options = {"OK","Share to Facebook"};
         // check for "game over" or "game won"
         if ( game.getState() == GameState.LOST )
         {
@@ -90,7 +90,11 @@ public class KiwiCountUI
             if(option == JOptionPane.OK_OPTION){
                   game = null;
                   this.setVisible(false);
-            }  
+            }
+            if(options[1].equals("Share to Facebook")){
+                System.out.println("Sharing scores and achievements to facebook");
+            }
+         
         }
         else if ( game.getState() == GameState.WON )
         {
