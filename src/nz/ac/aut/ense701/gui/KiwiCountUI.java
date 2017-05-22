@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import nz.ac.aut.ense701.gameModel.FacebookAPI;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameAchievement;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
@@ -86,13 +87,14 @@ public class KiwiCountUI
                          INFORMATION_MESSAGE, null, options, options[0]);  
             }
            
-            
             if(option == JOptionPane.OK_OPTION){
                   game = null;
                   this.setVisible(false);
             }
             if(options[1].equals("Share to Facebook")){
                 System.out.println("Sharing scores and achievements to facebook");
+                FacebookAPI fbapi = new FacebookAPI();
+                fbapi.authinticate();
             }
          
         }
