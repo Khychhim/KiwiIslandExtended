@@ -8,6 +8,10 @@
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
 <project name="KiwiIsland" default="default" basedir=".">
+      <path id="classpath.test">
+        <pathelement location="lib/junit-4.11.jar" />
+        <path refid="classpath.base" />
+       </path>
     <description>Builds, tests, and runs the project KiwiIsland.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
