@@ -14,10 +14,22 @@ public class DifferentMap {
     private static final String MAP_FILE_NAME = "IslandData.txt";
     private static final String TEXT_FORMAT = "UTF-8";
     public static final String playerName = "River Song";
+    //Difficulty : EASY
     private final int MAP_SIZE_EASY = 10;
     private final int NUMBER_PREDATOR_EASY = 3;
     private final int MIN__HAZARD_EASY = 3;
     private final int PREDATOR_MOVE_TIME_EASY = 60;
+    
+    //Difficulty: NORMAL
+    private final int MAP_SIZE_NORMAL_HARD = 15;
+    private final int NUMBER_PREDATOR_NORMAL = 5;
+    private final int MIN__HAZARD_NORMAL = 7;
+    private final int PREDATOR_MOVE_TIME_NORMAL = 40;
+
+    //Difficulty: HARD
+    private final int NUMBER_PREDATOR_HARD = 7;
+    private final int MIN__HAZARD_HARD = 10;
+    private final int PREDATOR_MOVE_TIME_HARD = 20;
     
     private int mapRows;
     private int mapCols;
@@ -27,7 +39,6 @@ public class DifferentMap {
     private int predatorMoveTime;
     private int MIN_HAZARDS;
     private int NUM_PREDATORS;
-    private double backpackWeight;
     
     //Sets the minimum number of each type to be generated
     private static final int MIN_KIWIS = 5;
@@ -54,14 +65,15 @@ public class DifferentMap {
     }     
     
     public DifferentMap(GameDifficulty gameDifficulty) {
-          mapRows = 15;
-          mapCols = 15;
         this.gameDifficulty = gameDifficulty;
         mapDataTypes = new MapDataTypes();
         mapDataTypes.loadTypesFromFile();
     }
     
     public void generateMap() {
+        //setup map difficulty
+        generateDifficulty();
+        
         PrintWriter pw = CreateFile();
         Random rand = new Random();
         //Setup Maps rows and columns
@@ -82,9 +94,6 @@ public class DifferentMap {
         //Sets up the player with 100 max stamina, 10 max backpack weight and 5 max backpack size
         pw.println(playerName + ", " + playerRow + ", " + playerCol + ", "
                 + " 100.0, 10.0, 5.0,");
-        
-        //setup map difficulty
-        generateDifficulty();
         
         //Sets up the number of each occupant and the total occupants
         int totalOccupants = 0;
@@ -118,18 +127,27 @@ public class DifferentMap {
     private void generateDifficulty(){
           switch(gameDifficulty){
                 case EASY:
-                      mapRows = 10;
-                      mapCols = 10;
+                      mapRows = MAP_SIZE_EASY;
+                      mapCols = MAP_SIZE_EASY;
                       NUM_PREDATORS = NUMBER_PREDATOR_EASY;
                       MIN_HAZARDS = MIN__HAZARD_EASY;
                       this.predatorMoveTime = this.PREDATOR_MOVE_TIME_EASY;                      
                 break;
                 
                 case NORMAL:
+                      mapRows = MAP_SIZE_NORMAL_HARD;
+                      mapCols = MAP_SIZE_NORMAL_HARD;
+                      NUM_PREDATORS = NUMBER_PREDATOR_NORMAL;
+                      MIN_HAZARDS = MIN__HAZARD_NORMAL;
+                      this.predatorMoveTime = this.PREDATOR_MOVE_TIME_NORMAL;       
                 break;
                 
                 case HARD:
-                
+                      mapRows = MAP_SIZE_NORMAL_HARD;
+                      mapCols = MAP_SIZE_NORMAL_HARD;
+                      NUM_PREDATORS = NUMBER_PREDATOR_HARD;
+                      MIN_HAZARDS = MIN__HAZARD_HARD;
+                      this.predatorMoveTime = this.PREDATOR_MOVE_TIME_HARD;       
                 break;
           }
     }
