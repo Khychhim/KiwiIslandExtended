@@ -24,11 +24,9 @@ public class DifferentMap {
     private int playerRow;
     private int playerCol;
     private final MapDataTypes mapDataTypes;
-    private int predatorMoveTime = 30;
-    private static final int MIN_HAZARDS = 5;
-    private static final int MIN_PREDATORS = 3;
-    private static final int RAND_HAZARDS = 4;
-    private static final int RAND_PREDATORS = 3;
+    private int predatorMoveTime;
+    private int MIN_HAZARDS;
+    private int NUM_PREDATORS;
     private double backpackWeight;
     
     //Sets the minimum number of each type to be generated
@@ -43,6 +41,7 @@ public class DifferentMap {
     private static final int RAND_TOOLS = 3; //Up to an addional X of each tool
     private static final int RAND_FAUNA = 3;
     private static final int RAND_TRIGGERS = 2;
+    private static final int RAND_HAZARDS = 2;
     //Minimum distances between spawns
     private static final int PRED_MIN_DIST = 3; //Min Distance between predator and kiwi
     private static final int HAZARD_MIN_DIST = 1; //Min Distance between other hazards
@@ -83,10 +82,14 @@ public class DifferentMap {
         //Sets up the player with 100 max stamina, 10 max backpack weight and 5 max backpack size
         pw.println(playerName + ", " + playerRow + ", " + playerCol + ", "
                 + " 100.0, 10.0, 5.0,");
+        
+        //setup map difficulty
+        generateDifficulty();
+        
         //Sets up the number of each occupant and the total occupants
         int totalOccupants = 0;
         int numberKiwis = rand.nextInt(RAND_KIWIS) + MIN_KIWIS + 1;
-        int numberPredators = rand.nextInt(RAND_PREDATORS) + MIN_PREDATORS + 1;
+        int numberPredators = NUM_PREDATORS;
         int numberFood = rand.nextInt(RAND_FOOD) + MIN_FOOD + 1;
         int[] numberTools = new int[mapDataTypes.toolTypes.size()];
         for(int i = 0; i < mapDataTypes.toolTypes.size(); i++) {
@@ -113,7 +116,22 @@ public class DifferentMap {
     }
     
     private void generateDifficulty(){
-          
+          switch(gameDifficulty){
+                case EASY:
+                      mapRows = 10;
+                      mapCols = 10;
+                      NUM_PREDATORS = NUMBER_PREDATOR_EASY;
+                      MIN_HAZARDS = MIN__HAZARD_EASY;
+                      this.predatorMoveTime = this.PREDATOR_MOVE_TIME_EASY;                      
+                break;
+                
+                case NORMAL:
+                break;
+                
+                case HARD:
+                
+                break;
+          }
     }
     
     private void generateTriggers(PrintWriter pw, int numberOfTriggers, String[][] tempMap) {

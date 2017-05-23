@@ -11,7 +11,6 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
 import javax.swing.JFrame;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -58,7 +57,7 @@ public class Game {
       private GameDifficulty gameDifficulty;
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
-       * @param dm differentMap object for different game difficulty
+       * @param gameDifficulty differentMap object for different game difficulty
      */
       public Game(GameDifficulty gameDifficulty) {
             this.gameDifficulty= gameDifficulty;
@@ -66,14 +65,15 @@ public class Game {
             rand = new Random();
             allPredators = new ArrayList<Occupant>();
             Collections.synchronizedList(allPredators);
-            quizQuestionList = new ReadQuizXML().getQuestionArrayList();            
             createNewGame();
       }
 
       /**
        * Starts a new game. At this stage data is being read from a text file
        */
-      private void createNewGame() {            
+      private void createNewGame() {
+            quizQuestionList = new ReadQuizXML().getQuestionArrayList();
+            modifyQuizQuestion();            
             dm = new DifferentMap(gameDifficulty);
             dm.generateMap();
             allPredators.clear();
@@ -1281,7 +1281,39 @@ public class Game {
             
            return (new int[]{startMap, endMap});
      }
-      
+     
+     /**
+      * method to modify quizquestion array to suit for current game level
+      */
+     public void modifyQuizQuestion(){
+           //new arraylist to override current arraylist after choosing the difficulty question
+           ArrayList<QuizQuestion> newQuizQuestion = new ArrayList<QuizQuestion>();
+           
+           //loop to choose question suitable to the game difficulty
+            for(int i = 0; i < this.quizQuestionList.size(); i++){
+                   if(gameDifficulty == GameDifficulty.EASY){
+                         if(this.quizQuestionList.get(i).getDifficulty() == 1){
+                               newQuizQuestion.add(quizQuestionList.get(i));
+                         }
+                   }
+                   
+                   else if(gameDifficulty == GameDifficulty.NORMAL || gameDifficulty == GameDifficulty.HARD){
+                         if(this.quizQuestionList.get(i).getDifficulty() == 2){ //only add difficulty level 2 for NORMAL
+                               newQuizQuestion.add(quizQuestionList.get(i));
+                         }
+
+                         if(gameDifficulty == GameDifficulty.HARD){
+                               if(this.quizQuestionList.get(i).getDifficulty() == 3){ // add difficuly level 2 and 3 for HARD
+                                     newQuizQuestion.add(quizQuestionList.get(i));
+                               }
+                         }
+                   }
+            }
+
+            this.quizQuestionList = newQuizQuestion;
+           
+     }
+     
      public int getStartRow(){
            return this.startMapRow;
      }
