@@ -24,24 +24,56 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" pref="200" max="-2" attributes="0"/>
-              <EmptySpace pref="543" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblQustion" min="-2" pref="297" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="lblImage1" min="-2" pref="200" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="lblImage2" min="-2" pref="200" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="lblImage3" min="-2" pref="200" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace pref="68" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" pref="200" max="-2" attributes="0"/>
-              <EmptySpace pref="458" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lblQustion" min="-2" pref="25" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblImage3" min="-2" pref="200" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="lblImage2" max="32767" attributes="0"/>
+                      <Component id="lblImage1" min="-2" pref="200" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace pref="147" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="lblImage1">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblImage2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Show_2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblImage3">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Show_3"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblQustion">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Which one is the Kiwi?"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

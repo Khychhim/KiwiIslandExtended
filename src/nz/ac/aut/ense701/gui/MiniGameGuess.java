@@ -5,9 +5,12 @@
  */
 package nz.ac.aut.ense701.gui;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Hashtable;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -19,24 +22,33 @@ import javax.swing.JFrame;
 public class MiniGameGuess extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 1L;
+    private HashMap<String, ImageIcon> imageMap;
+    private final String path = "..\\KiwiIslandExtended\\src\\nz\\ac\\aut\\ense701\\SilohuetteImages\\";
+    private final String[] animalNames = {"black-robin", "brown-kiwi", "cat", "kiore", "little-spotted-kiwi", "oyster-catcher", "possum",
+        "rat", "stewart-island-fernbird", "stoat", "tui", "white-heron"};
+    private String answer;
 
     /**
      * Creates new form MiniGameGuess
      */
     public MiniGameGuess() {
         initComponents();
-        
-        //if unlock glossary image greater than 0
-        //pick on unlock glossary image
-        //randomly pick 3 loadSilohuetteImages
+        loadImage();
+
+        //pick 3 Silohuette images
+        //randomly pick pick one as question
+        //set up Question label
         //set up images
         //jLabel1.setIcon(new ImageIcon(image));
-        
         //add listener to them
-        
+        lblImage1.setIcon(imageMap.get("cat" + "-silhouette"));
+        lblImage1.setText("cat");
+        lblImage2.setIcon(new ImageIcon(getImage("kiore")));
+        lblImage3.setIcon(new ImageIcon(getImage("brown-kiwi")));
+
         start();
     }
-    
+
     /**
      * This method will start the Quiz
      */
@@ -48,33 +60,51 @@ public class MiniGameGuess extends javax.swing.JFrame {
         pack();
     }
 
+    @SuppressWarnings("unchecked")
     /**
-     * This method will load Images
+     * This method load image to ImageMap
      */
+    public void loadImage() {
+        //initialize HashMap
+        if (imageMap == null) {
+            Hashtable<String, ImageIcon> table = new Hashtable<String, ImageIcon>();
+            imageMap = new HashMap(table);
+        }
+        //add images
+        for (int i = 0; i < animalNames.length; i++) {
+            //original image
+            String name = animalNames[i];
+            Image image = getImage(name);
+            //shillhouette image
+            String silhouetteName = animalNames[i] + "-silhouette";
+            Image silhouetteImage = getImage(silhouetteName);
+            //add to hash map
+            imageMap.put(name, new ImageIcon(image));
+            imageMap.put(silhouetteName, new ImageIcon(silhouetteImage));
+        }
+    }
+
     /**
-     * 
-     * @param animal
-     * @return image - BufferedImage
+     * This method gets image
+     *
+     * @param fileName
+     * @return image
      */
-    private BufferedImage loadimage(String animal) {
-        BufferedImage image = null;
+    private Image getImage(String fileName) {
+        Image image = null;
 
         //load image
         try {
-            image = ImageIO.read(
-                    new File("..\\KiwiIslandExtended\\src\\nz\\ac\\aut\\ense701\\SilohuetteImages\\" + animal + ".png"));
+            image = ImageIO.read(new File(path + fileName + ".png"));
         } catch (IOException ex) {
             System.out.println("Image Not Found.");
         }
         return image;
     }
 
-    /**
-     * This return unlock glossary image
-     * @return image
-     */
-    public String getUnlockGlossaryImage(){
-        return null;
+    
+    private void setAnswer(){
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -85,25 +115,47 @@ public class MiniGameGuess extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        lblImage1 = new javax.swing.JLabel();
+        lblImage2 = new javax.swing.JLabel();
+        lblImage3 = new javax.swing.JLabel();
+        lblQustion = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        lblImage2.setText("Show_2");
+
+        lblImage3.setText("Show_3");
+
+        lblQustion.setText("Which one is the Kiwi?");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(543, Short.MAX_VALUE))
+                .addGap(83, 83, 83)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblQustion, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblImage2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(458, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(lblQustion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblImage2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(147, Short.MAX_VALUE))
         );
 
         pack();
@@ -123,6 +175,9 @@ public class MiniGameGuess extends javax.swing.JFrame {
     }
     private JFrame frame;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblImage1;
+    private javax.swing.JLabel lblImage2;
+    private javax.swing.JLabel lblImage3;
+    private javax.swing.JLabel lblQustion;
     // End of variables declaration//GEN-END:variables
 }
