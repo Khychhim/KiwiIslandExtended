@@ -246,17 +246,17 @@ public class MainMenu extends JPanel implements MouseListener {
                     
                     switch(optionDifficulty){
                           case 0:
-                              //Create Game
+                              //Create easy level
                               game = new Game(GameDifficulty.EASY);
                           break;
                           
                           case 1:
-                              //Create Game
+                              //Create normal level
                               game = new Game(GameDifficulty.NORMAL);
                           break;
                           
                           case 2:
-                              //Create Game
+                              //Create hard level
                               game = new Game(GameDifficulty.HARD);
                               
                           break;
