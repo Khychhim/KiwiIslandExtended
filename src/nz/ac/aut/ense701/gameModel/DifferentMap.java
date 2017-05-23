@@ -40,18 +40,17 @@ public class DifferentMap {
     private int MIN_HAZARDS;
     private int NUM_PREDATORS;
     
+    private static final int NUM_TRIGGERS = 5;
     //Sets the minimum number of each type to be generated
     private static final int MIN_KIWIS = 5;
     private static final int MIN_FOOD = 4;
     private static final int MIN_TOOLS = 1; //Min number of each tool
     private static final int MIN_FAUNA = 3;
-    private static final int MIN_TRIGGERS = 3;
     //Sets the range of the random value to be added to each type
     private static final int RAND_KIWIS = 2;
     private static final int RAND_FOOD = 4;
     private static final int RAND_TOOLS = 3; //Up to an addional X of each tool
     private static final int RAND_FAUNA = 3;
-    private static final int RAND_TRIGGERS = 2;
     private static final int RAND_HAZARDS = 2;
     //Minimum distances between spawns
     private static final int PRED_MIN_DIST = 3; //Min Distance between predator and kiwi
@@ -107,7 +106,7 @@ public class DifferentMap {
         }
         int numberFauna = rand.nextInt(RAND_FAUNA) + MIN_FAUNA + 1;
         int numberHazards = rand.nextInt(RAND_HAZARDS) + MIN_HAZARDS + 1;
-        int numberTriggers = rand.nextInt(RAND_TRIGGERS) + MIN_TRIGGERS + 1;
+        int numberTriggers = NUM_TRIGGERS;
         totalOccupants += numberKiwis + numberPredators + numberFood + numberFauna + numberHazards + numberTriggers;
         pw.println(totalOccupants + ",");
         //Create a temporary map representation to track occupant positions and counts for viability
