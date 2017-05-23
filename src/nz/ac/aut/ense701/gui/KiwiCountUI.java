@@ -35,6 +35,7 @@ public class KiwiCountUI
     {
         assert game != null : "Make sure game object is created before UI";
         this.game = game;
+        tileset = new Tileset();
         setAsGameListener();
         initComponents();
         initIslandGrid();
@@ -786,7 +787,7 @@ public class KiwiCountUI
           {
                 for ( int col = game.getStartCol() ; col < game.getEndCol() ; col++ )
                 {
-                      gsp = new GridSquarePanel(game, row, col);
+                      gsp = new GridSquarePanel(game, row, col, tileset);
                       pnlIsland.add(gsp);
                 }
           }
@@ -816,6 +817,7 @@ public class KiwiCountUI
       // End of variables declaration//GEN-END:variables
 
       private GridSquarePanel gsp;
+      private Tileset tileset;
       public JFrame miniQuizFrame;
       public Game game;
 }

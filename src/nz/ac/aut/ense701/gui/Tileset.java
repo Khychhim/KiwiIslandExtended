@@ -10,8 +10,6 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -62,6 +60,12 @@ public class Tileset {
     public static final int G_AND_W_BOTTOM_LEFT     = 25;
     public static final int G_AND_W_BOTTOM_MIDDLE   = 26;
     public static final int G_AND_W_BOTTOM_RIGHT    = 27;
+    public static final int G_AND_W_CORNER_TL       = 8;
+    public static final int G_AND_W_CORNER_TR       = 9;
+    public static final int G_AND_W_CORNER_BL       = 18;
+    public static final int G_AND_W_CORNER_BR       = 19;
+    //Water
+    public static final int WATER = 53;
     
     //Array containing paths to tilesets
     private final String[] tileSets = {
@@ -111,8 +115,8 @@ public class Tileset {
             tiles[i] = new Image[totalTiles];
             //Split tileset Image into tiles
             int tileCount = 0;
-            for(int x = 0; x < tilesHorizontal; x++) {
-                for(int y = 0; y < tilesVertical; y++) {
+            for(int y = 0; y < tilesVertical; y++) {
+                for(int x = 0; x < tilesHorizontal; x++) {
                     tiles[i][tileCount] = tileSetsImages[i].getSubimage(
                             x*TILE_WIDTH, y*TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT);
                     tileCount++;

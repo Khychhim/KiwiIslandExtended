@@ -1,6 +1,8 @@
 package nz.ac.aut.ense701.gui;
 
 import java.awt.Color;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import nz.ac.aut.ense701.gameModel.Game;
@@ -20,12 +22,14 @@ public class GridSquarePanel extends javax.swing.JPanel
      * @param game the game to represent
      * @param row the row to represent
      * @param column the column to represent
+     * @param tileset the tile set being used
      */
-    public GridSquarePanel(Game game, int row, int column)
+    public GridSquarePanel(Game game, int row, int column, Tileset tileset)
     {
         this.game   = game;
         this.row    = row;
         this.column = column;
+        this.tileset = tileset;
         initComponents();
     }
 
@@ -45,15 +49,22 @@ public class GridSquarePanel extends javax.swing.JPanel
         boolean squareVisible = game.isVisible(row, column);
         boolean squareExplored = game.isExplored(row, column);
         
-        Color      color;
+        Color color;
+        Image image = null;
         
         switch ( terrain )
         {
             case SAND     : color = Color.YELLOW; break;
             case FOREST   : color = Color.GREEN;  break;
-            case WETLAND : color = Color.BLUE; break;
-            case SCRUB : color = Color.DARK_GRAY;   break;
-            case WATER    : color = Color.CYAN;   break;
+            case WETLAND  : color = Color.BLUE; break;
+            case SCRUB    : color = Color.DARK_GRAY;   break;
+            case WATER    : {
+                color = Color.WHITE;
+                image = tileset.getTile(Tileset.GROUND, Tileset.G_AND_W_MIDDLE_LEFT, 
+                        this.getWidth(), this.getHeight());
+                lblText.setIcon(new ImageIcon(image));
+                break;
+            }
             default  : color = Color.LIGHT_GRAY; break;
         }
         
@@ -107,6 +118,7 @@ public class GridSquarePanel extends javax.swing.JPanel
     // End of variables declaration//GEN-END:variables
     
     private Game game;
+    private Tileset tileset;
     public int row, column;
     
     private static final Border normalBorder = new LineBorder(Color.BLACK, 1);
