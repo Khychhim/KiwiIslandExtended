@@ -148,6 +148,34 @@ public class GameTest extends junit.framework.TestCase
     }
     
     @Test
+    public void testEasyDifficultyEnvironment(){
+          if(game.getGameDifficulty() == GameDifficulty.EASY){
+                assertEquals(game.MAP_SIZE,10);
+                assertEquals(game.getPlayer().getCurrentBackpackSize(), 0.0);
+                assertEquals(game.getPlayer().getCurrentBackpackWeight(), 0.0);
+                assertEquals(game.getPlayer().getStaminaLevel(), 100.0);
+          }
+    }    
+        
+    @Test
+    public void testNormalDifficultyEnvironment(){
+            game = new Game(GameDifficulty.NORMAL);
+            assertEquals(game.MAP_SIZE,15);
+            assertEquals(game.getPlayer().getCurrentBackpackSize(), 0.0);
+            assertEquals(game.getPlayer().getCurrentBackpackWeight(), 2.0);
+            assertEquals(game.getPlayer().getStaminaLevel(), 80.0);          
+    }
+    
+    @Test
+    public void testHardDifficultyEnvironment(){
+            game = new Game(GameDifficulty.HARD);
+            assertEquals(game.MAP_SIZE,15);
+            assertEquals(game.getPlayer().getCurrentBackpackSize(), 1.0);
+            assertEquals(game.getPlayer().getCurrentBackpackWeight(), 4.0);
+            assertEquals(game.getPlayer().getStaminaLevel(), 50.0);          
+    }
+    
+    @Test
     public void testIsKiwiNearPredator(){          
           Position positionPredator = new Position(island, 0,2);
           Position positionKiwi = new Position(island,0,0);

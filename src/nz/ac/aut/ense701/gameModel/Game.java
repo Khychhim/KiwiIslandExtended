@@ -74,8 +74,8 @@ public class Game {
       private void createNewGame() {
             quizQuestionList = new ReadQuizXML().getQuestionArrayList();
             modifyQuizQuestion();            
-            dm = new DifferentMap(gameDifficulty);
-            dm.generateMap();
+            setDm(new DifferentMap(getGameDifficulty()));
+            getDm().generateMap();
             allPredators.clear();
             totalPredators = 0;
             totalKiwis = 0;
@@ -113,7 +113,7 @@ public class Game {
             doc.getDocumentElement().normalize();
 
             glossarydocs = doc;
-            MAP_SIZE = dm.getMapCols();
+            MAP_SIZE = getDm().getMapCols();
             calculateMapDimension();
             notifyGameEventListeners();
       }
@@ -152,7 +152,7 @@ public class Game {
 
       public void startTimer(){
             predatorTimerTask = new PredatorTimerTask(this);
-            timer.scheduleAtFixedRate(predatorTimerTask, dm.getPredatorMoveTime() * 1000, dm.getPredatorMoveTime() * 1000);            
+            timer.scheduleAtFixedRate(predatorTimerTask, getDm().getPredatorMoveTime() * 1000, getDm().getPredatorMoveTime() * 1000);            
             notifyGameEventListeners();
       }
       
@@ -1175,7 +1175,7 @@ public class Game {
             player = new Player(pos, playerName,
                     playerMaxStamina,
                     playerMaxBackpackWeight, playerMaxBackpackSize);
-           player.setGameDifficulty(gameDifficulty);
+           player.setGameDifficulty(getGameDifficulty());
             island.updatePlayerPosition(player);
       }
 
@@ -1291,18 +1291,18 @@ public class Game {
            
            //loop to choose question suitable to the game difficulty
             for(int i = 0; i < this.quizQuestionList.size(); i++){
-                   if(gameDifficulty == GameDifficulty.EASY){
+                   if(getGameDifficulty() == GameDifficulty.EASY){
                          if(this.quizQuestionList.get(i).getDifficulty() == 1){
                                newQuizQuestion.add(quizQuestionList.get(i));
                          }
                    }
                    
-                   else if(gameDifficulty == GameDifficulty.NORMAL || gameDifficulty == GameDifficulty.HARD){
+                   else if(getGameDifficulty() == GameDifficulty.NORMAL || getGameDifficulty() == GameDifficulty.HARD){
                          if(this.quizQuestionList.get(i).getDifficulty() == 2){ //only add difficulty level 2 for NORMAL
                                newQuizQuestion.add(quizQuestionList.get(i));
                          }
 
-                         if(gameDifficulty == GameDifficulty.HARD){
+                         if(getGameDifficulty() == GameDifficulty.HARD){
                                if(this.quizQuestionList.get(i).getDifficulty() == 3){ // add difficuly level 2 and 3 for HARD
                                      newQuizQuestion.add(quizQuestionList.get(i));
                                }
@@ -1352,5 +1352,33 @@ public class Game {
     private String winMessage = "";
     private String loseMessage  = "";
     private String playerMessage  = "";   
+
+      /**
+       * @return the gameDifficulty
+       */
+      public GameDifficulty getGameDifficulty() {
+            return gameDifficulty;
+      }
+
+      /**
+       * @param gameDifficulty the gameDifficulty to set
+       */
+      public void setGameDifficulty(GameDifficulty gameDifficulty) {
+            this.gameDifficulty = gameDifficulty;
+      }
+
+      /**
+       * @return the dm
+       */
+      public DifferentMap getDm() {
+            return dm;
+      }
+
+      /**
+       * @param dm the dm to set
+       */
+      public void setDm(DifferentMap dm) {
+            this.dm = dm;
+      }
 
 }

@@ -92,7 +92,14 @@ public class Player
      */
     public double getStaminaLevel()
     {
-       return this.stamina;
+          if(gameDifficulty == GameDifficulty.NORMAL){
+                return stamina * 0.8;
+          }
+          else if(gameDifficulty == GameDifficulty.HARD){
+                return stamina * 0.5;
+          }
+          
+          return this.stamina;
     }
 
 
@@ -352,7 +359,7 @@ public class Player
     /**
      * Moves the player over terrain to a new position.
      * 
-     * @param position the new position of the player
+     * @param newPosition the new position of the player
      * @param terrain the terrain to move over
      */
     public void moveToPosition(Position newPosition, Terrain terrain)
