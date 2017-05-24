@@ -19,7 +19,7 @@
     <pathelement location="${main.build.dir}"/>
   </path>
   
-<!--   <target name="compile">
+  <target name="compile">
     <mkdir dir="${main.build.dir}"/>
     <javac srcdir="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false"/>
   </target>
@@ -30,8 +30,8 @@
         <classpath refid="classpath.test"/>
     </javac>
   </target>
-     -->
-  <target name="test">
+    
+  <target name="test" depends="test-compile">
     <junit printsummary="on" haltonfailure="yes" fork="true">
         <classpath>
           <path refid="classpath.test"/>
