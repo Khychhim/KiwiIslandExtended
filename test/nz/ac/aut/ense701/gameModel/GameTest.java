@@ -154,6 +154,7 @@ public class GameTest extends junit.framework.TestCase
                 assertEquals(game.getPlayer().getCurrentBackpackSize(), 0.0);
                 assertEquals(game.getPlayer().getCurrentBackpackWeight(), 0.0);
                 assertEquals(game.getPlayer().getStaminaLevel(), 100.0);
+                assertEquals(game.getPredatorsRemaining(), 3);
           }
     }    
         
@@ -163,7 +164,8 @@ public class GameTest extends junit.framework.TestCase
             assertEquals(game.MAP_SIZE,15);
             assertEquals(game.getPlayer().getCurrentBackpackSize(), 0.0);
             assertEquals(game.getPlayer().getCurrentBackpackWeight(), 2.0);
-            assertEquals(game.getPlayer().getStaminaLevel(), 80.0);          
+            assertEquals(game.getPlayer().getStaminaLevel(), 80.0);  
+            assertEquals(game.getPredatorsRemaining(), 5);
     }
     
     @Test
@@ -172,7 +174,8 @@ public class GameTest extends junit.framework.TestCase
             assertEquals(game.MAP_SIZE,15);
             assertEquals(game.getPlayer().getCurrentBackpackSize(), 1.0);
             assertEquals(game.getPlayer().getCurrentBackpackWeight(), 4.0);
-            assertEquals(game.getPlayer().getStaminaLevel(), 50.0);          
+            assertEquals(game.getPlayer().getStaminaLevel(), 50.0); 
+            assertEquals(game.getPredatorsRemaining(), 7);
     }
     
     @Test
