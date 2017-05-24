@@ -8,6 +8,9 @@
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
 <project name="KiwiIsland" default="default" basedir=".">
+    <dependency org="junit" name="junit" rev="4.12">
+      <artifact name="junit" type="jar" />
+    </dependency>
     <description>Builds, tests, and runs the project KiwiIsland.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
