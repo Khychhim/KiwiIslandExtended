@@ -42,7 +42,7 @@ public class GameTest extends junit.framework.TestCase
             // Create a new game from the data file.
             // Player is in position 2,0 & has 100 units of stamina
         game           = new Game(GameDifficulty.EASY);
-    
+        
         playerPosition = game.getPlayer().getPosition();
         player         = game.getPlayer();
         island = game.getIsland();
@@ -61,41 +61,6 @@ public class GameTest extends junit.framework.TestCase
         playerPosition = null;
     }
 
-    /*********************************************************************************************************
-     * Game under test
-      
----------------------------------------------------
-|    |    |@   | F  | T  |    |    | PK |    |    |
-|~~~~|~~~~|....|....|....|~~~~|^^^^|^^^^|^^^^|^^^^|
----------------------------------------------------
-|    |    |    |    | H  |    |    |    |    |    |
-|~~~~|####|^^^^|^^^^|^^^^|^^^^|^^^^|^^^^|^^^^|^^^^|
----------------------------------------------------
-|    |    | H  |    | E  |    | P  |    | K  |    |
-|####|####|####|####|^^^^|^^^^|^^^^|^^^^|^^^^|~~~~|
----------------------------------------------------
-| T  |    |    |    | P  | H  |    |    |    |    |
-|....|####|####|####|****|****|^^^^|....|~~~~|~~~~|
----------------------------------------------------
-| F  | P  |    |    |    |    | F  |    |    |    |
-|....|^^^^|^^^^|^^^^|****|****|^^^^|....|~~~~|~~~~|
----------------------------------------------------
-| H  |    | P  | T  | E  |    |    |    |    |    |
-|....|****|****|****|****|****|####|####|####|~~~~|
----------------------------------------------------
-|    |    | K  |    | P  | H  | K  | E  | F  |    |
-|....|****|****|****|****|****|****|####|####|####|
----------------------------------------------------
-| K  |    |    | F  | H  |    | H  | K  | T  |    |
-|****|****|****|****|****|~~~~|****|****|~~~~|~~~~|
----------------------------------------------------
-|    |    | E  | K  |    |    |    |    | F  |    |
-|....|....|****|****|~~~~|~~~~|~~~~|****|****|....|
----------------------------------------------------
-|    |    |    | K  | K  |    | K  | P  |    |    |
-|~~~~|....|****|****|****|~~~~|****|****|****|....|
----------------------------------------------------
- *********************************************************************************************************/
     /**
      * Tests for Accessor methods of Game, excluding those which are wrappers for accessors in other classes.
      * Other class accessors are tested in their test classes.
@@ -139,7 +104,6 @@ public class GameTest extends junit.framework.TestCase
           MoveDirection direction = game.getRandomDirection();
           assertTrue(direction instanceof MoveDirection);         
     }
-    
     
     @Test
     public void countreset(){
@@ -205,6 +169,7 @@ public class GameTest extends junit.framework.TestCase
     
     @Test
     public void testPredatorMoveToKiwi(){
+          
           Position positionPredator = new Position(island, 0,2);
           Position positionKiwi = new Position(island,0,0);
           Predator predator;
@@ -220,10 +185,11 @@ public class GameTest extends junit.framework.TestCase
                 kiwi = new Kiwi(positionKiwi,"Kiwi","Cute");
                 island.addOccupant(positionKiwi, kiwi);
           }
+          
           Predator newPredator = game.predatorMoveToKiwi(predator);
           newPredator.setcoloumnAwayFromKiwi(-1);
           game.predatorMoveToKiwi(newPredator);
-          assertTrue("Predator should be in this position",island.hasPredator(positionKiwi));
+          assertFalse("Predator should not be in this position",island.hasPredator(positionPredator));
     }
     
         @Test
@@ -437,7 +403,9 @@ public class GameTest extends junit.framework.TestCase
         
         // Can only use trap if there is a predator.
         Predator predator = new Predator(playerPosition,"Rat", "Norway rat");
-        island.addOccupant(playerPosition, predator);
+        if(!island.hasPredator(playerPosition)){
+              island.addOccupant(playerPosition, predator);
+        }
         game.useItem(trap);
         assertTrue("Player should still have trap",player.hasItem(trap));
         assertFalse("Predator should be gone.", island.hasPredator(playerPosition));
@@ -499,55 +467,15 @@ public class GameTest extends junit.framework.TestCase
     @Test
     public void testCountKiwi()
     {
-          Position pos = game.player.getPosition();
-        Occupant kiwi = new Kiwi(pos, "Kiwi","Kiwi");
-        island.addOccupant(pos, kiwi);
-
+        Island testIsland = new Island(2,1);
+        Position playerPosition = new Position(testIsland,0,0);        
+        Occupant kiwi = new Kiwi(playerPosition, "Kiwi","Kiwi");
+        testIsland.addOccupant(playerPosition, kiwi);
+        //set test Island , player position 
+        game.setIsland(testIsland);
+        game.getPlayer().setPosition(playerPosition);
+ 
         game.countKiwi();
         assertEquals("Wrong count", game.getKiwiCount(), 1);
-    }
-    
-    private boolean playerMoveNorth(int numberOfMoves)
-    {
-        boolean success = false;
-        for (int i = 0; i < numberOfMoves; i++) {
-            success = game.playerMove(MoveDirection.NORTH);
-            if(!success)break;
-            
-        }
-        return success;
-    }
-    
-    private boolean playerMoveSouth(int numberOfMoves)
-    {
-        boolean success = false;
-        for (int i = 0; i < numberOfMoves; i++) {
-            success = game.playerMove(MoveDirection.SOUTH);
-            if(!success)break;
-            
-        }
-        return success;
-    }
-    
-    private boolean playerMoveEast(int numberOfMoves)
-    {
-        boolean success = false;
-        for (int i = 0; i < numberOfMoves; i++) {
-            success = game.playerMove(MoveDirection.EAST);
-            if(!success)break;
-            
-        }
-        return success;
-    }
-    
-    private boolean playerMoveWest(int numberOfMoves)
-    {
-        boolean success = false;
-        for (int i = 0; i < numberOfMoves; i++) {
-            success = game.playerMove(MoveDirection.WEST);
-            if(!success)break;
-            
-        }
-        return success;
     }
 }
