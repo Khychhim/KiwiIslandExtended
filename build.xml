@@ -42,8 +42,8 @@
             <fileset dir="${test.src.dir}" includes="**/*Test.java" />
         </batchtest>
     </junit>
-<!--   </target>
-    <description>Builds, tests, and runs the project KiwiIsland.</description>
+   </target>
+<!--    <description>Builds, tests, and runs the project KiwiIsland.</description>
     <import file="nbproject/build-impl.xml"/> -->
     <!--
 
