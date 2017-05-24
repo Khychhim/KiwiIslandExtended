@@ -7,9 +7,9 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="KiwiIsland" default="default" basedir=".">
+<project name="KiwiIsland">
     <property name="main.build.dir" value="build/main"/>
-  <property name="main.src.dir" value="src/nz/ac/aut/ense701"/>
+  <property name="main.src.dir" value="src/nz/ac/aut/ense701/main"/>
   <property name="test.build.dir" value="build/test"/>
   <property name="test.src.dir" value="test/nz/ac/aut/ense701/gameModel"/>
 
@@ -42,9 +42,9 @@
             <fileset dir="${test.src.dir}" includes="**/*Test.java" />
         </batchtest>
     </junit>
-  </target>
+<!--   </target>
     <description>Builds, tests, and runs the project KiwiIsland.</description>
-    <import file="nbproject/build-impl.xml"/>
+    <import file="nbproject/build-impl.xml"/> -->
     <!--
 
     There exist several targets which are by default empty and which can be 
