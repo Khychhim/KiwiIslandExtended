@@ -9,7 +9,7 @@
 <!-- in the project's Project Properties dialog box.-->
 <project name="KiwiIsland">
     <property name="main.build.dir" value="build/main"/>
-  <property name="main.src.dir" value="src/nz/ac/aut/ense701/main"/>
+  <property name="main.src.dir" value="src/nz/ac/aut/ense701"/>
   <property name="test.build.dir" value="build/test"/>
   <property name="test.src.dir" value="test/nz/ac/aut/ense701/gameModel"/>
 
