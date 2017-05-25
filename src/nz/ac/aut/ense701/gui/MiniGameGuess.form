@@ -59,19 +59,34 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JLabel" name="lblImage1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Image 1"/>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblImage1MouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblImage2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Show_2"/>
+        <Property name="text" type="java.lang.String" value="Image 2"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblImage2MouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblImage3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Show_3"/>
+        <Property name="text" type="java.lang.String" value="Image 3"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblImage3MouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblQustion">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="DFKai-SB" size="18" style="3"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Which one is the Kiwi?"/>
       </Properties>
     </Component>

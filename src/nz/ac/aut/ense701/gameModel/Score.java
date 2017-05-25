@@ -19,6 +19,7 @@ public class Score {
     public static final int VALUE_KIWI_COUNTED = 50;
     public static final int VALUE_PREDATOR_TRAPPED = 40;
     public static final int VALUE_KIWI_EATEN = 50;
+    public static final int VALUE_GUESS_CORRECT = 30;
     //Score Values for end game multiplied by percentage completed
     public static final int SURVIVED = 100;
     public static final int KIWIS_COUNTED = 150;

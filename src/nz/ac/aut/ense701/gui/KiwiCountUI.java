@@ -2,15 +2,9 @@ package nz.ac.aut.ense701.gui;
 
 import java.awt.Component;
 import java.awt.GridLayout;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.awt.event.KeyEvent;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import nz.ac.aut.ense701.gameModel.Game;
-import nz.ac.aut.ense701.gameModel.GameAchievement;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
 import nz.ac.aut.ense701.gameModel.GameState;
 import nz.ac.aut.ense701.gameModel.MoveDirection;
@@ -142,11 +136,12 @@ public class KiwiCountUI
         }
         else if (game.getState() == GameState.QUIZ) {
             this.setEnabled(false);
-            miniGameStart(this, game, GameState.QUIZ);
+            miniGameStart(game, GameState.QUIZ);
             game.setGameState(GameState.PLAYING);
+            System.out.println("Here finish quiz game");
         } else if (game.getState() == GameState.GUESS) {
             this.setEnabled(false);
-            miniGameStart(this, game, GameState.GUESS);
+            miniGameStart(game, GameState.GUESS);
             game.setGameState(GameState.PLAYING);
         }
     }
@@ -157,11 +152,17 @@ public class KiwiCountUI
      * @param game
      * @param state 
      */
-    private void miniGameStart(KiwiCountUI gui, Game game, GameState state) {
+    private void miniGameStart(Game game, GameState state) {
         if (state == GameState.QUIZ) {
-            miniGameQuiz = new MiniGameQuiz(gui, game);
+            miniGameQuiz = new MiniGameQuiz(this, game);
         }else if (state == GameState.GUESS) {
-            miniGameGuess = new MiniGameGuess();
+            if (miniGameGuess == null) {
+                miniGameGuess = new MiniGameGuess(this, game);
+                miniGameGuess.start();
+            }else{
+                miniGameGuess.setVisible(true);
+                miniGameGuess.start();
+            }
         }
     }
     
