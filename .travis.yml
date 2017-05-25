@@ -1,7 +1,5 @@
 language: java
 
-mvn test -B
-
 notifications:
   email:
     on_success: never
