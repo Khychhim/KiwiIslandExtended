@@ -3,5 +3,7 @@ script: mvn verify
 
 notifications:
   email:
-    on_success: never
-    on_failure: never
+    recipients:
+      - limkhychhim@yahoo.com
+    on_success: never # default: change
+    on_failure: never # default: always
