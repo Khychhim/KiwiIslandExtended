@@ -1,10 +1,20 @@
 package nz.ac.aut.ense701.gui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
@@ -52,7 +62,30 @@ public class KiwiCountUI
     public void gameStateChanged()
     {
         update();
-        Object[] options = {"OK","Share to Facebook"};
+        
+
+        JButton fbButton = new JButton("Share");
+       
+        fbButton.setIcon(new ImageIcon("facebooksmall.png"));
+        
+        Dimension d = new Dimension(100,50);
+        fbButton.setPreferredSize(d);
+    
+        fbButton.addActionListener(new ActionListener(){
+             @Override
+            public void actionPerformed(ActionEvent e){
+            
+                System.out.println("Sharing scores and achievements to facebook");
+                  game = null;
+                  KiwiCountUI.this.setVisible(false);
+                   
+                FacebookAPI fbapi = new FacebookAPI();
+                fbapi.authinticate();
+            }
+            
+            });
+        Object[] options = {"OK", fbButton};
+        
         // check for "game over" or "game won"
         if ( game.getState() == GameState.LOST )
         {
@@ -91,11 +124,10 @@ public class KiwiCountUI
                   game = null;
                   this.setVisible(false);
             }
-            if(options[1].equals("Share to Facebook")){
-                System.out.println("Sharing scores and achievements to facebook");
-                FacebookAPI fbapi = new FacebookAPI();
-                fbapi.authinticate();
-            }
+            
+            
+
+
          
         }
         else if ( game.getState() == GameState.WON )
