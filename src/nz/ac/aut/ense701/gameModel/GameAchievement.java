@@ -34,6 +34,7 @@ import org.xml.sax.SAXException;
  */
 
 public class GameAchievement {
+
     public Element Achievement;
     public boolean won3gamesinrow;
     public boolean walked;
@@ -41,8 +42,9 @@ public class GameAchievement {
     public boolean walkingGUI;
     public boolean savedGUI;
     public boolean wonGUI;
-    public int amount_of_kiwiSaved = 1;
-    public int amount_of_steps = 10;
+    public static int amount_of_kiwiSaved = 1;
+    public static int amount_of_steps = 10;
+    public static int amount_of_games_won = 3;
     
     //Empty constructor.
     public GameAchievement(){
