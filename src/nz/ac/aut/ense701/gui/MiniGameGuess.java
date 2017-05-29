@@ -31,7 +31,7 @@ import nz.ac.aut.ense701.gameModel.Score;
  * @author Logan
  */
 public class MiniGameGuess extends javax.swing.JFrame {
-
+ 
     private static final long serialVersionUID = 1L;
     private HashMap<String, ImageIcon> imageMap;
     private final String path = "..\\KiwiIslandExtended\\src\\nz\\ac\\aut\\ense701\\SilohuetteImages\\";
@@ -212,9 +212,9 @@ public class MiniGameGuess extends javax.swing.JFrame {
 
         //set game status
         game.setGameState(GameState.PLAYING);
+        
         //start timer
         gui.setEnabled(true);
-        System.out.println("Set enable true to gui");
         gui.toFront();
         game.timer = new Timer();
         game.startTimer();
@@ -253,6 +253,9 @@ public class MiniGameGuess extends javax.swing.JFrame {
         lblQustion = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(780, 350));
+        setResizable(false);
+        setSize(new java.awt.Dimension(0, 0));
 
         lblImage1.setText("Image 1");
         lblImage1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -301,7 +304,7 @@ public class MiniGameGuess extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(83, 83, 83)
+                .addGap(74, 74, 74)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblQustion, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -310,12 +313,12 @@ public class MiniGameGuess extends javax.swing.JFrame {
                         .addComponent(lblImage2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(lblImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(41, 41, 41)
                 .addComponent(lblQustion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,10 +326,11 @@ public class MiniGameGuess extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lblImage2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(147, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblImage1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImage1MouseClicked
