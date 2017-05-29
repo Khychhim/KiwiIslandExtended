@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
 public class AchievementsMenu extends SubMenu {
     private Image titleImage;
     private Image progressBarContainerImage;
-    private JLabel titleLabel;
+    private final JLabel titleLabel;
     private final Image[] progressBarImages;
     private final JLabel[] progressBars;
     private final JLabel[] progressBarContainers;
@@ -180,7 +180,6 @@ public class AchievementsMenu extends SubMenu {
             if(achievements[i].achieved) progressWidth = widthBar-(progressX*2);
             else progressWidth = (int) (widthBar*((float)achievements[i].progress/
                     (float)achievements[i].goal))-(progressX*2);
-            System.out.println(progressWidth);
             if(progressWidth < MIN_PROGRESS_LENGTH) progressWidth = MIN_PROGRESS_LENGTH;
             progressBars[i].setIcon(new ImageIcon(
                     scaleImage(progressBarImages[i], progressWidth, heightBar)));
