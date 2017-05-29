@@ -115,6 +115,7 @@ public final class MiniGameQuiz extends javax.swing.JPanel {
         resultFrame.setVisible(true);
         resultFrame.pack();
         resultFrame.setDefaultCloseOperation(0);
+        resultFrame.setLocation(dim.width / 2 - resultFrame.getWidth() / 2, dim.height / 2 - resultFrame.getHeight() / 2);
 
         notificationPanel.displayToPanel();
     }
@@ -138,9 +139,10 @@ public final class MiniGameQuiz extends javax.swing.JPanel {
         //setup Frame
         frame = new JFrame("Mini Game Quiz");
         frame.add(this);
-        frame.setDefaultCloseOperation(0);
         frame.setVisible(true);
         frame.pack();
+        frame.setDefaultCloseOperation(0);
+        frame.setLocation(dim.width / 2 - frame.getWidth() / 2, dim.height / 2 - frame.getHeight() / 2);
     }
 
     /**
@@ -240,20 +242,19 @@ public final class MiniGameQuiz extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabelQuestion))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(98, 98, 98)
-                        .addComponent(jPanelAnswerOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(98, 98, 98)
+                .addComponent(jPanelAnswerOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(106, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabelQuestion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(jLabelQuestion)
+                .addGap(40, 40, 40)
+                .addComponent(jLabelQuestion, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelAnswerOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(27, 27, 27))
@@ -272,6 +273,7 @@ public final class MiniGameQuiz extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonEnterActionPerformed
 
     private JFrame frame;
+    private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonEnter;
