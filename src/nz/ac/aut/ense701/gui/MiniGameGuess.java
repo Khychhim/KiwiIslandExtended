@@ -5,6 +5,7 @@
  */
 package nz.ac.aut.ense701.gui;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +17,11 @@ import java.util.Hashtable;
 import java.util.Random;
 import java.util.Timer;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.border.Border;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameState;
 import nz.ac.aut.ense701.gameModel.Score;
@@ -76,7 +80,7 @@ public class MiniGameGuess extends javax.swing.JFrame {
         lblImage1.setText(questions.get(0));
         lblImage2.setText(questions.get(1));
         lblImage3.setText(questions.get(2));
-        
+
         //setup Frame
         setTitle("Mini Game Guess");
         setDefaultCloseOperation(0);
@@ -165,7 +169,7 @@ public class MiniGameGuess extends javax.swing.JFrame {
     /**
      * This method show message
      * @param isCorrect
-     * @param animal 
+     * @param animal
      */
     private void showMessage(boolean isCorrect, String animal) {
         if (isCorrect) {
@@ -174,40 +178,38 @@ public class MiniGameGuess extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Sorry, You have a wrong guess.\n\nYou have select: " + animal);
         }
     }
-    
+
     /**
      * This method add score when have a correct guess
      * @param isCorrect - boolean
      */
-    private void addScore(boolean isCorrect){
-        if(isCorrect){
+    private void addScore(boolean isCorrect) {
+        if (isCorrect) {
             game.score.addScore(Score.VALUE_GUESS_CORRECT);
         }
     }
-    
+
     /**
      * This method remove answer from arrayList when play have a right guess
      */
-    private void remvoeAnswer(boolean isCorrect){
+    private void remvoeAnswer(boolean isCorrect) {
         if (isCorrect) {
             //remove answer from arraylist
             animalArrayList.remove(answer);
         }
     }
-    
+
     /**
-     * This method clear current guess game
-     * Set game status
-     * notify all listeners
+     * This method clear current guess game Set game status notify all listeners
      */
-    private void exit(){
+    private void exit() {
         //clear questions
         questions.clear();
         answer = null;
-        
+
         //set invisible
         this.setVisible(false);
-        
+
         //set game status
         game.setGameState(GameState.PLAYING);
         //start timer
@@ -216,9 +218,26 @@ public class MiniGameGuess extends javax.swing.JFrame {
         gui.toFront();
         game.timer = new Timer();
         game.startTimer();
-        
+
     }
-    
+
+    /**
+     * This method set the label border
+     * @param label
+     */
+    public void mouseEnter(JLabel label) {
+        Border border = BorderFactory.createLineBorder(Color.YELLOW, 5);
+        label.setBorder(border);
+    }
+
+    /**
+     * This method set the border to null
+     * @param label 
+     */
+    public void mouseExit(JLabel label) {
+        label.setBorder(null);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -240,6 +259,12 @@ public class MiniGameGuess extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblImage1MouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblImage1MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblImage1MouseExited(evt);
+            }
         });
 
         lblImage2.setText("Image 2");
@@ -247,12 +272,24 @@ public class MiniGameGuess extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblImage2MouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblImage2MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblImage2MouseExited(evt);
+            }
         });
 
         lblImage3.setText("Image 3");
         lblImage3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblImage3MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblImage3MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblImage3MouseExited(evt);
             }
         });
 
@@ -318,6 +355,31 @@ public class MiniGameGuess extends javax.swing.JFrame {
         remvoeAnswer(isCorrect);
         exit();
     }//GEN-LAST:event_lblImage3MouseClicked
+
+    private void lblImage1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImage1MouseEntered
+        mouseEnter(lblImage1);
+    }//GEN-LAST:event_lblImage1MouseEntered
+
+    private void lblImage1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImage1MouseExited
+        mouseExit(lblImage1);
+    }//GEN-LAST:event_lblImage1MouseExited
+
+    private void lblImage2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImage2MouseEntered
+        mouseEnter(lblImage2);
+    }//GEN-LAST:event_lblImage2MouseEntered
+
+    private void lblImage2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImage2MouseExited
+        mouseExit(lblImage2);
+    }//GEN-LAST:event_lblImage2MouseExited
+
+    private void lblImage3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImage3MouseEntered
+        mouseEnter(lblImage3);
+    }//GEN-LAST:event_lblImage3MouseEntered
+
+    private void lblImage3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImage3MouseExited
+        mouseExit(lblImage3);
+    }//GEN-LAST:event_lblImage3MouseExited
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblImage1;
     private javax.swing.JLabel lblImage2;
