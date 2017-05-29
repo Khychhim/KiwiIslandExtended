@@ -7,6 +7,7 @@ import com.restfb.types.User;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import com.restfb.types.FacebookType;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -37,7 +38,23 @@ public class FacebookAPI {
                 if(!driver.getCurrentUrl().contains("facebook.com")){
                 String url = driver.getCurrentUrl();
                  accessToken = url.replaceAll(".*#access_token=(.+)&.*", "$1");
+                 
+                 
+                 
+                 driver.close();
+                String FbMessage = JOptionPane.showInputDialog("Enter to update status to facebook");
+                
+                 
+                 Object[] options = {"OK"};
                   
+                int option  = JOptionPane.showOptionDialog(null, 
+                    null, "Game over!", 
+                    JOptionPane.PLAIN_MESSAGE,JOptionPane.
+                            INFORMATION_MESSAGE, null, options, options[0]);
+                if(option == JOptionPane.OK_OPTION){
+                    break;
+                    
+                }
             
                 FacebookClient fbClient = new DefaultFacebookClient(accessToken);
                 FacebookType publishMessageResponse = fbClient.publish("me/feed", FacebookType.class, Parameter.with("message", "Testing application version 1.0"));
