@@ -217,9 +217,8 @@ public class GameTest extends junit.framework.TestCase
                 island.addOccupant(positionKiwi, kiwi);
           }
           
-          Predator newPredator = game.predatorMoveToKiwi(predator);
-          newPredator.setcoloumnAwayFromKiwi(-1);
-          game.predatorMoveToKiwi(newPredator);
+          game.predatorMoveToKiwi(predator);
+          
           assertFalse("Predator should not be in this position",island.hasPredator(positionPredator));
     }
     
