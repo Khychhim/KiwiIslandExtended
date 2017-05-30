@@ -160,9 +160,10 @@ public class KiwiCountUI
                 miniQuizFrame = new JFrame("Mini Game Quiz");
                 miniQuizFrame.add(minigamePanel);
                 miniQuizFrame.setSize(minigamePanel.getSize());
-                miniQuizFrame.setDefaultCloseOperation(0);
+                miniQuizFrame.setDefaultCloseOperation(0);                
                 miniQuizFrame.setVisible(true);
                 miniQuizFrame.pack();
+                miniQuizFrame.setLocationRelativeTo(null);
       }
     
      private void setAsGameListener()

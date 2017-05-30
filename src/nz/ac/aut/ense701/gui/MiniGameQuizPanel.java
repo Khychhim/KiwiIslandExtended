@@ -111,7 +111,7 @@ public final class MiniGameQuizPanel extends javax.swing.JPanel {
         resultFrame.setVisible(true);
         resultFrame.pack();
         resultFrame.setDefaultCloseOperation(0);
-        
+        resultFrame.setLocationRelativeTo(null);
         notificationPanel.displayToPanel();
     }
 
