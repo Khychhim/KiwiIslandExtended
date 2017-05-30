@@ -139,7 +139,7 @@
             <answer>4-5 months</answer>
             <answer>They don't</answer>
             <correct>2</correct>
-			<reward>stamina</reward>
+			<reward>score</reward>
         </question>
 	<question>
             <difficulty>3</difficulty>
@@ -149,7 +149,7 @@
             <answer>Black</answer>
             <answer>It doesn't change Colour</answer>
             <correct>3</correct>
-			<reward>score</reward>
+			<reward>stamina</reward>
         </question>
 	<question>
             <difficulty>2</difficulty>

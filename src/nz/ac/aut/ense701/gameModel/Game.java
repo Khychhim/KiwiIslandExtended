@@ -1324,7 +1324,8 @@ public class Game {
                  allPredators.remove(0);
                  totalPredators--;                 
            }else if(reward.equalsIgnoreCase("food")){
-                 
+                 Item food = new Food(player.getPosition(), "Magic Steak", "A limited edition food from heaven", 0, 0.1, 70.0);
+                 island.addOccupant(player.getPosition(), food);
            }else if(reward.equalsIgnoreCase("stamina")){
                  player.increaseMaximumStamina();
            }else if(reward.equalsIgnoreCase("score")){
