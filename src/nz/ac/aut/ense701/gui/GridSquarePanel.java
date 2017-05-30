@@ -61,7 +61,7 @@ public class GridSquarePanel extends javax.swing.JPanel
             case WATER    : {
                 color = Color.WHITE;
                 image = tileset.getTile(Tileset.GROUND, Tileset.G_AND_W_MIDDLE_LEFT, 
-                        this.getWidth(), this.getHeight());
+                        32, 32);
                 lblText.setIcon(new ImageIcon(image));
                 break;
             }

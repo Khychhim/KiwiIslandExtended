@@ -940,6 +940,7 @@ public class Game {
         int remainingStaminaBonus = (int)(Score.REMAINING_STAMINA * (player.getStaminaLevel() / player.getMaximumStaminaLevel()));
         int survivalBonus = player.isAlive() ? Score.SURVIVED : 0;
         score.addScore(kiwisCountedBonus + predatorsTrappedBonus + remainingStaminaBonus + survivalBonus);
+        score.saveHighScore(player.getName());
         
         String bonusString = "\nSurvival Bonus:          " + survivalBonus +
                              "\nStamina Remaining Bonus: " + remainingStaminaBonus + 
