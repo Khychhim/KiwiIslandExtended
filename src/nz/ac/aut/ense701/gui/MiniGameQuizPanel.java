@@ -248,9 +248,6 @@ public final class MiniGameQuizPanel extends javax.swing.JPanel {
             this.score = currentQuestion.getPointGain();
             
             game.setReward(reward, score);
-            
-//            game.score.addScore(this.score);
-           
         }
          //System.out.println(game.quizQuestionList.get(currentQuestionIndex).getReward());
         launchResult();

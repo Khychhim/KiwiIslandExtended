@@ -1330,7 +1330,7 @@ public class Game {
            }else if(reward.equalsIgnoreCase("stamina")){
                  
            }else if(reward.equalsIgnoreCase("score")){
-                 
+                 this.score.addScore(score);
            }
      }
      
