@@ -1314,6 +1314,27 @@ public class Game {
            
      }
      
+     /**
+      * method to give rewards to player based on answer from quiz question
+       * @param reward reward string to input
+       * @param score score to input
+      */
+     public void setReward(String reward, int score){
+           if(reward.equalsIgnoreCase("predator")){
+                 Occupant predator = allPredators.get(0);
+                 island.removeOccupant(predator.getPosition(), predator);
+                 allPredators.remove(0);
+                 totalPredators--;                 
+           }else if(reward.equalsIgnoreCase("food")){
+                 
+           }else if(reward.equalsIgnoreCase("stamina")){
+                 
+           }else if(reward.equalsIgnoreCase("score")){
+                 
+           }
+     }
+     
+     
      public int getStartRow(){
            return this.startMapRow;
      }
