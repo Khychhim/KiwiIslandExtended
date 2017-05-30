@@ -11,11 +11,15 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -77,7 +81,6 @@ public class Score {
                         Integer.parseInt(element.getElementsByTagName("points").item(0).getTextContent()),
                         df.parse(element.getElementsByTagName("date").item(0).getTextContent())
                     );
-                    System.out.println(highScores[i]);
                 }
             }
             boolean scoreIsHigher = false;
@@ -88,26 +91,47 @@ public class Score {
                 Element root = doc.getDocumentElement();
                 if(scoreIsHigher && numScores >= SCORES_RECORDED) {
                     int lowestScore = Integer.MAX_VALUE;
-                    int lowestIndex = 0;
                     for(int i = 0; i < numScores; i++) {
                         if(highScores[i].value < lowestScore) {
                             lowestScore = highScores[i].value;
-                            lowestIndex = i;
                         }
                     }
-                } else {
-                    Element newScore = doc.createElement("Score");
-                    Element playerName = doc.createElement("name");
-                    playerName.setTextContent(name);
-                    Element playerScore = doc.createElement("points");
-                    playerScore.setTextContent(""+score);
-                    Element currentDate = doc.createElement("date");
-                    currentDate.setTextContent(df.format(new Date()));
-                    newScore.appendChild(playerName);
-                    newScore.appendChild(playerScore);
-                    newScore.appendChild(currentDate);
-                    root.appendChild(newScore);
-                }
+                    for(int i = 0; i < numScores; i++) {
+                        Node highScore = list.item(i);
+
+                        if(highScore.getNodeType() == Node.ELEMENT_NODE) {
+                            Element element = (Element) highScore;
+                            int points = Integer.parseInt(element.
+                                    getElementsByTagName("points").item(0).getTextContent());
+                            if(points == lowestScore) {
+                                root.removeChild(highScore);
+                                break;
+                            }
+                        }
+                    }
+                } 
+                Element newScore = doc.createElement("Score");
+                Element playerName = doc.createElement("name");
+                playerName.setTextContent(name);
+                Element playerScore = doc.createElement("points");
+                playerScore.setTextContent(""+score);
+                Element currentDate = doc.createElement("date");
+                currentDate.setTextContent(df.format(new Date()));
+                newScore.appendChild(playerName);
+                newScore.appendChild(playerScore);
+                newScore.appendChild(currentDate);
+                root.appendChild(newScore);
+                
+                TransformerFactory transformerFactory = 
+                    TransformerFactory.newInstance();
+                Transformer transformer = transformerFactory.newTransformer();
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+                DOMSource source = new DOMSource(doc);
+                StreamResult result = 
+                        new StreamResult(new File("highScores.xml"));
+                transformer.transform(source, result);
             }
         } catch (IOException e) {
             System.err.println("IO error: " + e.getMessage());
@@ -117,8 +141,10 @@ public class Score {
             System.err.println("Parser error: " + e.getMessage());
         } catch (SAXException e) {
             System.err.println("SAXException error: " + e.getMessage());
-        } catch (ParseException ex) {
-            Logger.getLogger(Score.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException e) {
+            System.err.println("Document Parsing error: " + e.getMessage());
+        } catch (TransformerException e) {
+            System.err.println("Transformer error: " + e.getMessage());
         }
     }
     
