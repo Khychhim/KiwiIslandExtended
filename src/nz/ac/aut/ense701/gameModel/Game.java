@@ -1309,9 +1309,7 @@ public class Game {
                          }
                    }
             }
-
-            this.quizQuestionList = newQuizQuestion;
-           
+            this.quizQuestionList = newQuizQuestion;           
      }
      
      /**
@@ -1328,7 +1326,7 @@ public class Game {
            }else if(reward.equalsIgnoreCase("food")){
                  
            }else if(reward.equalsIgnoreCase("stamina")){
-                 
+                 player.increaseMaximumStamina();
            }else if(reward.equalsIgnoreCase("score")){
                  this.score.addScore(score);
            }

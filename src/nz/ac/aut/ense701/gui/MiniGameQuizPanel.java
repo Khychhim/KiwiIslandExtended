@@ -23,6 +23,7 @@ public final class MiniGameQuizPanel extends javax.swing.JPanel {
     public JFrame resultFrame;
     public int score = 0;
     public KiwiCountUI gui;
+    String reward;
     /**
      * Creates new form MiniGamePanel
        * @param gui KiwiCountUI object to use
@@ -38,6 +39,7 @@ public final class MiniGameQuizPanel extends javax.swing.JPanel {
         setQuestionLabel(currentQuestion.getQuestion());
         //set up radio buttons
         setUpRadioButtons(currentQuestion);
+        reward = "none";
     }
 
     public boolean isOptionCorrectAnswer() {
@@ -243,12 +245,14 @@ public final class MiniGameQuizPanel extends javax.swing.JPanel {
             game.quizQuestionList.get(currentQuestionIndex).setComplete(true);
             
             // get current reward
-            String reward = game.quizQuestionList.get(currentQuestionIndex).getReward();            
+            reward = game.quizQuestionList.get(currentQuestionIndex).getReward();            
             // get score
             this.score = currentQuestion.getPointGain();
             
             game.setReward(reward, score);
         }
+//        this.score = currentQuestion.getPointGain();
+//        game.setReward("stamina", score);
          //System.out.println(game.quizQuestionList.get(currentQuestionIndex).getReward());
         launchResult();
     }//GEN-LAST:event_jButtonEnterActionPerformed

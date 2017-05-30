@@ -30,14 +30,13 @@ public class NotificationPanel extends javax.swing.JPanel {
      * Display text to panel
      */
     public void displayToPanel(){
-
+        String display;
         int correctAnswerIndex = miniGamePanel.currentQuestion.getCorrectOptionIndex() - 1;
         
         String playerAnswer = miniGamePanel.getPlayerChosenAnswer();
         String correctAnswer = miniGamePanel.currentQuestion.getQuestionOptions()[correctAnswerIndex];
 
         this.jLabelQuizLevel.setText("Quiz Level: \t" + miniGamePanel.currentQuestion.getDifficulty());
-        this.jLabelScoreEarn.setText("Score Earn: \t" + miniGamePanel.score);
         this.jLabelPlayerAnswer.setText("Your Answer: \t" + playerAnswer);
         
         if(playerAnswer.equalsIgnoreCase(correctAnswer)){
@@ -45,7 +44,19 @@ public class NotificationPanel extends javax.swing.JPanel {
         }else{
               this.jLabelAnswer.setText("Wrong Answer!! \t");
         }
-        
+        if(miniGamePanel.reward.equalsIgnoreCase("score")){
+              display = "You earn a score of "+ Integer.toString(miniGamePanel.score);
+        }else if(miniGamePanel.reward.equalsIgnoreCase("predator")){
+              display = "The number of predator has been reduce by 1";
+        }else if(miniGamePanel.reward.equalsIgnoreCase("stamina")){
+              display = "Your stamina has been increase by 10";
+        }else if(miniGamePanel.reward.equalsIgnoreCase("food")){
+              display = "A food has magically spawn";
+        }else{
+              display = "You have earn nothing!";
+        }
+        this.jLabelScoreEarn.setText(display);    
+       
         miniGamePanel.setVisible(false);
     }
     
@@ -67,7 +78,7 @@ public class NotificationPanel extends javax.swing.JPanel {
             setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
             jLabelScoreEarn.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-            jLabelScoreEarn.setText("Score Earn: ");
+            jLabelScoreEarn.setText("Earn");
 
             jLabelAnswer.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
             jLabelAnswer.setText("Correct Answer:");
