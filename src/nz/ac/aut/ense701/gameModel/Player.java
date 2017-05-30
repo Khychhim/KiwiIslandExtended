@@ -17,7 +17,7 @@ public class Player
     
     private Position  position;
     private final String    name;
-    private double    maxStamina;
+    private final double    maxStamina;
     private double    stamina;
     private boolean   alive;
     private Set<Item> backpack;
@@ -264,10 +264,10 @@ public class Player
      * Mutator methods
      ****************************************************************************************************************/
     /**
-     * set maximum stamina
+     * increase  stamina to max
      */
-    public void increaseMaximumStamina(){
-          maxStamina +=10; 
+    public void increaseToMaxStamina(){
+          stamina = maxStamina; 
     }
     /**
      * Kills the Player

@@ -49,7 +49,7 @@ public class NotificationPanel extends javax.swing.JPanel {
         }else if(miniGamePanel.reward.equalsIgnoreCase("predator")){
               display = "The number of predator has been reduce by 1";
         }else if(miniGamePanel.reward.equalsIgnoreCase("stamina")){
-              display = "Your stamina has been increase by 10";
+              display = "Your stamina has been increaseto max";
         }else if(miniGamePanel.reward.equalsIgnoreCase("food")){
               display = "A food has magically spawn";
         }else{
