@@ -49,6 +49,8 @@ public class Score {
     
     private static final int SCORES_RECORDED = 100;
     
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    
     public Score() {
         score = 0;
     }
@@ -69,7 +71,7 @@ public class Score {
             NodeList list = doc.getElementsByTagName("Score");
             int numScores = list.getLength();
             HighScore[] highScores = new HighScore[numScores];
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            df = new SimpleDateFormat("dd/MM/yyyy");
             
             for(int i = 0; i < numScores; i++) {
                 Node highScore = list.item(i);
@@ -164,12 +166,12 @@ public class Score {
         score -= Math.abs(subtract);
     }
     
-    private class HighScore {
+    public class HighScore implements Comparable<HighScore> {
         String name;
         int value;
         Date date;
         
-        HighScore(String name, int value, Date date) {
+        public HighScore(String name, int value, Date date) {
             this.name = name;
             this.value = value;
             this.date = date;
@@ -177,7 +179,14 @@ public class Score {
         
         @Override
         public String toString() {
-            return "Name: " + name + ", Score: " + value + ", Date: " + date.toString();
+            return name + " scored " + value + " on " + df.format(date);
+        }
+
+        @Override
+        public int compareTo(HighScore hsToCompare) {
+            if(hsToCompare.value > value) return 1;
+            if(hsToCompare.value < value) return -1;
+            return 0;
         }
     }
 }
