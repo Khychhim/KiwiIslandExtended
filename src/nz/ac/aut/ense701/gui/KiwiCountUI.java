@@ -25,6 +25,7 @@ import nz.ac.aut.ense701.gameModel.GameAchievement;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
 import nz.ac.aut.ense701.gameModel.GameState;
 import nz.ac.aut.ense701.gameModel.MoveDirection;
+import nz.ac.aut.ense701.gameModel.TwitterAPI;
 
 /*
  * User interface form for Kiwi Island.
@@ -76,15 +77,34 @@ public class KiwiCountUI
             public void actionPerformed(ActionEvent e){
             
                 System.out.println("Sharing scores and achievements to facebook");
-                  game = null;
-                  KiwiCountUI.this.setVisible(false);
+//                  game = null;
+//                  KiwiCountUI.this.setVisible(false);
                    
                 FacebookAPI fbapi = new FacebookAPI();
                 fbapi.authinticate();
             }
             
             });
-        Object[] options = {"OK", fbButton};
+        
+        
+        
+        JButton twitterbt = new JButton("Share");
+        twitterbt.setIcon(new ImageIcon("twitter.png"));
+        twitterbt.setPreferredSize(d);
+        
+        twitterbt.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TwitterAPI tweet = new TwitterAPI();
+             
+                String game_score = String.valueOf(game.score.getScore());
+                tweet.postToTwitter(game_score, game.player.getName());   
+            }
+        });
+        
+        
+        
+        Object[] options = {"OK", fbButton, twitterbt};
         
         // check for "game over" or "game won"
         if ( game.getState() == GameState.LOST )
@@ -124,11 +144,7 @@ public class KiwiCountUI
                   game = null;
                   this.setVisible(false);
             }
-            
-            
 
-
-         
         }
         else if ( game.getState() == GameState.WON )
         {

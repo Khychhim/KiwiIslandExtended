@@ -48,7 +48,7 @@ public class FacebookAPI {
                  Object[] options = {"OK"};
                   
                 int option  = JOptionPane.showOptionDialog(null, 
-                    null, "Game over!", 
+                    "Status update to Facebook has been sent successfully!", "Update Status to Facebook", 
                     JOptionPane.PLAIN_MESSAGE,JOptionPane.
                             INFORMATION_MESSAGE, null, options, options[0]);
                 if(option == JOptionPane.OK_OPTION){
