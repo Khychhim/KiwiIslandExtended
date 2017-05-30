@@ -63,30 +63,8 @@ public class KiwiCountUI
     public void gameStateChanged()
     {
         update();
-        
 
-        JButton fbButton = new JButton("Share");
-       
-        fbButton.setIcon(new ImageIcon("facebooksmall.png"));
-        
         Dimension d = new Dimension(100,50);
-        fbButton.setPreferredSize(d);
-    
-        fbButton.addActionListener(new ActionListener(){
-             @Override
-            public void actionPerformed(ActionEvent e){
-            
-                System.out.println("Sharing scores and achievements to facebook");
-//                  game = null;
-//                  KiwiCountUI.this.setVisible(false);
-                   
-                FacebookAPI fbapi = new FacebookAPI();
-                fbapi.authinticate();
-            }
-            
-            });
-        
-        
         
         JButton twitterbt = new JButton("Share");
         twitterbt.setIcon(new ImageIcon("twitter.png"));
@@ -102,9 +80,8 @@ public class KiwiCountUI
             }
         });
         
-        
-        
-        Object[] options = {"OK", fbButton, twitterbt};
+
+        Object[] options = {"OK", twitterbt};
         
         // check for "game over" or "game won"
         if ( game.getState() == GameState.LOST )
