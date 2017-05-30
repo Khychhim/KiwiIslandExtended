@@ -19,7 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import nz.ac.aut.ense701.gameModel.FacebookAPI;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameAchievement;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
@@ -69,6 +68,7 @@ public class KiwiCountUI
         JButton twitterbt = new JButton("Share");
         twitterbt.setIcon(new ImageIcon("twitter.png"));
         twitterbt.setPreferredSize(d);
+        
         
         twitterbt.addActionListener(new ActionListener(){
             @Override
