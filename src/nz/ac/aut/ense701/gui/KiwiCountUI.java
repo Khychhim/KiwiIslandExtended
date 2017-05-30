@@ -142,7 +142,7 @@ public class KiwiCountUI
         }
         else if(game.getState() == GameState.QUIZ){
               this.setEnabled(false);
-              miniGameStart(this, game);
+              miniGameStart(this);
              game.setGameState(GameState.PLAYING);
               
         }
@@ -153,9 +153,9 @@ public class KiwiCountUI
        * set up mini game panel instance
        * @param game 
        */
-      private void miniGameStart(KiwiCountUI gui, Game game){
+      private void miniGameStart(KiwiCountUI gui){
                 //setup Mini game panel
-                MiniGameQuizPanel minigamePanel = new MiniGameQuizPanel(gui,game);                
+                MiniGameQuizPanel minigamePanel = new MiniGameQuizPanel(gui);                
                 //setup Frame
                 miniQuizFrame = new JFrame("Mini Game Quiz");
                 miniQuizFrame.add(minigamePanel);

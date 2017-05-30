@@ -28,9 +28,9 @@ public final class MiniGameQuizPanel extends javax.swing.JPanel {
        * @param gui KiwiCountUI object to use
        * @param game game object to use
      */
-    public MiniGameQuizPanel(KiwiCountUI gui, Game game) {
+    public MiniGameQuizPanel(KiwiCountUI gui) {
         initComponents();
-        this.game = game;
+        this.game = gui.game;
         this.gui = gui;
         //select a random question
         currentQuestion = pickRandomQuestion();
@@ -100,6 +100,7 @@ public final class MiniGameQuizPanel extends javax.swing.JPanel {
     }
 
     public void launchResult() {
+        gui.miniQuizFrame.dispose();
         //setup Mini game panel
         NotificationPanel notificationPanel = new NotificationPanel(this, gui);
 
