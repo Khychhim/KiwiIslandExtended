@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package nz.ac.aut.ense701.gui;
 
 import java.awt.Color;
@@ -16,6 +11,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Random;
 import java.util.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -178,10 +175,22 @@ public class MiniGameGuess extends javax.swing.JFrame {
      */
     private void showMessage(boolean isCorrect, String animal) {
         if (isCorrect) {
-            JOptionPane.showMessageDialog(this, "Great, You have a right guess.\n\nYou have select: " + animal + "\n\n You have eran: " + Score.VALUE_GUESS_CORRECT);
+            JOptionPane.showMessageDialog(this, "Great, You have a right guess.\n\nYou have select: " + animal + "\n\n You have earn: " + Score.VALUE_GUESS_CORRECT);
         } else {
             JOptionPane.showMessageDialog(this, "Sorry, You have a wrong guess.\n\nYou have select: " + animal);
         }
+    }
+
+    /**
+     * This is method reveal Silhouette Image
+     *
+     * @param label
+     * @param isCoreect
+     */
+    private void revealSilhouetteImage(JLabel label) {
+        //set reveal image
+        label.setIcon(imageMap.get(label.getText()));
+        System.out.println("Set label:" + label.getText());
     }
 
     /**
@@ -354,6 +363,7 @@ public class MiniGameGuess extends javax.swing.JFrame {
         //check answer and show message
         boolean isCorrect = checkAnswer(lblImage1.getText());
         addScore(isCorrect);
+        revealSilhouetteImage(lblImage1);
         showMessage(isCorrect, lblImage1.getText());
         remvoeAnswer(isCorrect);
         exit();
@@ -363,6 +373,7 @@ public class MiniGameGuess extends javax.swing.JFrame {
         //check answer and show message
         boolean isCorrect = checkAnswer(lblImage2.getText());
         addScore(isCorrect);
+        revealSilhouetteImage(lblImage2);
         showMessage(isCorrect, lblImage2.getText());
         remvoeAnswer(isCorrect);
         exit();
@@ -372,6 +383,7 @@ public class MiniGameGuess extends javax.swing.JFrame {
         //check answer and show message
         boolean isCorrect = checkAnswer(lblImage3.getText());
         addScore(isCorrect);
+        revealSilhouetteImage(lblImage3);
         showMessage(isCorrect, lblImage3.getText());
         remvoeAnswer(isCorrect);
         exit();
