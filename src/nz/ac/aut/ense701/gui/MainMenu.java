@@ -15,6 +15,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,7 +25,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import nz.ac.aut.ense701.gameModel.Game;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -36,6 +43,7 @@ public class MainMenu extends JPanel implements MouseListener {
     private Image backGroundImage;
     private Image buttonImage;
     private Timer resizeTimer;
+    private String playerName;
     private final JFrame menu;
     
     private final JFrame[] subMenus;
@@ -236,7 +244,8 @@ public class MainMenu extends JPanel implements MouseListener {
                 case 0:
                     menu.setVisible(false);
                     //Create Game
-                    final Game game = new Game();
+                    loadOptions();
+                    final Game game = new Game(playerName);
                     //Create the GUI for the game
                     final KiwiCountUI gui  = new KiwiCountUI(game);
                     gui.setLocation(menu.getLocation());
@@ -272,6 +281,26 @@ public class MainMenu extends JPanel implements MouseListener {
             subMenus[OPTIONS].setSize(menu.getWidth(), menu.getHeight());
         } else if(buttons[EXIT_GAME].getBounds().contains(clickLoc)) {
             System.exit(0);
+        }
+    }
+    
+    private void loadOptions() {
+        try {
+            File file = new File("options.xml");
+            DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance()
+                    .newDocumentBuilder();
+
+            Document doc = dBuilder.parse(file);
+            doc.getDocumentElement().normalize();
+
+            Element name = (Element) doc.getElementsByTagName("Name").item(0);
+            playerName = name.getTextContent();
+        } catch (SAXException e) {
+            System.err.println(e.getMessage());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        } catch (ParserConfigurationException e) {
+            System.err.println(e.getMessage());
         }
     }
     

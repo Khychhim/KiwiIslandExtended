@@ -51,7 +51,7 @@ public class Game {
       GameAchievement counting = new GameAchievement();
       public int count_of_steps = counting.readCount();
       GameAchievement achievement;
-      public static String playerName = "River Song";
+      public String playerName = "River Song";
       public ArrayList<QuizQuestion> quizQuestionList;
       public JFrame miniQuizFrame;
       public PredatorTimerTask predatorTimerTask;
@@ -59,8 +59,10 @@ public class Game {
     
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
+     * @param playerName
      */
-      public Game() {
+      public Game(String playerName) {
+            this.playerName = playerName;
             eventListeners = new HashSet<GameEventListener>();
             rand = new Random();
             allPredators = new ArrayList<Occupant>();
@@ -1165,7 +1167,7 @@ public class Game {
        * @param input data from the level file
        */
       private void setUpPlayer(Scanner input) {
-            String playerName = input.next();
+            input.next();
             int playerPosRow = input.nextInt();
             int playerPosCol = input.nextInt();
             double playerMaxStamina = input.nextDouble();

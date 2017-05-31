@@ -80,9 +80,16 @@ public class AchievementsMenu extends SubMenu {
             progressBarContainers[i] = new JLabel();
             progressBars[i] = new JLabel();
             achievementTitles[i] = new JLabel();
-            achievementTitles[i].setText(
-                    achievements[i].title + " " + achievements[i].progress 
-                    + "/" + achievements[i].goal);
+            if(!achievements[i].achieved || 
+                    achievements[i].progress > achievements[i].goal) {
+                achievementTitles[i].setText(
+                        achievements[i].title + " " + achievements[i].progress 
+                        + "/" + achievements[i].goal);
+            } else {
+                achievementTitles[i].setText(
+                        achievements[i].title + " " + achievements[i].goal 
+                        + "/" + achievements[i].goal);
+            }
             
             menuPane.setLayer(progressBarContainers[i], 1);
             menuPane.add(progressBarContainers[i]);

@@ -150,6 +150,10 @@ public abstract class SubMenu extends JPanel implements MouseListener {
         
         return resized;
     }
+    
+    protected JLabel getBackButton() {
+        return backButton;
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {}
