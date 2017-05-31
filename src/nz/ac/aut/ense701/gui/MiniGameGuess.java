@@ -56,13 +56,18 @@ public class MiniGameGuess extends javax.swing.JFrame {
         questions = new ArrayList<String>();
         animalArrayList = new ArrayList<String>();
         animalArrayList.addAll(Arrays.asList(animalNames));
-        loadImage();
+    }
+
+    public MiniGameGuess() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
      * This method will start the Guess Game
      */
     public void start() {
+        //load Images
+        loadImage();
         //select one animal as answer
         pickAnswer();
         //randomly pick 2 question
@@ -88,7 +93,6 @@ public class MiniGameGuess extends javax.swing.JFrame {
         pack();
     }
 
-    @SuppressWarnings("unchecked")
     /**
      * This method load image to ImageMap
      */
@@ -219,6 +223,14 @@ public class MiniGameGuess extends javax.swing.JFrame {
         game.timer = new Timer();
         game.startTimer();
 
+    }
+
+    /**
+     * This method return a HashMap of image
+     * @return imageMape
+     */
+    public HashMap<String, ImageIcon> getImageHashMap(){
+        return imageMap;
     }
 
     /**
