@@ -1,8 +1,0 @@
-{
-  "url": {
-    "i_contains": "shoes"
-  },
-  "event": {
-    "i_contains": "ViewContent"
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "key": "AU",
-  "name": "Australia",
-  "type": "country",
-  "country_code": "AU",
-  "supports_region": true,
-  "supports_city": true
-}

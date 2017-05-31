@@ -1,9 +1,0 @@
-{
-  "origin": [
-    {
-      "name": "My Custom Audience",
-      "id": "abc123",
-      "type": "custom_audience"
-    }
-  ]
-}
