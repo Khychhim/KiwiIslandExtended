@@ -166,15 +166,6 @@ public class KiwiCountUI
         }
     }
     
-    /**
-     *
-     * @param gui
-     * @param game
-     */
-    private void guessGamesStart(KiwiCountUI gui, Game game) {
-
-    }
-    
      private void setAsGameListener()
     {
        game.addGameEventListener(this);      

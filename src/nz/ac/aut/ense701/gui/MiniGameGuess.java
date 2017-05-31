@@ -31,10 +31,10 @@ import nz.ac.aut.ense701.gameModel.Score;
  * @author Logan
  */
 public class MiniGameGuess extends javax.swing.JFrame {
- 
+
     private static final long serialVersionUID = 1L;
     private HashMap<String, ImageIcon> imageMap;
-    private final String path = "..\\KiwiIslandExtended\\src\\nz\\ac\\aut\\ense701\\SilohuetteImages\\";
+    private final String path = "src/nz/ac/aut/ense701/SilohuetteImages/";
     private final String[] animalNames = {"black-robin", "brown-kiwi", "cat", "kiore", "little-spotted-kiwi", "oyster-catcher", "possum",
         "rat", "stewart-island-fernbird", "stoat", "tui", "white-heron"};
     private final Random random;
@@ -129,7 +129,7 @@ public class MiniGameGuess extends javax.swing.JFrame {
         try {
             image = ImageIO.read(new File(path + fileName + ".png"));
         } catch (IOException ex) {
-            System.out.println("Image Not Found.");
+            System.out.println("Image Not Found." + ex);
         }
         return image;
     }
@@ -172,6 +172,7 @@ public class MiniGameGuess extends javax.swing.JFrame {
 
     /**
      * This method show message
+     *
      * @param isCorrect
      * @param animal
      */
@@ -185,6 +186,7 @@ public class MiniGameGuess extends javax.swing.JFrame {
 
     /**
      * This method add score when have a correct guess
+     *
      * @param isCorrect - boolean
      */
     private void addScore(boolean isCorrect) {
@@ -216,7 +218,7 @@ public class MiniGameGuess extends javax.swing.JFrame {
 
         //set game status
         game.setGameState(GameState.PLAYING);
-        
+
         //start timer
         gui.setEnabled(true);
         gui.toFront();
@@ -227,14 +229,16 @@ public class MiniGameGuess extends javax.swing.JFrame {
 
     /**
      * This method return a HashMap of image
+     *
      * @return imageMape
      */
-    public HashMap<String, ImageIcon> getImageHashMap(){
+    public HashMap<String, ImageIcon> getImageHashMap() {
         return imageMap;
     }
 
     /**
      * This method set the label border
+     *
      * @param label
      */
     public void mouseEnter(JLabel label) {
@@ -244,7 +248,8 @@ public class MiniGameGuess extends javax.swing.JFrame {
 
     /**
      * This method set the border to null
-     * @param label 
+     *
+     * @param label
      */
     public void mouseExit(JLabel label) {
         label.setBorder(null);
