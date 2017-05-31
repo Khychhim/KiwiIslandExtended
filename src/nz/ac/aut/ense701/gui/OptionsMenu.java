@@ -16,7 +16,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -36,6 +39,8 @@ import org.xml.sax.SAXException;
  */
 public class OptionsMenu extends SubMenu {
     private final JTextField nameInput;
+    private final JTextArea helpText;
+    private final JScrollPane helpScrollPane;
     private final JLabel nameLabel;
     private final JLabel titleLabel;
     private Image titleImage;
@@ -50,10 +55,24 @@ public class OptionsMenu extends SubMenu {
     private static final float NAME_INPUT_END_WIDTH_RATIO     = 0.60f;
     private static final float NAME_INPUT_START_HEIGHT_RATIO  = 0.30f;
     private static final float NAME_INPUT_HEIGHT_RATIO        = 0.03f;
+    //Percentages of the screen used by the help text
+    private static final float HELP_START_WIDTH_RATIO   = 0.50f;
+    private static final float HELP_END_WIDTH_RATIO     = 0.65f;
+    private static final float HELP_START_HEIGHT_RATIO  = 0.25f;
+    private static final float HELP_HEIGHT_RATIO        = 0.60f;
     
     public OptionsMenu() {
         super("Kiwi Island - Options");
         nameInput = new JTextField();
+        nameInput.setBackground(new Color(154, 165, 0));
+        helpText = new JTextArea();
+        helpText.setEditable(false);
+        helpText.setBackground(new Color(154, 165, 0));
+        helpText.setLineWrap(true);
+        helpText.setWrapStyleWord(true);
+        helpScrollPane = new JScrollPane(helpText);
+        helpScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        helpScrollPane.setBackground(new Color(154, 165, 0));
         nameLabel = new JLabel("User name:");
         nameLabel.setForeground(Color.WHITE);
         titleLabel = new JLabel();
@@ -69,6 +88,8 @@ public class OptionsMenu extends SubMenu {
         menuPane.add(nameLabel);
         menuPane.setLayer(titleLabel, 1);
         menuPane.add(titleLabel);
+        menuPane.setLayer(helpScrollPane, 1);
+        menuPane.add(helpScrollPane);
         
         menu.pack();
         menu.validate();
@@ -107,6 +128,14 @@ public class OptionsMenu extends SubMenu {
         nameInput.setBounds(xName, yName, widthName, heightName);
         nameLabel.setPreferredSize(new Dimension(widthName, heightName));
         nameLabel.setBounds(xName, yName-heightName, widthName, heightName);
+        
+        int xHelp = (int) (width*HELP_START_WIDTH_RATIO);
+        int widthHelp = (int) (width*HELP_END_WIDTH_RATIO) - xTitle;
+        int heightHelp = (int) (height*HELP_HEIGHT_RATIO);
+        int yHelp = (int) (height*HELP_START_HEIGHT_RATIO);
+        
+        helpScrollPane.setPreferredSize(new Dimension(widthHelp, heightHelp));
+        helpScrollPane.setBounds(xHelp, yHelp, widthHelp, heightHelp);
     }
     
     public String getUserName() {
@@ -124,6 +153,8 @@ public class OptionsMenu extends SubMenu {
 
             Element name = (Element) doc.getElementsByTagName("Name").item(0);
             nameInput.setText(name.getTextContent());
+            Element help = (Element) doc.getElementsByTagName("Help").item(0);
+            helpText.setText(help.getTextContent());
         } catch (SAXException e) {
             System.err.println(e.getMessage());
         } catch (IOException e) {

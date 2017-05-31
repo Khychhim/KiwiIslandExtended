@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <HighScores>
     <Name>Josh</Name>
+    <Help>
+--- How to play ---
+===Controls===
+To move either use the provided directional 
+buttons labelled 'N','S','E' and 'W' or use the arrow keys. 
+To count the Kiwis move to a square that contains a 
+kiwi and click the button labelled 'Count'.
+To capture predators move to a square that contains a 
+Predator, select a Trap in your inventory and click the 
+button labelled 'Use'. 
+To pick up an Item or Tool move to a square that contains 
+one, select the desired item in the objects menu and 
+click the button labelled 'Collect'. 
+===Winning the Game===
+To win the game either count all the kiwis or 
+trap all the predators while there are still enough 
+kiwis remaining.
+===Score===
+Scores are given immediatly for completing mini-games 
+and Trapping predators. Additional Score is awarded 
+when the game is completed based on if you survived how 
+much stamina was remaining the number of kiwis counted 
+and the number of predators trapped. Score can also be 
+lost when you encounter a Hazard.
+    </Help>
 </HighScores>
