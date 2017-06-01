@@ -1,4 +1,4 @@
-package nz.ac.aut.ense701.gameModel;
+package guiTests;
 
 import java.awt.Image;
 import nz.ac.aut.ense701.gui.Tileset;

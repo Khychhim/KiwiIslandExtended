@@ -64,8 +64,22 @@ public class Tileset {
     public static final int G_AND_W_CORNER_TR       = 9;
     public static final int G_AND_W_CORNER_BL       = 18;
     public static final int G_AND_W_CORNER_BR       = 19;
-    //Water
-    public static final int WATER = 53;
+    //Single Tile Images
+    public static final int BLANK   = 0;
+    public static final int WATER   = 1;
+    public static final int FOREST  = 2;
+    public static final int SAND    = 3;
+    public static final int WETLAND = 4;
+    public static final int SCRUB   = 5;
+    public static final int FOOD    = 6;
+    public static final int FAUNA   = 7;
+    public static final int KIWI    = 8;
+    public static final int PREDATOR= 9;
+    public static final int TOOL    = 10;
+    public static final int TRIGGER = 11;
+    public static final int HAZARD  = 12;
+    public static final int EMPTY   = 13;
+    
     
     //Array containing paths to tilesets
     private final String[] tileSets = {
@@ -75,8 +89,29 @@ public class Tileset {
         "/nz/ac/aut/ense701/gameImages/trees.png"
     };
     
+    //Array containing paths to single tiles
+    private final String[] singleTilePaths = {
+        "/nz/ac/aut/ense701/gameImages/BlankTile.png",
+        "/nz/ac/aut/ense701/gameImages/waterTile.png",
+        "/nz/ac/aut/ense701/gameImages/forestTile.png",
+        "/nz/ac/aut/ense701/gameImages/sandTile.png",
+        "/nz/ac/aut/ense701/gameImages/wetlandTile.png",
+        "/nz/ac/aut/ense701/gameImages/scrubTile.png",
+        "/nz/ac/aut/ense701/gameImages/apple-silhouette.png",
+        "/nz/ac/aut/ense701/gameImages/bird-silhouette.png",
+        "/nz/ac/aut/ense701/gameImages/kiwi-silhouette.png",
+        "/nz/ac/aut/ense701/gameImages/rat-silhouette.png",
+        "/nz/ac/aut/ense701/gameImages/trap-silhouette.png",
+        "/nz/ac/aut/ense701/gameImages/question.png",
+        "/nz/ac/aut/ense701/gameImages/hazard.png",
+        "/nz/ac/aut/ense701/gameImages/empty.png"
+    };
+    
     //Array of tileset Images
     private final BufferedImage[] tileSetsImages;
+    
+    //Array of single Tile Images
+    private final BufferedImage[] singleTileImages;
     
     //Array of the tiles in each tileset
     private final Image[][] tiles;
@@ -88,6 +123,7 @@ public class Tileset {
     public Tileset() {
         tiles = new Image[tileSets.length][];
         tileSetsImages = new BufferedImage[tileSets.length];
+        singleTileImages = new BufferedImage[singleTilePaths.length];
         loadTileSets();
         setupTiles();
     }
@@ -96,8 +132,14 @@ public class Tileset {
     private void loadTileSets() {
         for(int i = 0; i < tileSets.length; i++) {
             try {
-                System.out.println("Loading " + tileSets[i]);
                 tileSetsImages[i] = ImageIO.read(this.getClass().getResource(tileSets[i]));
+            } catch(IOException ex) {
+                System.err.println("Failed to load " + tileSets[i] + ", " + ex.getMessage());
+            }
+        }
+        for(int i = 0; i < singleTilePaths.length; i++) {
+            try {
+                singleTileImages[i] = ImageIO.read(this.getClass().getResource(singleTilePaths[i]));
             } catch(IOException ex) {
                 System.err.println("Failed to load " + tileSets[i] + ", " + ex.getMessage());
             }
@@ -127,6 +169,10 @@ public class Tileset {
     
     public Image getTile(int tileSet, int tile, int width, int height) {
         return scaleImage(tiles[tileSet][tile], width, height);
+    }
+    
+    public Image getSingleTile(int tile, int width, int height) {
+        return scaleImage(singleTileImages[tile], width, height);
     }
     
     //Creates a new Image is a resized version of the given Image
