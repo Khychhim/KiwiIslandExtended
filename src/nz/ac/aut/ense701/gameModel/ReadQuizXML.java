@@ -80,7 +80,8 @@ public class ReadQuizXML {
             String quizQuestion;
             String[] answers;
             String correct;
-
+            String reward;
+            
             Node questionNode = questionList.item(i);
             Element questionElement = (Element) questionNode;
 
@@ -108,8 +109,13 @@ public class ReadQuizXML {
             Element correctElement = (Element) correctNode;
             correct = correctElement.getTextContent();
             
+            //get reward 
+            Node rewardNode = questionElement.getElementsByTagName("reward").item(0);
+            Element rewardElement = (Element) rewardNode;
+            reward = rewardElement.getTextContent();
+            
             //setQuestion
-            QuizQuestion question = new QuizQuestion(Integer.parseInt(difficulty), quizQuestion, answers, Integer.parseInt(correct));
+            QuizQuestion question = new QuizQuestion(Integer.parseInt(difficulty), quizQuestion, answers, Integer.parseInt(correct), reward);
             questionArrayList.add(question);
 
             //Debug - print all questions

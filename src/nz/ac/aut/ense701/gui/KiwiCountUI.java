@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -46,6 +47,7 @@ public class KiwiCountUI
     {
         assert game != null : "Make sure game object is created before UI";
         this.game = game;
+        tileset = new Tileset();
         setAsGameListener();
         initComponents();
         initIslandGrid();
@@ -173,7 +175,7 @@ public class KiwiCountUI
         }
         else if(game.getState() == GameState.QUIZ){
               this.setEnabled(false);
-              miniGameStart(this, game);
+              miniGameStart(this);
              game.setGameState(GameState.PLAYING);
               
         }
@@ -184,16 +186,17 @@ public class KiwiCountUI
        * set up mini game panel instance
        * @param game 
        */
-      private void miniGameStart(KiwiCountUI gui, Game game){
+      private void miniGameStart(KiwiCountUI gui){
                 //setup Mini game panel
-                MiniGameQuizPanel minigamePanel = new MiniGameQuizPanel(gui,game);                
+                MiniGameQuizPanel minigamePanel = new MiniGameQuizPanel(gui);                
                 //setup Frame
                 miniQuizFrame = new JFrame("Mini Game Quiz");
                 miniQuizFrame.add(minigamePanel);
                 miniQuizFrame.setSize(minigamePanel.getSize());
-                miniQuizFrame.setDefaultCloseOperation(0);
+                miniQuizFrame.setDefaultCloseOperation(0);                
                 miniQuizFrame.setVisible(true);
                 miniQuizFrame.pack();
+                miniQuizFrame.setLocationRelativeTo(null);
       }
     
      private void setAsGameListener()
@@ -216,7 +219,7 @@ public class KiwiCountUI
             // all components in the panel are GridSquarePanels,
             // so we can safely cast
             GridSquarePanel gsp = (GridSquarePanel) c;
-            gsp.update();
+            gsp.update(pnlIsland.getSize());
         }
         
         // update player information
@@ -794,6 +797,8 @@ public class KiwiCountUI
         // Add the grid
         int rows    = game.getViewSizeOfMap();
         int columns = game.getViewSizeOfMap();
+        System.out.println(rows);
+        System.out.println(columns);
         // set up the layout manager for the island grid panel
         pnlIsland.setLayout(new GridLayout(rows, columns));
         // create all the grid square panels and add them to the panel
@@ -817,7 +822,7 @@ public class KiwiCountUI
           {
                 for ( int col = game.getStartCol() ; col < game.getEndCol() ; col++ )
                 {
-                      gsp = new GridSquarePanel(game, row, col);
+                      gsp = new GridSquarePanel(game, row, col, tileset);
                       pnlIsland.add(gsp);
                 }
           }
@@ -847,6 +852,7 @@ public class KiwiCountUI
       // End of variables declaration//GEN-END:variables
 
       private GridSquarePanel gsp;
+      private Tileset tileset;
       public JFrame miniQuizFrame;
       public Game game;
 }

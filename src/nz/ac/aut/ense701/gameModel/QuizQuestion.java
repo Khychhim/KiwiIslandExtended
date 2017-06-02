@@ -12,18 +12,20 @@ public class QuizQuestion {
     private String questionOptions[];
     private int correctOptionIndex;
     private boolean complete;
-
+    private String reward;
+    
     //Score Value for different level of quiz
     public static final int VALUE_LEVEL1_QUIZ = 10;
     public static final int VALUE_LEVEL2_QUIZ = 20;
     public static final int VALUE_LEVEL3_QUIZ = 30;
 
-    public QuizQuestion(int difficulty, String question, String[] questionOptions, int correctOptionIndex) {
+    public QuizQuestion(int difficulty, String question, String[] questionOptions, int correctOptionIndex, String reward) {
         this.difficulty = difficulty;
         this.question = question;
         this.questionOptions = questionOptions;
         this.correctOptionIndex = correctOptionIndex;
         this.complete = false;
+        this.reward = reward;
     }
 
     public void setQuestion(String question) {
@@ -66,6 +68,20 @@ public class QuizQuestion {
         return this.complete;
     }
 
+      /**
+       * @return the reward
+       */
+      public String getReward() {
+            return reward;
+      }
+
+      /**
+       * @param reward the reward to set
+       */
+      public void setReward(String reward) {
+            this.reward = reward;
+      }
+    
     /**
      * get score point you can earn from this question
      * @return score

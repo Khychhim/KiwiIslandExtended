@@ -13,72 +13,108 @@ import java.util.Random;
 public class DifferentMap {
     private static final String MAP_FILE_NAME = "IslandData.txt";
     private static final String TEXT_FORMAT = "UTF-8";
-    private final int mapRows;
-    private final int mapCols;
+    //Difficulty : EASY
+    private final int MAP_SIZE_EASY = 10;
+    private final int NUMBER_PREDATOR_EASY = 3;
+    private final int MIN__HAZARD_EASY = 3;
+    private final int PREDATOR_MOVE_TIME_EASY = 60;
+    
+    //Difficulty: NORMAL
+    private final int MAP_SIZE_NORMAL_HARD = 15;
+    private final int NUMBER_PREDATOR_NORMAL = 5;
+    private final int MIN__HAZARD_NORMAL = 7;
+    private final int PREDATOR_MOVE_TIME_NORMAL = 40;
+
+    //Difficulty: HARD
+    private final int NUMBER_PREDATOR_HARD = 7;
+    private final int MIN__HAZARD_HARD = 10;
+    private final int PREDATOR_MOVE_TIME_HARD = 20;
+    
+    private int mapRows;
+    private int mapCols;
     private int playerRow;
     private int playerCol;
+    private int[][] mapGen;
     private final String playerName;
     private final MapDataTypes mapDataTypes;
+    private int predatorMoveTime;
+    private int MIN_HAZARDS;
+    private int NUM_PREDATORS;
     
+    private static final int NUM_TRIGGERS = 5;
     //Sets the minimum number of each type to be generated
     private static final int MIN_KIWIS = 5;
-    private static final int MIN_PREDATORS = 3;
-    private static final int MIN_FOOD = 3;
+    private static final int MIN_FOOD = 4;
     private static final int MIN_TOOLS = 1; //Min number of each tool
     private static final int MIN_FAUNA = 3;
-    private static final int MIN_HAZARDS = 5;
-    private static final int MIN_TRIGGERS = 3;
     //Sets the range of the random value to be added to each type
     private static final int RAND_KIWIS = 2;
-    private static final int RAND_PREDATORS = 3;
-    private static final int RAND_FOOD = 5;
+    private static final int RAND_FOOD = 4;
     private static final int RAND_TOOLS = 3; //Up to an addional X of each tool
     private static final int RAND_FAUNA = 3;
-    private static final int RAND_HAZARDS = 4;
-    private static final int RAND_TRIGGERS = 2;
+    private static final int RAND_HAZARDS = 2;
     //Minimum distances between spawns
     private static final int PRED_MIN_DIST = 3; //Min Distance between predator and kiwi
     private static final int HAZARD_MIN_DIST = 1; //Min Distance between other hazards
+    //Chance for generated tile to be the same as adjacent tile (1-10)
+    private static final int RE_GEN = 5;
+    private final GameDifficulty gameDifficulty;
     
     //For testing map Generation
     public static void main(String args[]) {
-        DifferentMap test = new DifferentMap(20, 20, "Cheese");
-        test.generateMap();
+//        DifferentMap test = new DifferentMap(GameDifficulty.EASY);
+//        test.generateMap();
     }     
     
-    public DifferentMap(int mapRows, int mapCols, String playerName) {
-        this.mapRows = mapRows;
-        this.mapCols = mapCols;
+    public DifferentMap(GameDifficulty difficulty, String playerName) {
         this.playerName = playerName;
+        gameDifficulty = difficulty;
         mapDataTypes = new MapDataTypes();
         mapDataTypes.loadTypesFromFile();
     }
     
     public void generateMap() {
+        //setup map difficulty
+        generateDifficulty();
+        mapGen = new int[mapRows][mapCols];
+        
         PrintWriter pw = CreateFile();
         Random rand = new Random();
         //Setup Maps rows and columns
-        pw.println(mapRows + ", " + mapCols + ",");
+        pw.println(getMapRows() + ", " + getMapCols() + ",");
         //Setup the maps Tiles
-        for(int r = 0; r < mapRows; r++) {
+        for(int r = 0; r < getMapRows(); r++) {
             String row = "";
             for(int c = 0; c < mapCols; c++) {
-                int tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
+                int tileToAdd;
+                if(r > 1 && c > 1) {
+                    if(rand.nextInt(10)+1 < RE_GEN) tileToAdd = mapGen[r-1][c];
+                    else if(rand.nextInt(10)+1 < RE_GEN) tileToAdd = mapGen[r][c-1];
+                    else tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
+                } else if(r > 1) {
+                    if(rand.nextInt(10)+1 < RE_GEN) tileToAdd = mapGen[r-1][c];
+                    else tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
+                } else if(c > 1) {
+                    if(rand.nextInt(10)+1 < RE_GEN) tileToAdd = mapGen[r][c-1];
+                    else tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
+                } else tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
+                mapGen[r][c] = tileToAdd;
                 row += mapDataTypes.tileTypes.get(tileToAdd);
             }
             row += ",";
             pw.println(row);
         }
         //Setup player stats
-        playerRow = rand.nextInt(mapRows);
-        playerCol = rand.nextInt(mapCols);
+        playerRow = rand.nextInt(getMapRows());
+        playerCol = rand.nextInt(getMapCols());
         //Sets up the player with 100 max stamina, 10 max backpack weight and 5 max backpack size
         pw.println(playerName + ", " + playerRow + ", " + playerCol + ", "
                 + " 100.0, 10.0, 5.0,");
+        
         //Sets up the number of each occupant and the total occupants
         int totalOccupants = 0;
         int numberKiwis = rand.nextInt(RAND_KIWIS) + MIN_KIWIS + 1;
-        int numberPredators = rand.nextInt(RAND_PREDATORS) + MIN_PREDATORS + 1;
+        int numberPredators = NUM_PREDATORS;
         int numberFood = rand.nextInt(RAND_FOOD) + MIN_FOOD + 1;
         int[] numberTools = new int[mapDataTypes.toolTypes.size()];
         for(int i = 0; i < mapDataTypes.toolTypes.size(); i++) {
@@ -87,11 +123,11 @@ public class DifferentMap {
         }
         int numberFauna = rand.nextInt(RAND_FAUNA) + MIN_FAUNA + 1;
         int numberHazards = rand.nextInt(RAND_HAZARDS) + MIN_HAZARDS + 1;
-        int numberTriggers = rand.nextInt(RAND_TRIGGERS) + MIN_TRIGGERS + 1;
+        int numberTriggers = NUM_TRIGGERS;
         totalOccupants += numberKiwis + numberPredators + numberFood + numberFauna + numberHazards + numberTriggers;
         pw.println(totalOccupants + ",");
         //Create a temporary map representation to track occupant positions and counts for viability
-        String[][] tempMap = new String[mapRows][mapCols];
+        String[][] tempMap = new String[getMapRows()][getMapCols()];
         //Generate the occupants any predators that cannot be generated will be replaced with extra food
         generateTools(pw, numberTools, tempMap);
         generateFauna(pw, numberFauna, tempMap);
@@ -104,12 +140,40 @@ public class DifferentMap {
         pw.close();
     }
     
+    private void generateDifficulty(){
+          switch(gameDifficulty){
+                case EASY:
+                      mapRows = MAP_SIZE_EASY;
+                      mapCols = MAP_SIZE_EASY;
+                      NUM_PREDATORS = NUMBER_PREDATOR_EASY;
+                      MIN_HAZARDS = MIN__HAZARD_EASY;
+                      this.predatorMoveTime = this.PREDATOR_MOVE_TIME_EASY;                      
+                break;
+                
+                case NORMAL:
+                      mapRows = MAP_SIZE_NORMAL_HARD;
+                      mapCols = MAP_SIZE_NORMAL_HARD;
+                      NUM_PREDATORS = NUMBER_PREDATOR_NORMAL;
+                      MIN_HAZARDS = MIN__HAZARD_NORMAL;
+                      this.predatorMoveTime = this.PREDATOR_MOVE_TIME_NORMAL;       
+                break;
+                
+                case HARD:
+                      mapRows = MAP_SIZE_NORMAL_HARD;
+                      mapCols = MAP_SIZE_NORMAL_HARD;
+                      NUM_PREDATORS = NUMBER_PREDATOR_HARD;
+                      MIN_HAZARDS = MIN__HAZARD_HARD;
+                      this.predatorMoveTime = this.PREDATOR_MOVE_TIME_HARD;       
+                break;
+          }
+    }
+    
     private void generateTriggers(PrintWriter pw, int numberOfTriggers, String[][] tempMap) {
         int generatedCount = 0;
         Random rand = new Random();
         while(generatedCount < numberOfTriggers) {
-            int row = rand.nextInt(mapRows);
-            int col = rand.nextInt(mapCols);
+            int row = rand.nextInt(getMapRows());
+            int col = rand.nextInt(getMapCols());
             int randomTrigger = rand.nextInt(mapDataTypes.triggerTypes.size());
             Trigger trigger = mapDataTypes.triggerTypes.get(randomTrigger);
             //Dont spawn a trigger in grid square more than 3, the hazard or player position
@@ -127,8 +191,8 @@ public class DifferentMap {
         int generatedCount = 0;
         Random rand = new Random();
         while(generatedCount < numberOfFood) {
-            int row = rand.nextInt(mapRows);
-            int col = rand.nextInt(mapCols);
+            int row = rand.nextInt(getMapRows());
+            int col = rand.nextInt(getMapCols());
             int randomFood = rand.nextInt(mapDataTypes.foodTypes.size());
             Food food = mapDataTypes.foodTypes.get(randomFood);
             if(tempMap[row][col] == null || tempMap[row][col].length() < 3) {
@@ -146,8 +210,8 @@ public class DifferentMap {
         int generatedCount = 0;
         Random rand = new Random();
         while(generatedCount < numberOfFauna) {
-            int row = rand.nextInt(mapRows);
-            int col = rand.nextInt(mapCols);
+            int row = rand.nextInt(getMapRows());
+            int col = rand.nextInt(getMapCols());
             int randomFauna = rand.nextInt(mapDataTypes.faunaTypes.size());
             Fauna fauna = mapDataTypes.faunaTypes.get(randomFauna);
             if(tempMap[row][col] == null || tempMap[row][col].length() < 3) {
@@ -164,15 +228,15 @@ public class DifferentMap {
         int generatedCount = 0;
         Random rand = new Random();
         while(generatedCount < numberOfHazards) {
-            int row = rand.nextInt(mapRows);
-            int col = rand.nextInt(mapCols);
+            int row = rand.nextInt(getMapRows());
+            int col = rand.nextInt(getMapCols());
             int randomHazard = rand.nextInt(mapDataTypes.hazardTypes.size());
             Hazard hazard = mapDataTypes.hazardTypes.get(randomHazard);
             //Dont spawn a predator within PRED_MIN_DIST spaces of a kiwi
             boolean validSpawn = true;
             for(int x = -HAZARD_MIN_DIST; x < HAZARD_MIN_DIST; x++) {
                 for(int y = -HAZARD_MIN_DIST; y < HAZARD_MIN_DIST; y++) {
-                    if(col+x > 0 && col+x < mapCols && row+y > 0 && row+y < mapRows) {
+                    if(col+x > 0 && col+x < getMapCols() && row+y > 0 && row+y < getMapRows()) {
                         if(tempMap[row+y][col+x] != null && tempMap[row+y][col+x].contains("H")) {
                             validSpawn = false;
                         }
@@ -195,15 +259,15 @@ public class DifferentMap {
         int failedSpawns = 0;
         Random rand = new Random();
         while(generatedCount < numberOfPredators) {
-            int row = rand.nextInt(mapRows);
-            int col = rand.nextInt(mapCols);
+            int row = rand.nextInt(getMapRows());
+            int col = rand.nextInt(getMapCols());
             int randomPredator = rand.nextInt(mapDataTypes.predatorTypes.size());
             Predator predator = mapDataTypes.predatorTypes.get(randomPredator);
             //Dont spawn a predator within PRED_MIN_DIST spaces of a kiwi
             boolean validSpawn = true;
             for(int x = -PRED_MIN_DIST; x < PRED_MIN_DIST; x++) {
                 for(int y = -PRED_MIN_DIST; y < PRED_MIN_DIST; y++) {
-                    if(col+x > 0 && col+x < mapCols && row+y > 0 && row+y < mapRows) {
+                    if(col+x > 0 && col+x < getMapCols() && row+y > 0 && row+y < getMapRows()) {
                         if(tempMap[row+y][col+x] != null && tempMap[row+y][col+x].contains("K")) {
                             validSpawn = false;
                         }
@@ -234,8 +298,8 @@ public class DifferentMap {
         int generatedCount = 0;
         Random rand = new Random();
         while(generatedCount < numberOfKiwis) {
-            int row = rand.nextInt(mapRows);
-            int col = rand.nextInt(mapCols);
+            int row = rand.nextInt(getMapRows());
+            int col = rand.nextInt(getMapCols());
             int randomKiwi = rand.nextInt(mapDataTypes.kiwiTypes.size());
             Kiwi kiwi = mapDataTypes.kiwiTypes.get(randomKiwi);
             if(tempMap[row][col] == null || 
@@ -254,8 +318,8 @@ public class DifferentMap {
             int generatedCount = 0;
             Random rand = new Random();
             while(generatedCount < numberOfTools[i]) {
-                int row = rand.nextInt(mapRows);
-                int col = rand.nextInt(mapCols);
+                int row = rand.nextInt(getMapRows());
+                int col = rand.nextInt(getMapCols());
                 Tool tool = mapDataTypes.toolTypes.get(i);
                 if(tempMap[row][col] == null || tempMap[row][col].length() < 3) {
                     if(tempMap[row][col] == null) tempMap[row][col] = "T";
@@ -282,5 +346,31 @@ public class DifferentMap {
         return pw;
     }
     
-    
+      /**
+       * @return the mapRows
+       */
+      public int getMapRows() {
+            return mapRows;
+      }
+
+      /**
+       * @return the mapCols
+       */
+      public int getMapCols() {
+            return mapCols;
+      }
+      
+      /**
+       * @return the predatorMoveTime
+       */
+      public int getPredatorMoveTime() {
+            return predatorMoveTime;
+      }
+
+      /**
+       * @param predatorMoveTime the predatorMoveTime to set
+       */
+      public void setPredatorMoveTime(int predatorMoveTime) {
+            this.predatorMoveTime = predatorMoveTime;
+      }
 }

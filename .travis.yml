@@ -4,6 +4,8 @@ script: mvn verify
 notifications:
   email:
     recipients:
+
       - jqj8595@autuni.ac.nz
+
     on_success: never # default: change
     on_failure: always # default: always

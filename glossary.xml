@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><Glossary>
-	<Creature Seen="true" id="1">
+	<Creature Seen="false" id="1">
 		<Name>Kiore</Name>
 		<Description>Kiore are predators of rare weta, snails, frogs, lizards, tuatara, birds and bats, as well as other insects and the flowers, fruits and seeds of plants. 
 
 Kiore is the Māori name for a species of rat (Rattus exulans). Kiore are unique because of their association with the migration of Polynesians throughout the Pacific, and their cultural and spiritual values to some iwi Māori.
 Recognising that iwi Māori sometimes have a cultural interest in kiore, as well as the ecological health and well-being of plants, forests and wildlife, DOC consults before starting eradication programmes.</Description>
 	</Creature>
-	<Creature Seen="true" id="4">
+	<Creature Seen="false" id="4">
 		<Name>Stoat</Name>
 		<Description>It was introduced to New Zealand in the 1880s to control rabbits and hares but is now a fierce predator of our native species.  
 
@@ -29,7 +29,7 @@ The damage to native forests is clear. Possums ignore old leaves and select the 
 The possum has a thick, bushy tail, a pointed snout and long, fox-like tapering ears.
 Size and weight of possums varies greatly across New Zealand. Adult possums are typically 65 to 95 cm long and weigh 1.4 to 6.4 kg.</Description>
 	</Creature>
-	<Creature Seen="true" id="0">
+	<Creature Seen="false" id="0">
 		<Name>Cat</Name>
 		<Description>WUncontrolled, wild or abandoned cats are a threat and kill kiwi chicks. Tests with radio collars on pet cats have shown their ability to wander up to 20 kilometres from home. 
 
@@ -44,7 +44,7 @@ The Norway rat is different from the ship rat in that the tail, which is about 1
 
 Methods used to eradicate rodents from offshore islands include trapping, 1080 and talon-type baits. Recent advances, including the development of more effective anticoagulant poisons and new application methods, mean it is now possible to consider rodent eradication operations on larger islands. </Description>
 	</Creature>
-	<Creature Seen="true" id="5">
+	<Creature Seen="false" id="5">
 		<Name>Brown Kiwi</Name>
 		<Description>The brown kiwi is one of our most common kiwi species; however, the population is steadly declining by about 2–3% a year. Without ongoing support, experts estimate brown kiwi will be extinct in the wild within two generations.
 
@@ -54,13 +54,13 @@ This proximity of people to kiwi has created its own risks to birds through incr
 
 The brown kiwi is faster at breeding than other kiwi, producing up to two eggs a clutch, and one to two clutches a year, as opposed to the more usual one egg per year in other kiwi species. </Description>
 	</Creature>
-	<Creature Seen="true" id="6">
+	<Creature Seen="false" id="6">
 		<Name>Little Spotted Kiwi</Name>
 		<Description>The little spotted kiwi is the only species to become extinct on the mainland. The population strong-hold of 1,400 birds is on Kapiti Island, to where a small number were translocated in the early 20th century. Through more recent successful translocations, little spotted kiwi are also now found on several other predator-free offshore islands and in the Zealandia Sanctuary, Wellington.
 
 Adventurous and raring to go, little spotted kiwi chicks leave home to feed themselves when just 5-7 days old. However, the male parent does stay near the young chick and both return to the nest burrow to sleep for up to 60 days after hatching.</Description>
 	</Creature>
-	<Creature Seen="true" id="7">
+	<Creature Seen="false" id="7">
 		<Name>Fernbird</Name>
 		<Description>Fernbirds inhabit wetlands throughout New Zealand, but are rarely seen because of their secretive behaviour and excellent camouflage. More often heard than seen, fernbirds are skulking sparrow-sized birds that on the three main islands are found mainly in dense, low wetland vegetation. 
 
@@ -68,7 +68,7 @@ Fernbirds have declined significantly since humans began draining wetlands and a
 
 Fernbirds are small (18 cm, 35 g), long-tailed songbirds that are predominantly streaked brown above and pale below. The mainland subspecies have a chestnut cap and a prominent pale superciliary stripe. The loosely-barbed plain brown tail feathers have a distinctive tattered appearance. </Description>
 	</Creature>
-	<Creature Seen="true" id="8">
+	<Creature Seen="false" id="8">
 		<Name>Oyster Catcher</Name>
 		<Description>Variable oystercatcher occur around most of the coastline of New Zealand, and breed most commonly on sandy beaches, sandspits and in dunes.
 They are very vocal; loud piping is used in territorial interactions and when alarmed. Chicks are warned of danger with a sharp, loud ‘chip’ or ‘click’.
@@ -78,7 +78,7 @@ Variable oystercatchers eat a wide range of coastal invertebrates, including mol
 They breed in monogamous pairs and defend territories vigorously against neighbours. Nests are normally simple scrapes in the sand and the 2–3 eggs are laid from October onwards. Incubation is shared and takes about 28 days.
 The chicks fly at 6–7 weeks old and late chicks may not fledge until March. Chicks are vigorously protected by both parents, often well after fledging. Adults show high fidelity to their mate and the site.</Description>
 	</Creature>
-	<Creature Seen="true" id="9">
+	<Creature Seen="false" id="9">
 		<Name>Heron</Name>
 		<Description>The white heron has always been rare in New Zealand and it has gained almost mythical status. 
 
@@ -88,7 +88,7 @@ During the breeding season time, the birds feed in the large coastal lagoons in 
 After breeding, the birds disperse widely and may be seen at coastal freshwater wetlands or estuaries throughout the country.
 During breeding seasons, they grow long, loose breeding plumes from its back and wings. The normally yellow bill turns dull black, and the facial skin between the eye and bill brightens to a bluish-green.</Description>
 	</Creature>
-	<Creature Seen="true" id="10">
+	<Creature Seen="false" id="10">
 		<Name>Tui</Name>
 		<Description>Tūī are common throughout New Zealand in forests, towns and on off-shore islands. They are found in native forests, bush reserves and bush remnants.
 They are adaptable birds, and can also be found in suburban areas, particularly in winter if there is a flowering gum about.
@@ -99,7 +99,7 @@ For Tui's breeding courting takes place between September and October when they 
 Display dives, where the bird will fly up in a sweeping arch and then dive at speed almost vertically, are also associated with breeding.
 Only females build nests, which are constructed from twigs, fine grasses and moss.</Description>
 	</Creature>
-	<Creature Seen="true" id="11">
+	<Creature Seen="false" id="11">
 		<Name>Robin</Name>
 		<Description>The black robin is a small songbird with completely black plumage.They are about 10 cm high, have a short black bill, long thin dark legs and an upright stance. The sexes are alike, although the female is slightly smaller. Females usually lay two eggs, and often re-lay if a clutch is lost.
 This little black bird is only found on the Chatham Islands. They currently live on Rangatira (South East) Island and Mangere Island in the Chatham Islands group.

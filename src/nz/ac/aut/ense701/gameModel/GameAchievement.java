@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -34,6 +35,7 @@ import org.xml.sax.SAXException;
  */
 
 public class GameAchievement {
+
     public Element Achievement;
     public boolean won3gamesinrow;
     public boolean walked;
@@ -41,8 +43,9 @@ public class GameAchievement {
     public boolean walkingGUI;
     public boolean savedGUI;
     public boolean wonGUI;
-    public int amount_of_kiwiSaved = 1;
-    public int amount_of_steps = 10;
+    public static int amount_of_kiwiSaved = 1;
+    public static int amount_of_steps = 10;
+    public static int amount_of_games_won = 3;
     
     //Empty constructor.
     public GameAchievement(){
@@ -242,6 +245,9 @@ public class GameAchievement {
             TransformerFactory transformerFactory = 
                     TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             DOMSource source = new DOMSource(doc);
             StreamResult result = 
                     new StreamResult(new File("Achievements.xml"));
@@ -277,6 +283,9 @@ public class GameAchievement {
             TransformerFactory transformerFactory = 
                     TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             DOMSource source = new DOMSource(doc);
             StreamResult result = 
                     new StreamResult(new File("Achievements.xml"));
@@ -309,6 +318,9 @@ public class GameAchievement {
             TransformerFactory transformerFactory = 
                     TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             DOMSource source = new DOMSource(doc);
             StreamResult result = 
                     new StreamResult(new File("Achievements.xml"));

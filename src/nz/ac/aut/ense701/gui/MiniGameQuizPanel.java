@@ -23,14 +23,15 @@ public final class MiniGameQuizPanel extends javax.swing.JPanel {
     public JFrame resultFrame;
     public int score = 0;
     public KiwiCountUI gui;
+    String reward;
     /**
      * Creates new form MiniGamePanel
        * @param gui KiwiCountUI object to use
-       * @param game game object to use
+       * 
      */
-    public MiniGameQuizPanel(KiwiCountUI gui, Game game) {
+    public MiniGameQuizPanel(KiwiCountUI gui) {
         initComponents();
-        this.game = game;
+        this.game = gui.game;
         this.gui = gui;
         //select a random question
         currentQuestion = pickRandomQuestion();
@@ -38,6 +39,7 @@ public final class MiniGameQuizPanel extends javax.swing.JPanel {
         setQuestionLabel(currentQuestion.getQuestion());
         //set up radio buttons
         setUpRadioButtons(currentQuestion);
+        reward = "none";
     }
 
     public boolean isOptionCorrectAnswer() {
@@ -100,6 +102,7 @@ public final class MiniGameQuizPanel extends javax.swing.JPanel {
     }
 
     public void launchResult() {
+        gui.miniQuizFrame.dispose();
         //setup Mini game panel
         NotificationPanel notificationPanel = new NotificationPanel(this, gui);
 
@@ -110,7 +113,7 @@ public final class MiniGameQuizPanel extends javax.swing.JPanel {
         resultFrame.setVisible(true);
         resultFrame.pack();
         resultFrame.setDefaultCloseOperation(0);
-        
+        resultFrame.setLocationRelativeTo(null);
         notificationPanel.displayToPanel();
     }
 
@@ -240,9 +243,13 @@ public final class MiniGameQuizPanel extends javax.swing.JPanel {
         //set question is complete and add score
         if (isOptionCorrectAnswer()) {
             game.quizQuestionList.get(currentQuestionIndex).setComplete(true);
-            //add Score
+            
+            // get current reward
+            reward = game.quizQuestionList.get(currentQuestionIndex).getReward();            
+            // get score
             this.score = currentQuestion.getPointGain();
-            game.score.addScore(this.score);
+            //set reward for game
+            game.setReward(reward, score);
         }
         launchResult();
     }//GEN-LAST:event_jButtonEnterActionPerformed

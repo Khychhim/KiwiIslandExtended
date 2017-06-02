@@ -2,14 +2,17 @@
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
+
+
 --><Count>
     <Player1>
         <name>player1</name>
-        <savedKiwis>0</savedKiwis>
+        <savedKiwis>1</savedKiwis>
         <gamesWon>0</gamesWon>
-        <squares>3557</squares>
+        <squares>324</squares>
         <game3won>f</game3won>
         <traveller>t</traveller>
         <hero>t</hero>
     </Player1>
+
 </Count>
