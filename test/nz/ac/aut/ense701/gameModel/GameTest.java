@@ -24,7 +24,6 @@ public class GameTest extends junit.framework.TestCase
     Player     player;
     Position   playerPosition;
     Island island ;
-    
     /**
      * Default constructor for test class GameTest
      */
@@ -40,11 +39,10 @@ public class GameTest extends junit.framework.TestCase
     @Override
     protected void setUp()
     {
- 
             // Create a new game from the data file.
             // Player is in position 2,0 & has 100 units of stamina
-        game           = new Game();
-    
+        game           = new Game(GameDifficulty.EASY);
+        
         playerPosition = game.getPlayer().getPosition();
         player         = game.getPlayer();
         island = game.getIsland();
@@ -63,41 +61,6 @@ public class GameTest extends junit.framework.TestCase
         playerPosition = null;
     }
 
-    /*********************************************************************************************************
-     * Game under test
-      
----------------------------------------------------
-|    |    |@   | F  | T  |    |    | PK |    |    |
-|~~~~|~~~~|....|....|....|~~~~|^^^^|^^^^|^^^^|^^^^|
----------------------------------------------------
-|    |    |    |    | H  |    |    |    |    |    |
-|~~~~|####|^^^^|^^^^|^^^^|^^^^|^^^^|^^^^|^^^^|^^^^|
----------------------------------------------------
-|    |    | H  |    | E  |    | P  |    | K  |    |
-|####|####|####|####|^^^^|^^^^|^^^^|^^^^|^^^^|~~~~|
----------------------------------------------------
-| T  |    |    |    | P  | H  |    |    |    |    |
-|....|####|####|####|****|****|^^^^|....|~~~~|~~~~|
----------------------------------------------------
-| F  | P  |    |    |    |    | F  |    |    |    |
-|....|^^^^|^^^^|^^^^|****|****|^^^^|....|~~~~|~~~~|
----------------------------------------------------
-| H  |    | P  | T  | E  |    |    |    |    |    |
-|....|****|****|****|****|****|####|####|####|~~~~|
----------------------------------------------------
-|    |    | K  |    | P  | H  | K  | E  | F  |    |
-|....|****|****|****|****|****|****|####|####|####|
----------------------------------------------------
-| K  |    |    | F  | H  |    | H  | K  | T  |    |
-|****|****|****|****|****|~~~~|****|****|~~~~|~~~~|
----------------------------------------------------
-|    |    | E  | K  |    |    |    |    | F  |    |
-|....|....|****|****|~~~~|~~~~|~~~~|****|****|....|
----------------------------------------------------
-|    |    |    | K  | K  |    | K  | P  |    |    |
-|~~~~|....|****|****|****|~~~~|****|****|****|....|
----------------------------------------------------
- *********************************************************************************************************/
     /**
      * Tests for Accessor methods of Game, excluding those which are wrappers for accessors in other classes.
      * Other class accessors are tested in their test classes.
@@ -142,7 +105,6 @@ public class GameTest extends junit.framework.TestCase
           assertTrue(direction instanceof MoveDirection);         
     }
     
-    
     @Test
     public void countreset(){
         int zero =0;
@@ -186,13 +148,34 @@ public class GameTest extends junit.framework.TestCase
     }
     
     @Test
-    public void testMovePredatorRandomly(){
-          //one of the position which predator is on previously
-          Position position = new Position(island, 6,4);
-            //method to move predator out of the current position
-          game.movePredators();
-          //check if predator is still on that same position
-          assertFalse("Predator should not be in this position", island.hasPredator(position));
+    public void testEasyDifficultyEnvironment(){
+          if(game.getGameDifficulty() == GameDifficulty.EASY){
+                assertEquals(game.MAP_SIZE,10);
+                assertEquals(game.getPlayer().getCurrentBackpackSize(), 0.0);
+                assertEquals(game.getPlayer().getCurrentBackpackWeight(), 0.0);
+                assertEquals(game.getPlayer().getStaminaLevel(), 100.0);
+                assertEquals(game.getPredatorsRemaining(), 3);
+          }
+    }    
+        
+    @Test
+    public void testNormalDifficultyEnvironment(){
+            game = new Game(GameDifficulty.NORMAL);
+            assertEquals(game.MAP_SIZE,15);
+            assertEquals(game.getPlayer().getCurrentBackpackSize(), 0.0);
+            assertEquals(game.getPlayer().getCurrentBackpackWeight(), 2.0);
+            assertEquals(game.getPlayer().getStaminaLevel(), 80.0);  
+            assertEquals(game.getPredatorsRemaining(), 5);
+    }
+    
+    @Test
+    public void testHardDifficultyEnvironment(){
+            game = new Game(GameDifficulty.HARD);
+            assertEquals(game.MAP_SIZE,15);
+            assertEquals(game.getPlayer().getCurrentBackpackSize(), 1.0);
+            assertEquals(game.getPlayer().getCurrentBackpackWeight(), 4.0);
+            assertEquals(game.getPlayer().getStaminaLevel(), 50.0); 
+            assertEquals(game.getPredatorsRemaining(), 7);
     }
     
     @Test
@@ -217,6 +200,7 @@ public class GameTest extends junit.framework.TestCase
     
     @Test
     public void testPredatorMoveToKiwi(){
+          
           Position positionPredator = new Position(island, 0,2);
           Position positionKiwi = new Position(island,0,0);
           Predator predator;
@@ -232,10 +216,10 @@ public class GameTest extends junit.framework.TestCase
                 kiwi = new Kiwi(positionKiwi,"Kiwi","Cute");
                 island.addOccupant(positionKiwi, kiwi);
           }
-          Predator newPredator = game.predatorMoveToKiwi(predator);
-          newPredator.setcoloumnAwayFromKiwi(-1);
-          game.predatorMoveToKiwi(newPredator);
-          assertTrue("Predator should be in this position",island.hasPredator(positionKiwi));
+          
+          game.predatorMoveToKiwi(predator);
+          
+          assertFalse("Predator should not be in this position",island.hasPredator(positionPredator));
     }
     
         @Test
@@ -449,7 +433,9 @@ public class GameTest extends junit.framework.TestCase
         
         // Can only use trap if there is a predator.
         Predator predator = new Predator(playerPosition,"Rat", "Norway rat");
-        island.addOccupant(playerPosition, predator);
+        if(!island.hasPredator(playerPosition)){
+              island.addOccupant(playerPosition, predator);
+        }
         game.useItem(trap);
         assertTrue("Player should still have trap",player.hasItem(trap));
         assertFalse("Predator should be gone.", island.hasPredator(playerPosition));
@@ -511,55 +497,15 @@ public class GameTest extends junit.framework.TestCase
     @Test
     public void testCountKiwi()
     {
-          Position pos = game.player.getPosition();
-        Occupant kiwi = new Kiwi(pos, "Kiwi","Kiwi");
-        island.addOccupant(pos, kiwi);
-
+        Island testIsland = new Island(2,1);
+        Position playerPosition = new Position(testIsland,0,0);        
+        Occupant kiwi = new Kiwi(playerPosition, "Kiwi","Kiwi");
+        testIsland.addOccupant(playerPosition, kiwi);
+        //set test Island , player position 
+        game.setIsland(testIsland);
+        game.getPlayer().setPosition(playerPosition);
+ 
         game.countKiwi();
         assertEquals("Wrong count", game.getKiwiCount(), 1);
-    }
-    
-    private boolean playerMoveNorth(int numberOfMoves)
-    {
-        boolean success = false;
-        for (int i = 0; i < numberOfMoves; i++) {
-            success = game.playerMove(MoveDirection.NORTH);
-            if(!success)break;
-            
-        }
-        return success;
-    }
-    
-    private boolean playerMoveSouth(int numberOfMoves)
-    {
-        boolean success = false;
-        for (int i = 0; i < numberOfMoves; i++) {
-            success = game.playerMove(MoveDirection.SOUTH);
-            if(!success)break;
-            
-        }
-        return success;
-    }
-    
-    private boolean playerMoveEast(int numberOfMoves)
-    {
-        boolean success = false;
-        for (int i = 0; i < numberOfMoves; i++) {
-            success = game.playerMove(MoveDirection.EAST);
-            if(!success)break;
-            
-        }
-        return success;
-    }
-    
-    private boolean playerMoveWest(int numberOfMoves)
-    {
-        boolean success = false;
-        for (int i = 0; i < numberOfMoves; i++) {
-            success = game.playerMove(MoveDirection.WEST);
-            if(!success)break;
-            
-        }
-        return success;
     }
 }
