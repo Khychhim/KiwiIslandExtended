@@ -106,33 +106,36 @@ public class GridSquarePanel extends javax.swing.JLayeredPane
                                    imWidth*numOccupants, imHeight,
                                    BufferedImage.TYPE_INT_ARGB);
             Graphics2D g = (Graphics2D) image.getGraphics();
-            if(occupants.contains("F")) {
-                g.drawImage(tileset.getSingleTile(Tileset.FAUNA, imWidth, imHeight), x, y, null);
-                x += imWidth;
-            }
-            if(occupants.contains("E")) {
-                g.drawImage(tileset.getSingleTile(Tileset.FOOD, imWidth, imHeight), x, y, null);
-                x += imWidth;
-            }
-            if(occupants.contains("P")) {
-                g.drawImage(tileset.getSingleTile(Tileset.PREDATOR, imWidth, imHeight), x, y, null);
-                x += imWidth;
-            }
-            if(occupants.contains("T")) {
-                g.drawImage(tileset.getSingleTile(Tileset.TOOL, imWidth, imHeight), x, y, null);
-                x += imWidth;
-            }
-            if(occupants.contains("K")) {
-                g.drawImage(tileset.getSingleTile(Tileset.KIWI, imWidth, imHeight), x, y, null);
-                x += imWidth;
-            }
-            if(occupants.contains("H")) {
-                g.drawImage(tileset.getSingleTile(Tileset.HAZARD, imWidth, imHeight), x, y, null);
-                x += imWidth;
-            }
-            if(occupants.contains("Q")) {
-                g.drawImage(tileset.getSingleTile(Tileset.TRIGGER, imWidth, imHeight), x, y, null);
-                x += imWidth;
+            for(int i = 0; i < occupants.length(); i++) {
+                char c = occupants.charAt(i);
+                if(c == 'F') {
+                    g.drawImage(tileset.getSingleTile(Tileset.FAUNA, imWidth, imHeight), x, y, null);
+                    x += imWidth;
+                }
+                if(c == 'E') {
+                    g.drawImage(tileset.getSingleTile(Tileset.FOOD, imWidth, imHeight), x, y, null);
+                    x += imWidth;
+                }
+                if(c == 'P') {
+                    g.drawImage(tileset.getSingleTile(Tileset.PREDATOR, imWidth, imHeight), x, y, null);
+                    x += imWidth;
+                }
+                if(c == 'T') {
+                    g.drawImage(tileset.getSingleTile(Tileset.TOOL, imWidth, imHeight), x, y, null);
+                    x += imWidth;
+                }
+                if(c == 'K') {
+                    g.drawImage(tileset.getSingleTile(Tileset.KIWI, imWidth, imHeight), x, y, null);
+                    x += imWidth;
+                }
+                if(c == 'H') {
+                    g.drawImage(tileset.getSingleTile(Tileset.HAZARD, imWidth, imHeight), x, y, null);
+                    x += imWidth;
+                }
+                if(c == 'Q') {
+                    g.drawImage(tileset.getSingleTile(Tileset.TRIGGER, imWidth, imHeight), x, y, null);
+                    x += imWidth;
+                }
             }
             return image;
         }
