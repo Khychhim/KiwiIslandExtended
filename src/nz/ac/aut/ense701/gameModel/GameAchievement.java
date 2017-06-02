@@ -43,8 +43,8 @@ public class GameAchievement {
     public boolean walkingGUI;
     public boolean savedGUI;
     public boolean wonGUI;
-    public static int amount_of_kiwiSaved = 1;
-    public static int amount_of_steps = 10;
+    public static int amount_of_kiwiSaved = 3;
+    public static int amount_of_steps = 1000;
     public static int amount_of_games_won = 3;
     
     //Empty constructor.
