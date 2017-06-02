@@ -68,4 +68,3 @@ E,Muesli Bar,A juicy and nutricious muesli bar, 12, 8, 1.0, 1.0, 50.0,
 E,Muesli Bar,A juicy and nutricious muesli bar, 5, 8, 1.0, 1.0, 50.0,
 E,Sandwich,A nice and healthy sandwich, 13, 9, 2.0, 1.0, 50.0,
 E,Orange Juice,A bottle of juice, 12, 12, 2.0, 3.0, 50.0,
-
