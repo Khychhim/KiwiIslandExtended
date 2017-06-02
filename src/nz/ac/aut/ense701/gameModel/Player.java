@@ -23,7 +23,7 @@ public class Player
     private Set<Item> backpack;
     private final double    maxBackpackWeight;
     private final double    maxBackpackSize;   
-    
+    private GameDifficulty gameDifficulty;
     /**
      * Constructs a new player object.
      * 
@@ -33,7 +33,7 @@ public class Player
      * @param maxBackpackWeight the most weight that can be in a backpack
      * @param maxBackpackSize the maximum size items that will fit in the backpack     
      */    
-    public Player(Position position, String name, double maxStamina,
+    public Player(Position position, String name, double maxStamina, 
                   double maxBackpackWeight, double maxBackpackSize)
     {
        this.position          = position;
@@ -92,7 +92,14 @@ public class Player
      */
     public double getStaminaLevel()
     {
-       return this.stamina;
+          if(gameDifficulty == GameDifficulty.NORMAL){
+                return stamina * 0.8;
+          }
+          else if(gameDifficulty == GameDifficulty.HARD){
+                return stamina * 0.5;
+          }
+          
+          return this.stamina;
     }
 
 
@@ -132,6 +139,11 @@ public class Player
      */
     public double getCurrentBackpackSize(){
         double totalSize = 0.0;
+        
+        if(gameDifficulty == GameDifficulty.HARD){
+              totalSize = 1.0;
+        }
+        
         for ( Item item : backpack ) 
         {
             totalSize += item.getSize();
@@ -148,7 +160,6 @@ public class Player
     {
         return maxBackpackSize;
     }
-
     
     /**
      * Get current weight of backpack.
@@ -158,6 +169,13 @@ public class Player
     public double getCurrentBackpackWeight()
     {
         double totalWeight = 0.0;
+        
+        if(gameDifficulty == GameDifficulty.HARD){
+              totalWeight = 4.0;
+        }else if(gameDifficulty == GameDifficulty.NORMAL){
+              totalWeight = 2.0;
+        }
+        
         for ( Item item : backpack ) 
         {
             totalWeight += item.getWeight();
@@ -245,7 +263,12 @@ public class Player
     /*************************************************************************************************************
      * Mutator methods
      ****************************************************************************************************************/
-    
+    /**
+     * increase  stamina to max
+     */
+    public void increaseToMaxStamina(){
+          stamina = maxStamina; 
+    }
     /**
      * Kills the Player
      */
@@ -341,7 +364,7 @@ public class Player
     /**
      * Moves the player over terrain to a new position.
      * 
-     * @param position the new position of the player
+     * @param newPosition the new position of the player
      * @param terrain the terrain to move over
      */
     public void moveToPosition(Position newPosition, Terrain terrain)
@@ -360,9 +383,17 @@ public class Player
     
     /**
      * This method will set the player position
-     * @param Position - position
+       * @param position position to set
      */
     public void setPosition(Position position){
         this.position = position;
+    }
+    
+    /**
+     * This method set the game difficulty variable
+     * @param gameDifficulty GameDifficulty object to set
+     */
+    public void setGameDifficulty(GameDifficulty gameDifficulty){
+          this.gameDifficulty = gameDifficulty;
     }
 }

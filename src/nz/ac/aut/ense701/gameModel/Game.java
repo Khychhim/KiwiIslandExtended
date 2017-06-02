@@ -11,7 +11,6 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
 import javax.swing.JFrame;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -45,8 +44,7 @@ public class Game {
       public static final int WEIGHT_INDEX = 3;
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
-      public static final int PREDATOR_TIME = 30;
-      public static final int MAP_SIZE = 15;
+      public  int MAP_SIZE;
       public Timer timer;
       GameAchievement counting = new GameAchievement();
       public int count_of_steps = counting.readCount();
@@ -56,27 +54,31 @@ public class Game {
       public JFrame miniQuizFrame;
       public PredatorTimerTask predatorTimerTask;
       public Document glossarydocs;
-    
+      private DifferentMap dm;
+      private GameDifficulty gameDifficulty;
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
      * @param playerName
+     * @param gameDifficulty differentMap object for different game difficulty
      */
-      public Game(String playerName) {
+      public Game(GameDifficulty gameDifficulty, String playerName) {
             this.playerName = playerName;
+            this.gameDifficulty = gameDifficulty;
             eventListeners = new HashSet<GameEventListener>();
             rand = new Random();
             allPredators = new ArrayList<Occupant>();
             Collections.synchronizedList(allPredators);
-            quizQuestionList = new ReadQuizXML().getQuestionArrayList();
             createNewGame();
       }
 
       /**
        * Starts a new game. At this stage data is being read from a text file
        */
-      public void createNewGame() {            
-            DifferentMap dm = new DifferentMap(MAP_SIZE, MAP_SIZE, playerName);
-            dm.generateMap();
+      private void createNewGame() {
+            quizQuestionList = new ReadQuizXML().getQuestionArrayList();
+            modifyQuizQuestion();            
+            setDm(new DifferentMap(getGameDifficulty(), playerName));
+            getDm().generateMap();
             allPredators.clear();
             totalPredators = 0;
             totalKiwis = 0;
@@ -114,8 +116,8 @@ public class Game {
             doc.getDocumentElement().normalize();
 
             glossarydocs = doc;
+            MAP_SIZE = getDm().getMapCols();
             calculateMapDimension();
-
             notifyGameEventListeners();
       }
 
@@ -153,7 +155,7 @@ public class Game {
 
       public void startTimer(){
             predatorTimerTask = new PredatorTimerTask(this);
-            timer.scheduleAtFixedRate(predatorTimerTask, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);            
+            timer.scheduleAtFixedRate(predatorTimerTask, getDm().getPredatorMoveTime() * 1000, getDm().getPredatorMoveTime() * 1000);            
             notifyGameEventListeners();
       }
       
@@ -1173,11 +1175,11 @@ public class Game {
             double playerMaxStamina = input.nextDouble();
             double playerMaxBackpackWeight = input.nextDouble();
             double playerMaxBackpackSize = input.nextDouble();
-
             Position pos = new Position(island, playerPosRow, playerPosCol);
             player = new Player(pos, playerName,
                     playerMaxStamina,
                     playerMaxBackpackWeight, playerMaxBackpackSize);
+           player.setGameDifficulty(getGameDifficulty());
             island.updatePlayerPosition(player);
       }
 
@@ -1283,7 +1285,59 @@ public class Game {
             
            return (new int[]{startMap, endMap});
      }
-      
+     
+     /**
+      * method to modify quizquestion array to suit for current game level
+      */
+     public void modifyQuizQuestion(){
+           //new arraylist to override current arraylist after choosing the difficulty question
+           ArrayList<QuizQuestion> newQuizQuestion = new ArrayList<QuizQuestion>();
+           
+           //loop to choose question suitable to the game difficulty
+            for(int i = 0; i < this.quizQuestionList.size(); i++){
+                   if(getGameDifficulty() == GameDifficulty.EASY){
+                         if(this.quizQuestionList.get(i).getDifficulty() == 1){
+                               newQuizQuestion.add(quizQuestionList.get(i));
+                         }
+                   }
+                   
+                   else if(getGameDifficulty() == GameDifficulty.NORMAL || getGameDifficulty() == GameDifficulty.HARD){
+                         if(this.quizQuestionList.get(i).getDifficulty() == 2){ //only add difficulty level 2 for NORMAL
+                               newQuizQuestion.add(quizQuestionList.get(i));
+                         }
+
+                         if(getGameDifficulty() == GameDifficulty.HARD){
+                               if(this.quizQuestionList.get(i).getDifficulty() == 3){ // add difficuly level 2 and 3 for HARD
+                                     newQuizQuestion.add(quizQuestionList.get(i));
+                               }
+                         }
+                   }
+            }
+            this.quizQuestionList = newQuizQuestion;           
+     }
+     
+     /**
+      * method to give rewards to player based on answer from quiz question
+       * @param reward reward string to input
+       * @param score score to input
+      */
+     public void setReward(String reward, int score){
+           if(reward.equalsIgnoreCase("predator")){
+                 Occupant predator = allPredators.get(0);
+                 island.removeOccupant(predator.getPosition(), predator);
+                 allPredators.remove(0);
+                 totalPredators--;                 
+           }else if(reward.equalsIgnoreCase("food")){
+                 Item food = new Food(player.getPosition(), "Magic Steak", "A limited edition food from heaven", 0, 0.1, 70.0);
+                 island.addOccupant(player.getPosition(), food);
+           }else if(reward.equalsIgnoreCase("stamina")){
+                 player.increaseToMaxStamina();
+           }else if(reward.equalsIgnoreCase("score")){
+                 this.score.addScore(score);
+           }
+     }
+     
+     
      public int getStartRow(){
            return this.startMapRow;
      }
@@ -1322,5 +1376,33 @@ public class Game {
     private String winMessage = "";
     private String loseMessage  = "";
     private String playerMessage  = "";   
+
+      /**
+       * @return the gameDifficulty
+       */
+      public GameDifficulty getGameDifficulty() {
+            return gameDifficulty;
+      }
+
+      /**
+       * @param gameDifficulty the gameDifficulty to set
+       */
+      public void setGameDifficulty(GameDifficulty gameDifficulty) {
+            this.gameDifficulty = gameDifficulty;
+      }
+
+      /**
+       * @return the dm
+       */
+      public DifferentMap getDm() {
+            return dm;
+      }
+
+      /**
+       * @param dm the dm to set
+       */
+      public void setDm(DifferentMap dm) {
+            this.dm = dm;
+      }
 
 }

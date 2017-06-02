@@ -6,7 +6,6 @@
 package nz.ac.aut.ense701.gameModel;
 
 import java.util.TimerTask;
-import static nz.ac.aut.ense701.gameModel.Game.PREDATOR_TIME;
 
 /**
  *

@@ -4,6 +4,6 @@ script: mvn verify
 notifications:
   email:
     recipients:
-      - joshlewis26@gmail.com
+      - limkhychhim@yahoo.com
     on_success: never # default: change
     on_failure: always # default: always

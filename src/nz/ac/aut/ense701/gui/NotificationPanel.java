@@ -30,14 +30,13 @@ public class NotificationPanel extends javax.swing.JPanel {
      * Display text to panel
      */
     public void displayToPanel(){
-
+        String display;
         int correctAnswerIndex = miniGamePanel.currentQuestion.getCorrectOptionIndex() - 1;
         
         String playerAnswer = miniGamePanel.getPlayerChosenAnswer();
         String correctAnswer = miniGamePanel.currentQuestion.getQuestionOptions()[correctAnswerIndex];
 
         this.jLabelQuizLevel.setText("Quiz Level: \t" + miniGamePanel.currentQuestion.getDifficulty());
-        this.jLabelScoreEarn.setText("Score Earn: \t" + miniGamePanel.score);
         this.jLabelPlayerAnswer.setText("Your Answer: \t" + playerAnswer);
         
         if(playerAnswer.equalsIgnoreCase(correctAnswer)){
@@ -45,7 +44,19 @@ public class NotificationPanel extends javax.swing.JPanel {
         }else{
               this.jLabelAnswer.setText("Wrong Answer!! \t");
         }
-        
+        if(miniGamePanel.reward.equalsIgnoreCase("score")){
+              display = "You earn a score of "+ Integer.toString(miniGamePanel.score);
+        }else if(miniGamePanel.reward.equalsIgnoreCase("predator")){
+              display = "The number of predator has been reduce by 1";
+        }else if(miniGamePanel.reward.equalsIgnoreCase("stamina")){
+              display = "Your stamina has been increaseto max";
+        }else if(miniGamePanel.reward.equalsIgnoreCase("food")){
+              display = "A food has magically spawn";
+        }else{
+              display = "You have earn nothing!";
+        }
+        this.jLabelScoreEarn.setText(display);    
+       
         miniGamePanel.setVisible(false);
     }
     
@@ -60,23 +71,23 @@ public class NotificationPanel extends javax.swing.JPanel {
 
             jLabelScoreEarn = new javax.swing.JLabel();
             jLabelAnswer = new javax.swing.JLabel();
-            jButton1 = new javax.swing.JButton();
+            jButtonExit = new javax.swing.JButton();
             jLabelQuizLevel = new javax.swing.JLabel();
             jLabelPlayerAnswer = new javax.swing.JLabel();
 
             setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
             jLabelScoreEarn.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-            jLabelScoreEarn.setText("Score Earn: ");
+            jLabelScoreEarn.setText("Earn");
 
             jLabelAnswer.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
             jLabelAnswer.setText("Correct Answer:");
 
-            jButton1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-            jButton1.setText("Exit");
-            jButton1.addActionListener(new java.awt.event.ActionListener() {
+            jButtonExit.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+            jButtonExit.setText("Exit");
+            jButtonExit.addActionListener(new java.awt.event.ActionListener() {
                   public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jButton1ActionPerformed(evt);
+                        jButtonExitActionPerformed(evt);
                   }
             });
 
@@ -99,7 +110,7 @@ public class NotificationPanel extends javax.swing.JPanel {
                         .addContainerGap())
                   .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(154, 154, 154))
             );
             layout.setVerticalGroup(
@@ -114,24 +125,23 @@ public class NotificationPanel extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(jLabelScoreEarn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
-                        .addComponent(jButton1)
+                        .addComponent(jButtonExit)
                         .addContainerGap())
             );
       }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExitActionPerformed
         //Close the Notification Panel
-        this.miniGamePanel.resultFrame.dispose();
-        gui.miniQuizFrame.dispose();
+        miniGamePanel.resultFrame.dispose();
         gui.setEnabled(true);
         gui.toFront();
         gui.game.timer =  new Timer();
         gui.game.startTimer();        
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonExitActionPerformed
 
 
       // Variables declaration - do not modify//GEN-BEGIN:variables
-      private javax.swing.JButton jButton1;
+      private javax.swing.JButton jButtonExit;
       private javax.swing.JLabel jLabelAnswer;
       private javax.swing.JLabel jLabelPlayerAnswer;
       private javax.swing.JLabel jLabelQuizLevel;

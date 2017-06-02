@@ -35,7 +35,7 @@ Size and weight of possums varies greatly across New Zealand. Adult possums are 
 
 Along with stoats, cats kill 70% of wild-born kiwi chicks before they reach 6 months of age. </Description>
 	</Creature>
-	<Creature Seen="false" id="3">
+	<Creature Seen="true" id="3">
 		<Name>Rat</Name>
 		<Description>Rats have a major impact on New Zealand’s wildlife because they eat native animals and their eggs. They also eat a wide range of native fruit and plants, which puts them in competition with native wildlife for food. 
 

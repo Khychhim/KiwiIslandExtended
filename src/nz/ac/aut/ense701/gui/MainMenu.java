@@ -29,6 +29,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import nz.ac.aut.ense701.gameModel.Game;
+import nz.ac.aut.ense701.gameModel.GameDifficulty;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -240,18 +241,49 @@ public class MainMenu extends JPanel implements MouseListener {
                     JOptionPane.DEFAULT_OPTION, 
                     null, options, options[1]);
             
+           Game game = null;
+           
             switch(option) {
-                case 0:
-                    menu.setVisible(false);
-                    //Create Game
+                case 0:                      
+                     Object[] optionsDifficulty = {"Easy","Normal","Hard"};
+                     int optionDifficulty = JOptionPane.showOptionDialog(menuPane, 
+                    "Choose Game Difficulty", "Game Difficulty", 
+                    JOptionPane.YES_NO_CANCEL_OPTION, 
+                    JOptionPane.DEFAULT_OPTION, 
+                    null, optionsDifficulty, optionsDifficulty[0]);
                     loadOptions();
-                    final Game game = new Game(playerName);
-                    //Create the GUI for the game
-                    final KiwiCountUI gui  = new KiwiCountUI(game);
-                    gui.setLocation(menu.getLocation());
-                    gui.addComponentListener(backListener());
-                    gui.setVisible(true);
-                    break;
+                    
+                    switch(optionDifficulty){
+                          case 0:
+                              //Create easy level
+                              game = new Game(GameDifficulty.EASY, playerName);
+                          break;
+                          
+                          case 1:
+                              //Create normal level
+                              game = new Game(GameDifficulty.NORMAL, playerName);
+                          break;
+                          
+                          case 2:
+                              //Create hard level
+                              game = new Game(GameDifficulty.HARD, playerName);
+                              
+                          break;
+                          
+                          default:
+                                System.out.println("No option selected");
+                          break;
+                    }
+                    
+                    if(game != null){
+                          menu.setVisible(false);
+                          KiwiCountUI gui = null;
+                          //Create the GUI for the game
+                          gui  = new KiwiCountUI(game);
+                          gui.setLocation(menu.getLocation());
+                          gui.addComponentListener(backListener());
+                          gui.setVisible(true);   
+                    }
                 case 1:
                     System.err.println("Load Game");
                     break;
