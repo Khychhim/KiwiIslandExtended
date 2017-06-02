@@ -90,18 +90,22 @@ public class GridSquarePanel extends javax.swing.JLayeredPane
     private Image getOccupantIcon(int tileWidth, int tileHeight) {
         String occupants = game.getOccupantStringRepresentation(row, column);
         int numOccupants = occupants.length() == 1 ? 2 : occupants.length();
-        int imWidth = (tileWidth/3);
-        int imHeight = tileHeight/3;
+        int imWidth;
+        int imHeight;
+        int x = 0, y = 0;
+        if(occupants.length() == 1) {
+            imWidth = tileWidth;
+            imHeight = tileHeight;
+            x += imWidth/2;
+        } else {
+            imWidth = (tileWidth/3);
+            imHeight = tileHeight/3;
+        }
         if(numOccupants > 0) {
             BufferedImage image = new BufferedImage(
                                    imWidth*numOccupants, imHeight,
                                    BufferedImage.TYPE_INT_ARGB);
             Graphics2D g = (Graphics2D) image.getGraphics();
-            int x = 0, y = 0;
-            if(occupants.length() == 1) {
-                g.drawImage(tileset.getSingleTile(Tileset.EMPTY, imWidth, imHeight), x, y, null);
-                x += imWidth;
-            }
             if(occupants.contains("F")) {
                 g.drawImage(tileset.getSingleTile(Tileset.FAUNA, imWidth, imHeight), x, y, null);
                 x += imWidth;
@@ -168,6 +172,6 @@ public class GridSquarePanel extends javax.swing.JLayeredPane
     private Tileset tileset;
     public int row, column;
     
-    private static final Border normalBorder = new LineBorder(Color.BLACK, 1);
+    private static final Border normalBorder = null;
     private static final Border activeBorder = new LineBorder(Color.RED, 3);
 }
