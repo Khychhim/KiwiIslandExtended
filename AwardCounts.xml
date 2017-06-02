@@ -9,7 +9,7 @@ and open the template in the editor.
         <gamesWon>0</gamesWon>
         <squares>324</squares>
         <game3won>f</game3won>
-        <traveller>t</traveller>
-        <hero>t</hero>
+        <traveller>f</traveller>
+        <hero>f</hero>
     </Player1>
 </Count>
