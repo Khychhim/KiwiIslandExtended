@@ -17,6 +17,7 @@ public class DifferentMap {
     private final int mapCols;
     private int playerRow;
     private int playerCol;
+    private int[][] mapGen;
     private final String playerName;
     private final MapDataTypes mapDataTypes;
     
@@ -39,6 +40,8 @@ public class DifferentMap {
     //Minimum distances between spawns
     private static final int PRED_MIN_DIST = 3; //Min Distance between predator and kiwi
     private static final int HAZARD_MIN_DIST = 1; //Min Distance between other hazards
+    //Chance for generated tile to be the same as adjacent tile (1-10)
+    private static final int RE_GEN = 5;
     
     //For testing map Generation
     public static void main(String args[]) {
@@ -50,6 +53,7 @@ public class DifferentMap {
         this.mapRows = mapRows;
         this.mapCols = mapCols;
         this.playerName = playerName;
+        mapGen = new int[mapRows][mapCols];
         mapDataTypes = new MapDataTypes();
         mapDataTypes.loadTypesFromFile();
     }
@@ -63,7 +67,19 @@ public class DifferentMap {
         for(int r = 0; r < mapRows; r++) {
             String row = "";
             for(int c = 0; c < mapCols; c++) {
-                int tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
+                int tileToAdd;
+                if(r > 1 && c > 1) {
+                    if(rand.nextInt(10)+1 < RE_GEN) tileToAdd = mapGen[r-1][c];
+                    else if(rand.nextInt(10)+1 < RE_GEN) tileToAdd = mapGen[r][c-1];
+                    else tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
+                } else if(r > 1) {
+                    if(rand.nextInt(10)+1 < RE_GEN) tileToAdd = mapGen[r-1][c];
+                    else tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
+                } else if(c > 1) {
+                    if(rand.nextInt(10)+1 < RE_GEN) tileToAdd = mapGen[r][c-1];
+                    else tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
+                } else tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
+                mapGen[r][c] = tileToAdd;
                 row += mapDataTypes.tileTypes.get(tileToAdd);
             }
             row += ",";

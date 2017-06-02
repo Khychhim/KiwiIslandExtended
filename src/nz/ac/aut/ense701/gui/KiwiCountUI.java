@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -35,6 +36,7 @@ public class KiwiCountUI
     {
         assert game != null : "Make sure game object is created before UI";
         this.game = game;
+        tileset = new Tileset();
         setAsGameListener();
         initComponents();
         initIslandGrid();
@@ -185,7 +187,7 @@ public class KiwiCountUI
             // all components in the panel are GridSquarePanels,
             // so we can safely cast
             GridSquarePanel gsp = (GridSquarePanel) c;
-            gsp.update();
+            gsp.update(pnlIsland.getSize());
         }
         
         // update player information
@@ -520,6 +522,11 @@ public class KiwiCountUI
             });
             listInventory.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
             listInventory.setVisibleRowCount(3);
+            listInventory.addKeyListener(new java.awt.event.KeyAdapter() {
+                  public void keyPressed(java.awt.event.KeyEvent evt) {
+                        listInventoryKeyPressed(evt);
+                  }
+            });
             listInventory.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
                   public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                         listInventoryValueChanged(evt);
@@ -683,10 +690,12 @@ public class KiwiCountUI
     private void btnCollectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCollectActionPerformed
         Object obj = listObjects.getSelectedValue();
         game.collectItem(obj);
+         this.pnlIsland.requestFocusInWindow();
     }//GEN-LAST:event_btnCollectActionPerformed
 
     private void btnDropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDropActionPerformed
         game.dropItem(listInventory.getSelectedValue());
+         this.pnlIsland.requestFocusInWindow();
     }//GEN-LAST:event_btnDropActionPerformed
 
     private void listObjectsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listObjectsValueChanged
@@ -701,6 +710,7 @@ public class KiwiCountUI
 
     private void btnUseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseActionPerformed
         game.useItem( listInventory.getSelectedValue());
+         this.pnlIsland.requestFocusInWindow();
     }//GEN-LAST:event_btnUseActionPerformed
 
     private void listInventoryValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listInventoryValueChanged
@@ -715,6 +725,7 @@ public class KiwiCountUI
 
     private void btnCountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCountActionPerformed
         game.countKiwi();
+         this.pnlIsland.requestFocusInWindow();
     }//GEN-LAST:event_btnCountActionPerformed
 
       private void pnlIslandKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlIslandKeyPressed
@@ -741,6 +752,10 @@ public class KiwiCountUI
       private void listObjectsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listObjectsKeyPressed
             this.pnlIsland.requestFocusInWindow();
       }//GEN-LAST:event_listObjectsKeyPressed
+
+      private void listInventoryKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listInventoryKeyPressed
+            this.pnlIsland.requestFocusInWindow();
+      }//GEN-LAST:event_listInventoryKeyPressed
     
     /**
      * Creates and initialises the island grid.
@@ -773,7 +788,7 @@ public class KiwiCountUI
           {
                 for ( int col = game.getStartCol() ; col < game.getEndCol() ; col++ )
                 {
-                      gsp = new GridSquarePanel(game, row, col);
+                      gsp = new GridSquarePanel(game, row, col, tileset);
                       pnlIsland.add(gsp);
                 }
           }
@@ -803,6 +818,7 @@ public class KiwiCountUI
       // End of variables declaration//GEN-END:variables
 
       private GridSquarePanel gsp;
+      private Tileset tileset;
       public JFrame miniQuizFrame;
       public Game game;
 }

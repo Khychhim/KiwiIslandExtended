@@ -46,12 +46,12 @@ public class Game {
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
       public static final int PREDATOR_TIME = 30;
-      public static final int MAP_SIZE = 20;
+      public static final int MAP_SIZE = 15;
       public Timer timer;
       GameAchievement counting = new GameAchievement();
       public int count_of_steps = counting.readCount();
       GameAchievement achievement;
-      public static String playerName = "River Song";
+      public String playerName = "River Song";
       public ArrayList<QuizQuestion> quizQuestionList;
       public JFrame miniQuizFrame;
       public PredatorTimerTask predatorTimerTask;
@@ -59,8 +59,10 @@ public class Game {
     
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
+     * @param playerName
      */
-      public Game() {
+      public Game(String playerName) {
+            this.playerName = playerName;
             eventListeners = new HashSet<GameEventListener>();
             rand = new Random();
             allPredators = new ArrayList<Occupant>();
@@ -89,7 +91,6 @@ public class Game {
             playerMessage = "";
             // timer for predator movement
             timer = new Timer();
-            predatorTimerTask = new PredatorTimerTask(this);
             startTimer();
 
             //creating XML glossary document.
@@ -151,6 +152,7 @@ public class Game {
       }
 
       public void startTimer(){
+            predatorTimerTask = new PredatorTimerTask(this);
             timer.scheduleAtFixedRate(predatorTimerTask, PREDATOR_TIME * 1000, PREDATOR_TIME * 1000);            
             notifyGameEventListeners();
       }
@@ -940,6 +942,7 @@ public class Game {
         int remainingStaminaBonus = (int)(Score.REMAINING_STAMINA * (player.getStaminaLevel() / player.getMaximumStaminaLevel()));
         int survivalBonus = player.isAlive() ? Score.SURVIVED : 0;
         score.addScore(kiwisCountedBonus + predatorsTrappedBonus + remainingStaminaBonus + survivalBonus);
+        score.saveHighScore(player.getName());
         
         String bonusString = "\nSurvival Bonus:          " + survivalBonus +
                              "\nStamina Remaining Bonus: " + remainingStaminaBonus + 
@@ -1046,14 +1049,13 @@ public class Game {
             {
                 //pause game timer
                 timer.cancel();
-                
+                timer.purge();
                 //remove trigger
                 Occupant trigger = island.getTrigger(current);
                 //remove launched trigger
                 island.removeOccupant(current, trigger);
                 //change gamestate to quiz
                 state = GameState.QUIZ;
-                island.removeOccupant(current, trigger);
             }
         }
     
@@ -1165,7 +1167,7 @@ public class Game {
        * @param input data from the level file
        */
       private void setUpPlayer(Scanner input) {
-            String playerName = input.next();
+            input.next();
             int playerPosRow = input.nextInt();
             int playerPosCol = input.nextInt();
             double playerMaxStamina = input.nextDouble();

@@ -18,7 +18,7 @@ The stoat is reddish-brown above, white to yellowish underneath, and has a long 
 
 It is 350-400 mm long from nose to tip of tail. Males are generally larger than females. Average weight of males is around 325 g and females 205 g, though this may vary from region to region.</Description>
 	</Creature>
-	<Creature Seen="false" id="2">
+	<Creature Seen="true" id="2">
 		<Name>Possum</Name>
 		<Description>In New Zealand, possums have no predators and lots of palatable vegetation. As a result, possums have a huge impact on our ecosystems.
 The Australian brush tailed possum was introduced into New Zealand in 1837 to establish a fur trade.

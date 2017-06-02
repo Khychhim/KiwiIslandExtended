@@ -1,0 +1,7 @@
+Liscences:
+http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+http://www.gnu.org/licenses/gpl-3.0.html
+https://creativecommons.org/licenses/by/3.0/
+Author: Leonard Pabin
+Obtained From:
+https://opengameart.org/content/whispers-of-avalon-grassland-tileset
