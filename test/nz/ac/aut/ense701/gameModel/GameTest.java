@@ -2,13 +2,10 @@ package nz.ac.aut.ense701.gameModel;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.text.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -68,12 +65,12 @@ public class GameTest extends junit.framework.TestCase
     
     @Test
     public void testGetNumRows(){
-        assertEquals("Check row number", game.getNumRows(), game.MAP_SIZE);
+        assertEquals("Check row number", game.getNumRows(), game.getMapSize());
     }
     
     @Test
     public void testGetNumColumns(){
-        assertEquals("Check column number", game.getNumColumns(), game.MAP_SIZE);
+        assertEquals("Check column number", game.getNumColumns(), game.getMapSize());
     }
     
     @Test
@@ -150,7 +147,7 @@ public class GameTest extends junit.framework.TestCase
     @Test
     public void testEasyDifficultyEnvironment(){
           if(game.getGameDifficulty() == GameDifficulty.EASY){
-                assertEquals(game.MAP_SIZE,10);
+                assertEquals(game.getMapSize(),10);
                 assertEquals(game.getPlayer().getCurrentBackpackSize(), 0.0);
                 assertEquals(game.getPlayer().getCurrentBackpackWeight(), 0.0);
                 assertEquals(game.getPlayer().getStaminaLevel(), 100.0);
@@ -161,7 +158,7 @@ public class GameTest extends junit.framework.TestCase
     @Test
     public void testNormalDifficultyEnvironment(){
             game = new Game(GameDifficulty.NORMAL);
-            assertEquals(game.MAP_SIZE,15);
+            assertEquals(game.getMapSize(),15);
             assertEquals(game.getPlayer().getCurrentBackpackSize(), 0.0);
             assertEquals(game.getPlayer().getCurrentBackpackWeight(), 2.0);
             assertEquals(game.getPlayer().getStaminaLevel(), 80.0);  
@@ -171,7 +168,7 @@ public class GameTest extends junit.framework.TestCase
     @Test
     public void testHardDifficultyEnvironment(){
             game = new Game(GameDifficulty.HARD);
-            assertEquals(game.MAP_SIZE,15);
+            assertEquals(game.getMapSize(),15);
             assertEquals(game.getPlayer().getCurrentBackpackSize(), 1.0);
             assertEquals(game.getPlayer().getCurrentBackpackWeight(), 4.0);
             assertEquals(game.getPlayer().getStaminaLevel(), 50.0); 

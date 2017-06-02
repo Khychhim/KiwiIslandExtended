@@ -44,8 +44,8 @@ public class Game {
       public static final int WEIGHT_INDEX = 3;
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
-      public  int MAP_SIZE;
-      public Timer timer;
+      private  int mapSize;
+      private Timer timer;
       GameAchievement counting = new GameAchievement();
       public int count_of_steps = counting.readCount();
       GameAchievement achievement;
@@ -89,7 +89,7 @@ public class Game {
             loseMessage = "";
             playerMessage = "";
             // timer for predator movement
-            timer = new Timer();
+            setTimer(new Timer());
             startTimer();
 
             //creating XML glossary document.
@@ -113,7 +113,7 @@ public class Game {
             doc.getDocumentElement().normalize();
 
             glossarydocs = doc;
-            MAP_SIZE = getDm().getMapCols();
+            setMapSize(getDm().getMapCols());
             calculateMapDimension();
             notifyGameEventListeners();
       }
@@ -152,7 +152,7 @@ public class Game {
 
       public void startTimer(){
             predatorTimerTask = new PredatorTimerTask(this);
-            timer.scheduleAtFixedRate(predatorTimerTask, getDm().getPredatorMoveTime() * 1000, getDm().getPredatorMoveTime() * 1000);            
+            getTimer().scheduleAtFixedRate(predatorTimerTask, getDm().getPredatorMoveTime() * 1000, getDm().getPredatorMoveTime() * 1000);            
             notifyGameEventListeners();
       }
       
@@ -1046,8 +1046,8 @@ public class Game {
             if (hadTrigger) //can delete the trigger
             {
                 //pause game timer
-                timer.cancel();
-                timer.purge();
+                  getTimer().cancel();
+                  getTimer().purge();
                 //remove trigger
                 Occupant trigger = island.getTrigger(current);
                 //remove launched trigger
@@ -1061,7 +1061,7 @@ public class Game {
      * This method start predator timer
      */
     public void startPredatorTimer(){
-        timer = new Timer();
+            setTimer(new Timer());
         predatorTimerTask = new PredatorTimerTask(this);
     }
 
@@ -1235,7 +1235,7 @@ public class Game {
             int playerPositionRow = player.getPosition().getRow();
             
             //calculate the view size which player will see the map
-            viewSizeOfMap = (int)Math.round(MAP_SIZE*PLAYER_VIEW_PERCENTAGE_OF_MAP);
+            viewSizeOfMap = (int)Math.round(getMapSize()*PLAYER_VIEW_PERCENTAGE_OF_MAP);
             int start = 0;
             int end = 0;
             //if view size is an even number, then there is a one grid square difference between the left/top end to player position and
@@ -1270,9 +1270,9 @@ public class Game {
             int startMap = playerPosition-start;
             int endMap = playerPosition+end;
             if(startMap >=0){                  
-                   if(endMap >=MAP_SIZE){
-                        endMap = MAP_SIZE;
-                        startMap = MAP_SIZE-viewSizeOfMap;
+                   if(endMap >=getMapSize()){
+                        endMap = getMapSize();
+                        startMap = getMapSize()-viewSizeOfMap;
                   }
             }else{
                   startMap = 0;
@@ -1399,6 +1399,34 @@ public class Game {
        */
       public void setDm(DifferentMap dm) {
             this.dm = dm;
+      }
+
+      /**
+       * @return the map_size
+       */
+      public int getMapSize() {
+            return mapSize;
+      }
+
+      /**
+       * @param map_size the map_size to set
+       */
+      public void setMapSize(int map_size) {
+            this.mapSize = map_size;
+      }
+
+      /**
+       * @return the timer
+       */
+      public Timer getTimer() {
+            return timer;
+      }
+
+      /**
+       * @param timer the timer to set
+       */
+      public void setTimer(Timer timer) {
+            this.timer = timer;
       }
 
 }
