@@ -613,7 +613,7 @@ public class GameAchievement {
     
     
      /**
-     * Checks if won award is unlocked or locked for player achievement.
+     * Checks if travel award is unlocked or locked for player achievement.
      * @return boolean if unlocked then returns true.
      */
     public boolean check_if_wonaward(){
