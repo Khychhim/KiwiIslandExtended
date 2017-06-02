@@ -8,7 +8,8 @@
             <answer>Rabbits</answer> 
             <answer>Deer</answer> 
             <answer>Possums</answer> 
-            <correct>2</correct> 
+            <correct>2</correct>
+			<reward>score</reward>
         </question>
         <question>
             <difficulty>1</difficulty>
@@ -18,6 +19,7 @@
             <answer>Day and Night</answer>
             <answer>They don't</answer>
             <correct>3</correct>
+			<reward>predator</reward>
         </question>
         <question>
             <difficulty>1</difficulty>
@@ -27,6 +29,7 @@
             <answer>Eating the birds eggs</answer>
             <answer>All of the Above</answer>
             <correct>4</correct>
+			<reward>score</reward>
         </question>	  
         <question>
             <difficulty>3</difficulty>
@@ -36,6 +39,7 @@
             <answer>65 to 95cm long</answer>
             <answer>80 to 115cm long</answer>
             <correct>3</correct>
+			<reward>predator</reward>
         </question>	  
         <question>
             <difficulty>3</difficulty>
@@ -45,6 +49,7 @@
             <answer>Moss-forest Rats and Turkestan Rats</answer>
             <answer>Pale field Rats and Ship Rats</answer>
             <correct>1</correct>
+			<reward>score</reward>
         </question>
         <question>
             <difficulty>2</difficulty>
@@ -54,6 +59,7 @@
             <answer>1080 and talon-type baits</answer>
             <answer>All of the above are used</answer>
             <correct>2</correct>
+			<reward>stamina</reward>
         </question>
         <question>
             <difficulty>1</difficulty>
@@ -63,6 +69,7 @@
             <answer>Spiritual values to some iwi Māori</answer>
             <answer>All of the above</answer>
             <correct>4</correct>
+			<reward>score</reward>
         </question>        
         <question>
             <difficulty>2</difficulty>
@@ -72,6 +79,7 @@
             <answer>15 kilometers</answer>
             <answer>20 kilometers</answer>
             <correct>4</correct>
+			<reward>food</reward>
         </question>        
         <question>
             <difficulty>2</difficulty>
@@ -81,6 +89,7 @@
 			<answer>3-4% per year</answer>
 			<answer>4-5% per year</answer>
             <correct>2</correct>
+			<reward>food</reward>
         </question>        
         <question>
             <difficulty>1</difficulty>
@@ -90,6 +99,7 @@
             <answer>4</answer>
             <answer>5</answer>
             <correct>1</correct>
+			<reward>food</reward>
         </question>
 	<question>
             <difficulty>2</difficulty>
@@ -99,6 +109,7 @@
             <answer>Little Spotted Kiwi</answer>
             <answer>Great Spotted Kiwi</answer>
             <correct>3</correct>
+			<reward>score</reward>
         </question>
 	<question>
             <difficulty>2</difficulty>
@@ -108,6 +119,7 @@
             <answer>Naturally Uncommon (population is naturally small)</answer>
             <answer>Recovering (population is small but increasing)</answer>
             <correct>1</correct>
+			<reward>score</reward>
         </question>
 	<question>
             <difficulty>1</difficulty>
@@ -117,6 +129,7 @@
             <answer>Treetops</answer>
             <answer>Sandy beaches, sandspits and in dunes</answer>
             <correct>4</correct>
+			<reward>score</reward>
         </question>
 	<question>
             <difficulty>2</difficulty>
@@ -126,6 +139,7 @@
             <answer>4-5 months</answer>
             <answer>They don't</answer>
             <correct>2</correct>
+			<reward>score</reward>
         </question>
 	<question>
             <difficulty>3</difficulty>
@@ -135,6 +149,7 @@
             <answer>Black</answer>
             <answer>It doesn't change Colour</answer>
             <correct>3</correct>
+			<reward>stamina</reward>
         </question>
 	<question>
             <difficulty>2</difficulty>
@@ -144,6 +159,7 @@
             <answer>July and August</answer>
             <answer>September and October</answer>
             <correct>4</correct>
+			<reward>food</reward>
         </question>
 	<question>
             <difficulty>1</difficulty>
@@ -152,6 +168,7 @@
             <answer>Females</answer>
             <answer>Either</answer>
             <correct>2</correct>
+			<reward>food</reward>
         </question>
 	<question>
             <difficulty>2</difficulty>
@@ -160,6 +177,7 @@
             <answer>Motuopao Island</answer>
             <answer>Cuvier Island</answer>
             <correct>1</correct>
+			<reward>predator</reward>
         </question>
     </questions>
 </quiz>

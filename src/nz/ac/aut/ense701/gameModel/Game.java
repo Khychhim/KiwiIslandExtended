@@ -1309,10 +1309,30 @@ public class Game {
                          }
                    }
             }
-
-            this.quizQuestionList = newQuizQuestion;
-           
+            this.quizQuestionList = newQuizQuestion;           
      }
+     
+     /**
+      * method to give rewards to player based on answer from quiz question
+       * @param reward reward string to input
+       * @param score score to input
+      */
+     public void setReward(String reward, int score){
+           if(reward.equalsIgnoreCase("predator")){
+                 Occupant predator = allPredators.get(0);
+                 island.removeOccupant(predator.getPosition(), predator);
+                 allPredators.remove(0);
+                 totalPredators--;                 
+           }else if(reward.equalsIgnoreCase("food")){
+                 Item food = new Food(player.getPosition(), "Magic Steak", "A limited edition food from heaven", 0, 0.1, 70.0);
+                 island.addOccupant(player.getPosition(), food);
+           }else if(reward.equalsIgnoreCase("stamina")){
+                 player.increaseToMaxStamina();
+           }else if(reward.equalsIgnoreCase("score")){
+                 this.score.addScore(score);
+           }
+     }
+     
      
      public int getStartRow(){
            return this.startMapRow;
