@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -14,32 +16,33 @@ public class DifferentMap {
     private static final String MAP_FILE_NAME = "IslandData.txt";
     private static final String TEXT_FORMAT = "UTF-8";
     //Difficulty : EASY
-    private final int MAP_SIZE_EASY = 10;
-    private final int NUMBER_PREDATOR_EASY = 3;
-    private final int MIN__HAZARD_EASY = 3;
-    private final int PREDATOR_MOVE_TIME_EASY = 60;
+    private static final int MAP_SIZE_EASY = 10;
+    private static final int NUMBER_PREDATOR_EASY = 3;
+    private static final int MIN__HAZARD_EASY = 3;
+    private static final int PREDATOR_MOVE_TIME_EASY = 60;
     
     //Difficulty: NORMAL
-    private final int MAP_SIZE_NORMAL_HARD = 15;
-    private final int NUMBER_PREDATOR_NORMAL = 5;
-    private final int MIN__HAZARD_NORMAL = 7;
-    private final int PREDATOR_MOVE_TIME_NORMAL = 40;
+    private static final int MAP_SIZE_NORMAL_HARD = 15;
+    private static final int NUMBER_PREDATOR_NORMAL = 5;
+    private static final int MIN__HAZARD_NORMAL = 7;
+    private static final int PREDATOR_MOVE_TIME_NORMAL = 40;
 
     //Difficulty: HARD
-    private final int NUMBER_PREDATOR_HARD = 7;
-    private final int MIN__HAZARD_HARD = 10;
-    private final int PREDATOR_MOVE_TIME_HARD = 20;
+    private static final int NUMBER_PREDATOR_HARD = 7;
+    private static final int MIN__HAZARD_HARD = 10;
+    private static final int PREDATOR_MOVE_TIME_HARD = 20;
     
     private int mapRows;
     private int mapCols;
     private int playerRow;
     private int playerCol;
-    private int[][] mapGen;
     private final String playerName;
     private final MapDataTypes mapDataTypes;
     private int predatorMoveTime;
-    private int MIN_HAZARDS;
-    private int NUM_PREDATORS;
+    private int minHazards;
+    private int numPredators;
+    
+    private static final Logger LOG = Logger.getLogger(DifferentMap.class.getName());
     
     private static final int NUM_TRIGGERS = 5;
     //Sets the minimum number of each type to be generated
@@ -58,13 +61,7 @@ public class DifferentMap {
     private static final int HAZARD_MIN_DIST = 1; //Min Distance between other hazards
     //Chance for generated tile to be the same as adjacent tile (1-10)
     private static final int RE_GEN = 5;
-    private final GameDifficulty gameDifficulty;
-    
-    //For testing map Generation
-    public static void main(String args[]) {
-//        DifferentMap test = new DifferentMap(GameDifficulty.EASY);
-//        test.generateMap();
-    }     
+    private final GameDifficulty gameDifficulty;     
     
     public DifferentMap(GameDifficulty difficulty, String playerName) {
         this.playerName = playerName;
@@ -76,7 +73,7 @@ public class DifferentMap {
     public void generateMap() {
         //setup map difficulty
         generateDifficulty();
-        mapGen = new int[mapRows][mapCols];
+        int[][] mapGen = new int[mapRows][mapCols];
         
         PrintWriter pw = CreateFile();
         Random rand = new Random();
@@ -84,24 +81,19 @@ public class DifferentMap {
         pw.println(getMapRows() + ", " + getMapCols() + ",");
         //Setup the maps Tiles
         for(int r = 0; r < getMapRows(); r++) {
-            String row = "";
+            StringBuilder row = new StringBuilder();
             for(int c = 0; c < mapCols; c++) {
                 int tileToAdd;
-                if(r > 1 && c > 1) {
-                    if(rand.nextInt(10)+1 < RE_GEN) tileToAdd = mapGen[r-1][c];
-                    else if(rand.nextInt(10)+1 < RE_GEN) tileToAdd = mapGen[r][c-1];
-                    else tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
-                } else if(r > 1) {
-                    if(rand.nextInt(10)+1 < RE_GEN) tileToAdd = mapGen[r-1][c];
-                    else tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
-                } else if(c > 1) {
-                    if(rand.nextInt(10)+1 < RE_GEN) tileToAdd = mapGen[r][c-1];
+                //Gives a chance to group tiles that are the same
+                if(r > 0 || c > 0) {
+                    if(rand.nextInt(10)+1 < RE_GEN && r > 0) tileToAdd = mapGen[r-1][c];
+                    else if(rand.nextInt(10)+1 < RE_GEN && c > 0) tileToAdd = mapGen[r][c-1];
                     else tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
                 } else tileToAdd = rand.nextInt(mapDataTypes.tileTypes.size());
                 mapGen[r][c] = tileToAdd;
-                row += mapDataTypes.tileTypes.get(tileToAdd);
+                row.append(mapDataTypes.tileTypes.get(tileToAdd));
             }
-            row += ",";
+            row.append(",");
             pw.println(row);
         }
         //Setup player stats
@@ -114,7 +106,7 @@ public class DifferentMap {
         //Sets up the number of each occupant and the total occupants
         int totalOccupants = 0;
         int numberKiwis = rand.nextInt(RAND_KIWIS) + MIN_KIWIS + 1;
-        int numberPredators = NUM_PREDATORS;
+        int numberPredators = numPredators;
         int numberFood = rand.nextInt(RAND_FOOD) + MIN_FOOD + 1;
         int[] numberTools = new int[mapDataTypes.toolTypes.size()];
         for(int i = 0; i < mapDataTypes.toolTypes.size(); i++) {
@@ -122,7 +114,7 @@ public class DifferentMap {
             totalOccupants += numberTools[i];
         }
         int numberFauna = rand.nextInt(RAND_FAUNA) + MIN_FAUNA + 1;
-        int numberHazards = rand.nextInt(RAND_HAZARDS) + MIN_HAZARDS + 1;
+        int numberHazards = rand.nextInt(RAND_HAZARDS) + minHazards + 1;
         int numberTriggers = NUM_TRIGGERS;
         totalOccupants += numberKiwis + numberPredators + numberFood + numberFauna + numberHazards + numberTriggers;
         pw.println(totalOccupants + ",");
@@ -145,26 +137,28 @@ public class DifferentMap {
                 case EASY:
                       mapRows = MAP_SIZE_EASY;
                       mapCols = MAP_SIZE_EASY;
-                      NUM_PREDATORS = NUMBER_PREDATOR_EASY;
-                      MIN_HAZARDS = MIN__HAZARD_EASY;
+                      numPredators = NUMBER_PREDATOR_EASY;
+                      minHazards = MIN__HAZARD_EASY;
                       this.predatorMoveTime = this.PREDATOR_MOVE_TIME_EASY;                      
                 break;
                 
                 case NORMAL:
                       mapRows = MAP_SIZE_NORMAL_HARD;
                       mapCols = MAP_SIZE_NORMAL_HARD;
-                      NUM_PREDATORS = NUMBER_PREDATOR_NORMAL;
-                      MIN_HAZARDS = MIN__HAZARD_NORMAL;
+                      numPredators = NUMBER_PREDATOR_NORMAL;
+                      minHazards = MIN__HAZARD_NORMAL;
                       this.predatorMoveTime = this.PREDATOR_MOVE_TIME_NORMAL;       
                 break;
                 
                 case HARD:
                       mapRows = MAP_SIZE_NORMAL_HARD;
                       mapCols = MAP_SIZE_NORMAL_HARD;
-                      NUM_PREDATORS = NUMBER_PREDATOR_HARD;
-                      MIN_HAZARDS = MIN__HAZARD_HARD;
+                      numPredators = NUMBER_PREDATOR_HARD;
+                      minHazards = MIN__HAZARD_HARD;
                       this.predatorMoveTime = this.PREDATOR_MOVE_TIME_HARD;       
                 break;
+                
+                default : break;
           }
     }
     
@@ -236,10 +230,9 @@ public class DifferentMap {
             boolean validSpawn = true;
             for(int x = -HAZARD_MIN_DIST; x < HAZARD_MIN_DIST; x++) {
                 for(int y = -HAZARD_MIN_DIST; y < HAZARD_MIN_DIST; y++) {
-                    if(col+x > 0 && col+x < getMapCols() && row+y > 0 && row+y < getMapRows()) {
-                        if(tempMap[row+y][col+x] != null && tempMap[row+y][col+x].contains("H")) {
-                            validSpawn = false;
-                        }
+                    if(col+x > 0 && col+x < getMapCols() && row+y > 0 && row+y < getMapRows() &&
+                            tempMap[row+y][col+x] != null && tempMap[row+y][col+x].contains("H")) {
+                        validSpawn = false;
                     }
                 }
             }
@@ -287,7 +280,7 @@ public class DifferentMap {
             }
             if(failedSpawns > 100) {
                 int failedGens = (numberOfPredators-generatedCount);
-                System.err.println("Unable to generate " + failedGens + " predators.");
+                LOG.log(Level.FINE, "Unable to generate {0} predators.", failedGens);
                 return failedGens;
             }
         }
@@ -338,9 +331,9 @@ public class DifferentMap {
         try {
             pw = new PrintWriter(MAP_FILE_NAME, TEXT_FORMAT);
         } catch (FileNotFoundException ex) {
-            System.out.println("File not found " + ex.getMessage());
+            LOG.log(Level.SEVERE, "File not found {0}", ex.getMessage());
         } catch (UnsupportedEncodingException ex) {
-            System.out.println("File encoding not supported " + ex.getMessage());
+            LOG.log(Level.SEVERE, "File encoding not supported {0}", ex.getMessage());
         }
         
         return pw;
