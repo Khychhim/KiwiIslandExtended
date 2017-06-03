@@ -3,6 +3,7 @@ package nz.ac.aut.ense701.gameModel;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -52,6 +53,20 @@ public class Deserialization {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
+    }
+
+    /**
+     * This method check if the save file is exist
+     * @return 
+     */
+    public boolean isSaveExist() {
+        boolean isExist = false;
+
+        File file = new File(FILE_NAME);
+        if (file.exists()) {
+            isExist = true;
+        }
+        return isExist;
     }
 
     /**

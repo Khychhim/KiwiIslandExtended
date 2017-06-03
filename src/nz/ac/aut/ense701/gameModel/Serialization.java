@@ -28,6 +28,7 @@ public class Serialization {
     public Serialization(Game game) {
         this.game = game;
 //        createAWindow();
+        Save();
     }
 
     /**

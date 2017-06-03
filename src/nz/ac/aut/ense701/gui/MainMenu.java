@@ -24,6 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import nz.ac.aut.ense701.gameModel.Deserialization;
 import nz.ac.aut.ense701.gameModel.Game;
 
 /**
@@ -244,10 +245,26 @@ public class MainMenu extends JPanel implements MouseListener {
                     gui.setVisible(true);
                     break;
                 case 1:
-                    System.err.println("Load Game");
-                    break;
+                    Deserialization der = new Deserialization();
+                    //load successful 
+                    if (der.isSaveExist()) {
+                        menu.setVisible(false);
+                        //Load Game
+                        final Game load = der.Load();
+                        //Create the GUI for the game
+                        final KiwiCountUI KiwiGUI  = new KiwiCountUI(load);
+                        KiwiGUI.setLocation(menu.getLocation());
+                        KiwiGUI.addComponentListener(backListener());
+                        KiwiGUI.setVisible(true);
+                        break;
+                    }else{
+                        System.err.println("There's no Save File.");
+                        JOptionPane.showMessageDialog(this, "Sorry, no saved Game exists.");
+                    }
+                    
+                    
                 default:
-                    System.out.println("No option selected");
+                    System.err.println("No option selected");
                     break;
             }
         } else if(buttons[HIGH_SCORES].getBounds().contains(clickLoc)) {
