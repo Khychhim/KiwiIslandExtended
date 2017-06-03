@@ -18,17 +18,8 @@ public class MiniGameGuessTest extends junit.framework.TestCase {
 
         //loadImage
         guessGame.loadImage();
-
+        
         assertTrue(guessGame.getImageHashMap() != null);
-    }
-
-    @Test
-    public void testImageIsNotLoaded() {
-        Game game = new Game();
-        KiwiCountUI gui = new KiwiCountUI(game);
-        MiniGameGuess guessGame = new MiniGameGuess(gui, game);
-
-        assertFalse(guessGame.getImageHashMap() != null);
     }
 
 }
