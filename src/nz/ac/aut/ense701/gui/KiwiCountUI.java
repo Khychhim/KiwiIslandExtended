@@ -63,8 +63,7 @@ public class KiwiCountUI
          Dimension d = new Dimension(100,50);
         
         JButton twitterbt = new JButton("Share");
-        twitterbt.setIcon(new ImageIcon(this.getClass().
-                        getResource("/nz/ac/aut/ense701/guiImages/twitter.png")));
+        twitterbt.setIcon(new ImageIcon("twitter.png"));
         twitterbt.setPreferredSize(d);
         
         
