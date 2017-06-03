@@ -21,7 +21,7 @@ public class Deserialization {
     }
 
     public Deserialization() {
-        createAWindow();
+//        createAWindow();
     }
 
     /**
