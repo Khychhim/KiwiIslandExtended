@@ -675,12 +675,10 @@ public class Game {
                   Tool tool = (Tool) item;
                   if (tool.isTrap() && !tool.isBroken()) {
                         success = trapPredator();
-                  } else if (tool.isScrewdriver())// Use screwdriver (to fix trap)
-                  {
-                        if (player.hasTrap()) {
-                              Tool trap = player.getTrap();
-                              trap.fix();
-                        }
+                  } else if (tool.isScrewdriver() && player.hasTrap())// Use screwdriver (to fix trap)
+                  {                       
+                        Tool trap = player.getTrap();
+                        trap.fix();                        
                   }
             }
             updateGameState();
@@ -788,7 +786,7 @@ public class Game {
        */
           private void updateGameState()
     {
-         String message = "";
+         String message;
         if ( !player.isAlive() )
         {
             state = GameState.LOST;
@@ -872,7 +870,7 @@ public class Game {
                  
                  System.out.println("File saved!");
              } catch (TransformerException ex) {
-                 System.err.println("Transformer Exception: " + ex);
+                LOGGER.info("Transformer Exception: " + ex);
              }
             this.setWinMessage(message);
 
@@ -902,7 +900,7 @@ public class Game {
                  
                  System.out.println("File saved!");
              } catch (TransformerException ex) {
-                 System.err.println("Transformer Exception: " + ex);
+                LOGGER.info("Transformer Exception: " + ex);
              }
                 this.setWinMessage(message);
                 
@@ -913,8 +911,10 @@ public class Game {
             // notify listeners about changes
             notifyGameEventListeners();
       }
+    
+    // private void 
           
-    public void detectAnimal() {
+    private void detectAnimal() {
         NodeList creatures = glossarydocs.getElementsByTagName("Creature");
 
         for (Occupant occupant : island.getOccupants(player.getPosition())) {
