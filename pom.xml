@@ -18,19 +18,13 @@
             <version>1.3</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>4.0.6</version>
+        </dependency>
     </dependencies>
     <build>
-        <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <configuration>
-                <excludes>
-                  <exclude>src/nz/ac/aut/ense701/gameModel/TwitterAPI.java</exclude>
-                </excludes>
-              </configuration>
-            </plugin>
-         </plugins>
     <sourceDirectory>src/nz/ac/aut/ense701</sourceDirectory>
     <testSourceDirectory>test/nz/ac/aut/ense701/gameModel</testSourceDirectory>
     </build>
