@@ -78,6 +78,7 @@ public class Deserialization {
             fstream.close();
         } catch (IOException ex) {
             System.out.println("Deserialization: IO Exception.");
+            System.out.println(ex);
         } catch (ClassNotFoundException ex) {
             System.out.println("Deserialization: Class Not Found Exception.");
         }

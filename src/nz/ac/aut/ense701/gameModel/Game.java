@@ -3,6 +3,7 @@ package nz.ac.aut.ense701.gameModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -11,7 +12,6 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
 import javax.swing.JFrame;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -37,7 +37,7 @@ import org.xml.sax.SAXException;
  * @version 1.0 - created Maintenance History August 2011 Extended for stage 2.
  * AS
  */
-public class Game {
+public class Game implements Serializable{
       //Constants shared with UI to provide player data
       public static final int STAMINA_INDEX = 0;
       public static final int MAXSTAMINA_INDEX = 1;
@@ -47,7 +47,7 @@ public class Game {
       public static final int SIZE_INDEX = 5;
       public static final int PREDATOR_TIME = 30;
       public static final int MAP_SIZE = 15;
-      public Timer timer;
+      public static Timer timer;
       GameAchievement counting = new GameAchievement();
       public int count_of_steps = counting.readCount();
       GameAchievement achievement;

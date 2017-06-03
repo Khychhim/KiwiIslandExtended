@@ -1,5 +1,7 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
+
 /**
  * Abstract base class for occupants that inhabit Kiwi Island.
  * 
@@ -7,7 +9,7 @@ package nz.ac.aut.ense701.gameModel;
  * @version 1.0 - July 2011
  * @version 2.0 - October 2011 - AS - added toString
  */
-public abstract class Occupant 
+public abstract class Occupant  implements Serializable
 {
     private Position position;
     private final String   name;

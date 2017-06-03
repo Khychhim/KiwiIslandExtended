@@ -1,5 +1,7 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
+
 /**
  * This class represents a tool that can be found on the island
  * and gives the player any sort of advantage. 
@@ -8,7 +10,7 @@ package nz.ac.aut.ense701.gameModel;
  * @version July 2011
  */
 
-public class Tool extends Item 
+public class Tool extends Item implements Serializable
 {
     private boolean broken;
     

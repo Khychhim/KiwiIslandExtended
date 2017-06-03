@@ -5,6 +5,7 @@
  */
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
 import java.util.TimerTask;
 import static nz.ac.aut.ense701.gameModel.Game.PREDATOR_TIME;
 
@@ -12,12 +13,13 @@ import static nz.ac.aut.ense701.gameModel.Game.PREDATOR_TIME;
  *
  * @author Logan
  */
-public class PredatorTimerTask extends TimerTask {
+public class PredatorTimerTask extends TimerTask implements Serializable{
 
     private boolean hasStarted = false;
     private Game game;
 
     public PredatorTimerTask(Game game) {
+        super();
         this.game = game;
     }
 

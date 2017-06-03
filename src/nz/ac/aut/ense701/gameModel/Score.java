@@ -5,11 +5,13 @@
  */
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
+
 /**
  *
  * @author joshl
  */
-public class Score {
+public class Score implements Serializable{
     private int score;
     
     //Score Values for each event

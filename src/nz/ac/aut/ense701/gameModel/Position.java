@@ -1,5 +1,7 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
+
 /**
  * Represents the location of any item/grid square/player in the game.
  * Positions must always be valid for the particular game.
@@ -10,7 +12,7 @@ package nz.ac.aut.ense701.gameModel;
  * @version 2.0 - created July 2011
  */
 
-public class Position
+public class Position implements Serializable
 {
     private int row;
     private int column;

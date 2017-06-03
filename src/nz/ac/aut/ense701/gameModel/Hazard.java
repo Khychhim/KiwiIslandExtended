@@ -1,6 +1,8 @@
 
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
+
 /**
  * This class represents a hazard that can be found on the island
  *  
@@ -8,7 +10,7 @@ package nz.ac.aut.ense701.gameModel;
  * @version July 2011
  */
 
-public class Hazard extends Occupant {
+public class Hazard extends Occupant implements Serializable{
     
     private final double impact;
     private final double FATAL_IMPACT = 1.0;

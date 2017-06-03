@@ -1,5 +1,7 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
+
 /**
  * Predator represents a predator on the island.
  * If more specific behaviour is required for particular predators, descendants 
@@ -7,8 +9,10 @@ package nz.ac.aut.ense701.gameModel;
  * @author AS
  * @version July 2011
  */
-public class Predator extends Fauna
+public class Predator extends Fauna implements Serializable
 {
+
+      private static final long serialVersionUID = 1L;
       private int rowAwayFromKiwi;
       private int coloumnAwayFromKiwi;
       

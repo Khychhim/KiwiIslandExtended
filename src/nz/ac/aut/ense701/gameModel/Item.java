@@ -1,5 +1,7 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
+
 
 /**
  * This class represents an item that can be found on the island.
@@ -7,7 +9,7 @@ package nz.ac.aut.ense701.gameModel;
  * @author AS
  * @version July 2011
  */
-public  abstract class Item extends Occupant
+public  abstract class Item extends Occupant  implements Serializable
 {
     private double weight;
     private double size;

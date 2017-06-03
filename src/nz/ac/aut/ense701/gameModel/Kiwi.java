@@ -1,12 +1,14 @@
 
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
+
 /**
  * Kiwi represents a kiwi living on the island
  * @author AS
  * @version July 2011
  */
-public class Kiwi  extends Fauna
+public class Kiwi  extends Fauna implements Serializable
 {
     private boolean counted;
     /**

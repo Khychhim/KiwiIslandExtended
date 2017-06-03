@@ -1,6 +1,8 @@
 package nz.ac.aut.ense701.gameModel;
 
-public class Trigger extends Occupant {
+import java.io.Serializable;
+
+public class Trigger extends Occupant implements Serializable{
 
     /**
      * Create a Trigger on the map
