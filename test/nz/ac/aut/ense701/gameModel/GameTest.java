@@ -133,7 +133,7 @@ public class GameTest extends junit.framework.TestCase
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             xml = (Document) dBuilder.parse(fXmlFile);
-            assertEquals(xml, game.achievement.ReadAchievementXML());
+            assertEquals(xml, game.achievement.readAchievementXML());
         }
         catch(SAXException e){
             System.out.println("SAXException error");

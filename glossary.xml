@@ -6,7 +6,7 @@
 Kiore is the Māori name for a species of rat (Rattus exulans). Kiore are unique because of their association with the migration of Polynesians throughout the Pacific, and their cultural and spiritual values to some iwi Māori.
 Recognising that iwi Māori sometimes have a cultural interest in kiore, as well as the ecological health and well-being of plants, forests and wildlife, DOC consults before starting eradication programmes.</Description>
 	</Creature>
-	<Creature Seen="false" id="4">
+	<Creature Seen="true" id="4">
 		<Name>Stoat</Name>
 		<Description>It was introduced to New Zealand in the 1880s to control rabbits and hares but is now a fierce predator of our native species.  
 

@@ -6,8 +6,7 @@
 package nz.ac.aut.ense701.gameModel;
 
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -39,16 +38,18 @@ import org.xml.sax.SAXException;
 
 public class GameAchievement {
 
-    public Element Achievement;
+    private Element Achievement;
     private  boolean won3gamesinrow;
     private boolean walked;
     private boolean  savedKiwis;
     private boolean walkingGUI;
     private boolean savedGUI;
     private boolean wonGUI;
-    public static final int amountKiwisaved = 3;
-    public static final int amountSteps = 1000;
-    public static final int amountWon = 3;
+    public static final int AMOUNTKIWISAVED = 3;
+    public static final int AMOUNTSTEPS = 1000;
+    public static final int AMOUNTWON= 3;
+    public static final String ACHIEVEMENTS = "Achievements.xml";
+    public static final String AWARDCOUNTS = "AwardCounts.xml";
     
     //Empty constructor.
     public GameAchievement(){
@@ -69,11 +70,11 @@ public class GameAchievement {
      * using documentBuilder
      * @return document
      */
-    public Document ReadAchievementXML(){
+    public Document readAchievementXML(){
         Document xml = null;
         try{
          
-            File fXmlFile = new File("Achievements.xml");
+            File fXmlFile = new File(ACHIEVEMENTS);
             DocumentBuilderFactory dbFactory = 
                     DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -101,7 +102,7 @@ public class GameAchievement {
     public void lossGameResetCounter(){
         Document xml = null;
         try{
-            File File = new File("AwardCounts.xml");
+            File File = new File(AWARDCOUNTS);
             DocumentBuilderFactory dbFactory = 
                     DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -150,7 +151,7 @@ public class GameAchievement {
         Document xml = null;
         try{
             //read through the AwardCounts.xml already created.
-            File File = new File("AwardCounts.xml");
+            File File = new File(AWARDCOUNTS);
             DocumentBuilderFactory dbFactory = 
                     DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -183,7 +184,7 @@ public class GameAchievement {
                         "game3won".equals(node.getNodeName())){
                         node.setTextContent("t");
                         wonGUI = true;
-                        setAchievements(ReadAchievementXML(), true,
+                        setAchievements(readAchievementXML(), true,
                                 false, false);             
                      
                 }
@@ -246,7 +247,7 @@ public class GameAchievement {
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             DOMSource source = new DOMSource(doc);
             StreamResult result = 
-                    new StreamResult(new File("Achievements.xml"));
+                    new StreamResult(new File(ACHIEVEMENTS));
             transformer.transform(source, result);
             } catch (TransformerException ex) {
                 Logger.getLogger(GameAchievement.
@@ -280,7 +281,7 @@ public class GameAchievement {
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             DOMSource source = new DOMSource(doc);
             StreamResult result = 
-                    new StreamResult(new File("Achievements.xml"));
+                    new StreamResult(new File(ACHIEVEMENTS));
             transformer.transform(source, result);
         } catch (TransformerException ex) {
                 Logger.getLogger(GameAchievement.
@@ -311,7 +312,7 @@ public class GameAchievement {
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             DOMSource source = new DOMSource(doc);
             StreamResult result = 
-                    new StreamResult(new File("Achievements.xml"));
+                    new StreamResult(new File(ACHIEVEMENTS));
             transformer.transform(source, result);            
         } catch (TransformerException ex) {
                 Logger.getLogger(GameAchievement.
@@ -331,7 +332,7 @@ public class GameAchievement {
     public void read_kiwiCount(int kiwi){
         Document xml = null;
         try{
-            File File = new File("AwardCounts.xml");
+            File File = new File(AWARDCOUNTS);
             DocumentBuilderFactory dbFactory = 
                     DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -342,7 +343,7 @@ public class GameAchievement {
                 Node node = list.item(i);
                 if("savedKiwis".equals(node.getNodeName())){
                     node.setTextContent(Integer.toString(kiwi));
-                    if(kiwi >=amountKiwisaved){ 
+                    if(kiwi >=AMOUNTKIWISAVED){ 
                             //This is if player saves x amount of kiwi. 
                         savedKiwis = true;
                     }
@@ -351,7 +352,7 @@ public class GameAchievement {
                         && "hero".equals(node.getNodeName())){
                         node.setTextContent("t");
                         savedGUI = true;
-                        setAchievements(ReadAchievementXML()
+                        setAchievements(readAchievementXML()
                                 , false, false, true); 
                 }
             }       
@@ -386,7 +387,7 @@ public class GameAchievement {
     public void write_to_count(int count_of_step){
          Document xml = null;
         try{
-            File File = new File("AwardCounts.xml");
+            File File = new File(AWARDCOUNTS);
             DocumentBuilderFactory dbFactory = 
                     DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -398,7 +399,7 @@ public class GameAchievement {
                 if("squares".equals(node.getNodeName())){
                     node.setTextContent(Integer.toString(count_of_step));
                     walked = false;
-                    if(count_of_step >=amountSteps){ 
+                    if(count_of_step >=AMOUNTSTEPS){ 
                         //This isif player walks over 1000 squares.
                             walked = true;
                     }
@@ -407,7 +408,7 @@ public class GameAchievement {
                         "traveller".equals(node.getNodeName())){
                         node.setTextContent("t");
                         walkingGUI = true;
-                        setAchievements(ReadAchievementXML(),
+                        setAchievements(readAchievementXML(),
                                 false, true, false);
                 }
             }
@@ -444,7 +445,7 @@ public class GameAchievement {
         int count_of_steps=0;
          Document xml = null;
         try{
-            File File = new File("AwardCounts.xml");
+            File File = new File(AWARDCOUNTS);
             DocumentBuilderFactory dbFactory = 
                     DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -491,7 +492,7 @@ public class GameAchievement {
     public boolean check_if_kiwiaward(){
          Document xml = null;
         try{
-            File File = new File("AwardCounts.xml");
+            File File = new File(AWARDCOUNTS);
             DocumentBuilderFactory dbFactory = 
                     DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -538,7 +539,7 @@ public class GameAchievement {
     public boolean check_if_tavelaward(){
          Document xml = null;
         try{
-            File File = new File("AwardCounts.xml");
+            File File = new File(AWARDCOUNTS);
             DocumentBuilderFactory dbFactory = 
                     DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -584,7 +585,7 @@ public class GameAchievement {
     public boolean check_if_wonaward(){
          Document xml = null;
         try{
-            File File = new File("AwardCounts.xml");
+            File File = new File(AWARDCOUNTS);
             DocumentBuilderFactory dbFactory = 
                     DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
