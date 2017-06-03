@@ -22,7 +22,16 @@
     <build>
     <sourceDirectory>src/nz/ac/aut/ense701</sourceDirectory>
     <testSourceDirectory>test/nz/ac/aut/ense701/gameModel</testSourceDirectory>
-</build>
+    </build>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <configuration>
+        <excludes>
+          <exclude>src/nz/ac/aut/ense701/gameModel/TwitterAPI.java</exclude>
+        </excludes>
+      </configuration>
+</plugin>
 <!--     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
