@@ -18,18 +18,18 @@ public class DifferentMap {
     //Difficulty : EASY
     private static final int MAP_SIZE_EASY = 10;
     private static final int NUMBER_PREDATOR_EASY = 3;
-    private static final int MIN__HAZARD_EASY = 3;
+    private static final int MIN_HAZARD_EASY = 3;
     private static final int PREDATOR_MOVE_TIME_EASY = 60;
     
     //Difficulty: NORMAL
     private static final int MAP_SIZE_NORMAL_HARD = 15;
     private static final int NUMBER_PREDATOR_NORMAL = 5;
-    private static final int MIN__HAZARD_NORMAL = 7;
+    private static final int MIN_HAZARD_NORMAL = 7;
     private static final int PREDATOR_MOVE_TIME_NORMAL = 40;
 
     //Difficulty: HARD
     private static final int NUMBER_PREDATOR_HARD = 7;
-    private static final int MIN__HAZARD_HARD = 10;
+    private static final int MIN_HAZARD_HARD = 10;
     private static final int PREDATOR_MOVE_TIME_HARD = 20;
     
     private int mapRows;
@@ -75,7 +75,7 @@ public class DifferentMap {
         generateDifficulty();
         int[][] mapGen = new int[mapRows][mapCols];
         
-        PrintWriter pw = CreateFile();
+        PrintWriter pw = createFile();
         Random rand = new Random();
         //Setup Maps rows and columns
         pw.println(getMapRows() + ", " + getMapCols() + ",");
@@ -138,24 +138,24 @@ public class DifferentMap {
                       mapRows = MAP_SIZE_EASY;
                       mapCols = MAP_SIZE_EASY;
                       numPredators = NUMBER_PREDATOR_EASY;
-                      minHazards = MIN__HAZARD_EASY;
-                      this.predatorMoveTime = this.PREDATOR_MOVE_TIME_EASY;                      
+                      minHazards = MIN_HAZARD_EASY;
+                      this.predatorMoveTime = PREDATOR_MOVE_TIME_EASY;                      
                 break;
                 
                 case NORMAL:
                       mapRows = MAP_SIZE_NORMAL_HARD;
                       mapCols = MAP_SIZE_NORMAL_HARD;
                       numPredators = NUMBER_PREDATOR_NORMAL;
-                      minHazards = MIN__HAZARD_NORMAL;
-                      this.predatorMoveTime = this.PREDATOR_MOVE_TIME_NORMAL;       
+                      minHazards = MIN_HAZARD_NORMAL;
+                      this.predatorMoveTime = PREDATOR_MOVE_TIME_NORMAL;       
                 break;
                 
                 case HARD:
                       mapRows = MAP_SIZE_NORMAL_HARD;
                       mapCols = MAP_SIZE_NORMAL_HARD;
                       numPredators = NUMBER_PREDATOR_HARD;
-                      minHazards = MIN__HAZARD_HARD;
-                      this.predatorMoveTime = this.PREDATOR_MOVE_TIME_HARD;       
+                      minHazards = MIN_HAZARD_HARD;
+                      this.predatorMoveTime = PREDATOR_MOVE_TIME_HARD;       
                 break;
                 
                 default : break;
@@ -260,10 +260,9 @@ public class DifferentMap {
             boolean validSpawn = true;
             for(int x = -PRED_MIN_DIST; x < PRED_MIN_DIST; x++) {
                 for(int y = -PRED_MIN_DIST; y < PRED_MIN_DIST; y++) {
-                    if(col+x > 0 && col+x < getMapCols() && row+y > 0 && row+y < getMapRows()) {
-                        if(tempMap[row+y][col+x] != null && tempMap[row+y][col+x].contains("K")) {
-                            validSpawn = false;
-                        }
+                    if(col+x > 0 && col+x < getMapCols() && row+y > 0 && row+y < getMapRows() &&
+                            tempMap[row+y][col+x] != null && tempMap[row+y][col+x].contains("K")) {
+                        validSpawn = false;
                     }
                 }
             }
@@ -325,7 +324,7 @@ public class DifferentMap {
         }
     }
     
-    public PrintWriter CreateFile() {
+    public PrintWriter createFile() {
         PrintWriter pw = null;
         
         try {

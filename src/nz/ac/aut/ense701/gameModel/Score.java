@@ -11,6 +11,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,7 +33,7 @@ import org.xml.sax.SAXException;
  * @author joshl
  */
 public class Score {
-    private int score;
+    private int currentScore;
     
     //Score Values for each event
     public static final int VALUE_HARARD_DEATH = 100;
@@ -49,14 +51,18 @@ public class Score {
     
     private static final int SCORES_RECORDED = 100;
     
+    private static final String POINTS_TAG = "points";
+    
     DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     
+    private static final Logger LOG = Logger.getLogger(Score.class.getName());
+    
     public Score() {
-        score = 0;
+        currentScore = 0;
     }
     
     public Score(int score) {
-        this.score = score;
+        currentScore = score;
     }
     
     public void saveHighScore(String name) {
@@ -76,18 +82,16 @@ public class Score {
             for(int i = 0; i < numScores; i++) {
                 Node highScore = list.item(i);
 
-                if(highScore.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) highScore;
-                    highScores[i] = new HighScore(
-                        element.getElementsByTagName("name").item(0).getTextContent(),
-                        Integer.parseInt(element.getElementsByTagName("points").item(0).getTextContent()),
-                        df.parse(element.getElementsByTagName("date").item(0).getTextContent())
-                    );
-                }
+                Element element = (Element) highScore;
+                highScores[i] = new HighScore(
+                    element.getElementsByTagName("name").item(0).getTextContent(),
+                    Integer.parseInt(element.getElementsByTagName(POINTS_TAG).item(0).getTextContent()),
+                    df.parse(element.getElementsByTagName("date").item(0).getTextContent())
+                );
             }
             boolean scoreIsHigher = false;
             for(HighScore hs : highScores) {
-                if(score > hs.value) scoreIsHigher = true;
+                if(currentScore > hs.value) scoreIsHigher = true;
             }
             if(numScores < SCORES_RECORDED || scoreIsHigher) {
                 Element root = doc.getDocumentElement();
@@ -104,7 +108,7 @@ public class Score {
                         if(highScore.getNodeType() == Node.ELEMENT_NODE) {
                             Element element = (Element) highScore;
                             int points = Integer.parseInt(element.
-                                    getElementsByTagName("points").item(0).getTextContent());
+                                    getElementsByTagName(POINTS_TAG).item(0).getTextContent());
                             if(points == lowestScore) {
                                 root.removeChild(highScore);
                                 break;
@@ -115,8 +119,8 @@ public class Score {
                 Element newScore = doc.createElement("Score");
                 Element playerName = doc.createElement("name");
                 playerName.setTextContent(name);
-                Element playerScore = doc.createElement("points");
-                playerScore.setTextContent(""+score);
+                Element playerScore = doc.createElement(POINTS_TAG);
+                playerScore.setTextContent(Integer.toString(currentScore));
                 Element currentDate = doc.createElement("date");
                 currentDate.setTextContent(df.format(new Date()));
                 newScore.appendChild(playerName);
@@ -136,34 +140,34 @@ public class Score {
                 transformer.transform(source, result);
             }
         } catch (IOException e) {
-            System.err.println("IO error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "IO error: {0}", e.getMessage());
         } catch (NumberFormatException e) {
-            System.err.println("NumberFormatException error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "Number Format Exception {0}", e.getMessage());
         } catch (ParserConfigurationException e) {
-            System.err.println("Parser error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "Parser error: {0}", e.getMessage());
         } catch (SAXException e) {
-            System.err.println("SAXException error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "SAXException error: {0}", e.getMessage());
         } catch (ParseException e) {
-            System.err.println("Document Parsing error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "Document Parsing error: {0}", e.getMessage());
         } catch (TransformerException e) {
-            System.err.println("Transformer error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "Transformer error: {0}", e.getMessage());
         }
     }
     
     public int getScore() {
-        return score;
+        return currentScore;
     }
     
     public void setScore(int score) {
-        this.score = score;
+        this.currentScore = score;
     }
     
     public void addScore(int add) {
-        score += Math.abs(add);
+        currentScore += Math.abs(add);
     }
     
     public void subtractScore(int subtract) {
-        score -= Math.abs(subtract);
+        currentScore -= Math.abs(subtract);
     }
     
     public class HighScore implements Comparable<HighScore> {

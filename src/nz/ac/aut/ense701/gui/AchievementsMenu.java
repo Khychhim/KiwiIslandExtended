@@ -10,6 +10,8 @@ import java.awt.Image;
 import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -58,6 +60,8 @@ public class AchievementsMenu extends SubMenu {
     private static final float TITLE_HEIGHT_RATIO        = 0.20f;
     //Percentages of the screen used by the achievement titles
     private static final float ADD_TO_PROGRESS_BAR_X = 0.125f;
+    
+    private static final Logger LOG = Logger.getLogger(AchievementsMenu.class.getName());
     
     public AchievementsMenu() {
         super("Kiwi Island - Achievements Menu");
@@ -114,7 +118,7 @@ public class AchievementsMenu extends SubMenu {
             progressBarContainerImage = ImageIO.read(this.getClass().
                     getResource("/nz/ac/aut/ense701/guiImages/ProgressBarContainer.png"));
         } catch (IOException e) {
-            System.err.println("Unable to load Image. " + e.getMessage());
+            LOG.log(Level.SEVERE, "Failed to load image {0}", e.getMessage());
         }
     }
     
@@ -160,13 +164,13 @@ public class AchievementsMenu extends SubMenu {
                 }
             }
         } catch (IOException e) {
-            System.err.println("IO error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "IO Exception {0}", e.getMessage());
         } catch (NumberFormatException e) {
-            System.err.println("NumberFormatException error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "Number format Exception {0}", e.getMessage());
         } catch (ParserConfigurationException e) {
-            System.err.println("Parser error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "Parser config Exception {0}", e.getMessage());
         } catch (SAXException e) {
-            System.err.println("SAXException error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "SAXException {0}", e.getMessage());
         }
     }
     
@@ -180,7 +184,8 @@ public class AchievementsMenu extends SubMenu {
         int heightBar = (int) (height*PROGRESS_BAR_HEIGHT_RATIO);
         int yBar = (int) (height*PROGRESS_BAR_START_HEIGHT_RATIO);
         int heightBetweenBars = (((height-(heightBar*ACHIEVEMENT_COUNT))-yBar)/ACHIEVEMENT_COUNT);
-        int progressWidth, progressX;
+        int progressWidth;
+        int progressX;
         
         for(int i = 0; i < ACHIEVEMENT_COUNT; i++) {
             progressX = (int)(width*PROGRESS_BAR_ADD_TO_CONTAINTER_X);

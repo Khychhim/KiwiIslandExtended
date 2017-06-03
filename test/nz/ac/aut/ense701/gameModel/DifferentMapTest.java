@@ -64,7 +64,7 @@ public class DifferentMapTest extends junit.framework.TestCase {
     
     @Test
     public void testDidPrintWriterAccessFile() {
-        PrintWriter pw = differentMap.CreateFile();
+        PrintWriter pw = differentMap.createFile();
         assertFalse("Printwriter should not be null", pw == null);
         assertFalse("The printwriter should not have an error", pw.checkError());
         pw.close();

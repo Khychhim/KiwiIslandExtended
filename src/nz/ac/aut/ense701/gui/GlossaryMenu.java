@@ -7,7 +7,6 @@ package nz.ac.aut.ense701.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
@@ -15,6 +14,8 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -49,7 +50,7 @@ public class GlossaryMenu extends SubMenu implements ComponentListener {
     private static final int ANIMAL_START_INDEX = 3;
     
     private static final int HIDDEN     = 0;
-    private static final int SELECTED   = 1;
+    private static final int SELECTION  = 1;
     private static final int INFO_BOX   = 2;
     private static final int CAT        = 3; //Animal start Index
     private static final int KIORE      = 4;
@@ -82,6 +83,8 @@ public class GlossaryMenu extends SubMenu implements ComponentListener {
     private static final float TEXT_AREA_HEIGHT_RATIO = 0.215f;
     private static final float TEXT_AREA_X_POS_RATIO  = 0.56f;
     private static final float TEXT_AREA_Y_POS_RATIO  = 0.60f;
+    
+    private static final Logger LOG = Logger.getLogger(GlossaryMenu.class.getName());
     
     public GlossaryMenu() {
         super("Kiwi Island - Glossary");
@@ -127,7 +130,7 @@ public class GlossaryMenu extends SubMenu implements ComponentListener {
     private void loadImages() {
         try {
             glossaryImages[HIDDEN] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/glossaryImages/Hidden.png"));
-            glossaryImages[SELECTED] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/glossaryImages/Selected.png"));
+            glossaryImages[SELECTION] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/glossaryImages/Selected.png"));
             glossaryImages[INFO_BOX] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/glossaryImages/InfoBox.png"));
             glossaryImages[CAT] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/glossaryImages/cat.png"));
             glossaryImages[KIORE] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/glossaryImages/kiore.png"));
@@ -142,7 +145,7 @@ public class GlossaryMenu extends SubMenu implements ComponentListener {
             glossaryImages[OYSTER_CTCR] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/glossaryImages/oyster-catcher.png"));
             glossaryImages[ROBIN] = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/glossaryImages/black-robin.png"));
         } catch (IOException e) {
-            System.err.println("Unable to load Image. " + e.getMessage());
+            LOG.log(Level.SEVERE, "Failed to load image {0}", e.getMessage());
         }
     }
     
@@ -168,13 +171,13 @@ public class GlossaryMenu extends SubMenu implements ComponentListener {
                 }
             }
         } catch (IOException e) {
-            System.err.println("IO error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "Failed to read document {0}", e.getMessage());
         } catch (NumberFormatException e) {
-            System.err.println("NumberFormatException error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "error parsing id {0}", e.getMessage());
         } catch (ParserConfigurationException e) {
-            System.err.println("Parser error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "ParserConfigException {0}", e.getMessage());
         } catch (SAXException e) {
-            System.err.println("SAXException error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "SaxException  {0}", e.getMessage());
         }
     }
     
@@ -210,10 +213,14 @@ public class GlossaryMenu extends SubMenu implements ComponentListener {
     }
 
     @Override
-    public void componentResized(ComponentEvent e) {}
+    public void componentResized(ComponentEvent e) {
+        //Not used
+    }
 
     @Override
-    public void componentMoved(ComponentEvent e) {}
+    public void componentMoved(ComponentEvent e) {
+        //Not used
+    }
 
     @Override
     public void componentShown(ComponentEvent e) {
@@ -221,14 +228,16 @@ public class GlossaryMenu extends SubMenu implements ComponentListener {
     }
 
     @Override
-    public void componentHidden(ComponentEvent e) {}
+    public void componentHidden(ComponentEvent e) {
+        //Not used
+    }
     
     public class AnimalIcon {
-        public JLabel animal;
-        public boolean visible;
-        public int animalIndex;
-        public String name;
-        public String description;
+        private JLabel animal;
+        private boolean visible;
+        private final int animalIndex;
+        private String name;
+        private String description;
         
         public AnimalIcon(int animalIndex) {
             animal = new JLabel();
@@ -247,13 +256,11 @@ public class GlossaryMenu extends SubMenu implements ComponentListener {
             int x = 0;
             int y = 0;
             int index = animalIndex;
-            int rows = 1;
             //Set the icons position based on the icon number and the number of icons per row
             do {
                 x = (int) ((winWidth*ICON_AREA_START_WIDTH_RATIO)+
-                        (iconWidth*(index-ANIMAL_START_INDEX)+(iconWidth*(index-ANIMAL_START_INDEX)/ICONS_PER_ROW)));
-                y += (int) ((winHeight*ICON_AREA_START_HIEGHT_RATIO)+(iconWidth*2/ICONS_PER_ROW));
-                rows++;
+                        (iconWidth*(index-ANIMAL_START_INDEX)+(iconWidth*(index-ANIMAL_START_INDEX)/(double)ICONS_PER_ROW)));
+                y += (int) ((winHeight*ICON_AREA_START_HIEGHT_RATIO)+(iconWidth*2/(double)ICONS_PER_ROW));
                 index -= ICONS_PER_ROW;
             } while(index >= ICONS_PER_ROW-1);
             int imageIndex;
@@ -264,7 +271,7 @@ public class GlossaryMenu extends SubMenu implements ComponentListener {
             animal.setPreferredSize(new Dimension(iconWidth, iconHeight));
             animal.setBounds(x, y, iconWidth, iconHeight);
             if(isSelected) {
-                selected.setIcon(new ImageIcon(scaleImage(glossaryImages[SELECTED], iconWidth, iconHeight)));
+                selected.setIcon(new ImageIcon(scaleImage(glossaryImages[SELECTION], iconWidth, iconHeight)));
                 selected.setPreferredSize(new Dimension(iconWidth, iconHeight));
                 selected.setBounds(x, y, iconWidth, iconHeight);
             }
@@ -278,23 +285,21 @@ public class GlossaryMenu extends SubMenu implements ComponentListener {
         //Checks if the click location was within a visible animal icon
         //Then calls resizeIcon to move the selection icon to that icon
         for(int i = 0; i < NUMBER_OF_ANIMALS; i++) {
-            if(animals[i].animal.getBounds().contains(clickLoc)) {
-                if(animals[i].visible) {
-                    selectedIndex = i;
-                    int width = menu.getWidth();
-                    int height = menu.getHeight();
-                    animals[i].resizeIcon(width, height, true);
-                    
-                    int x = (int) (width*INFO_BOX_X_POS_RATIO);
-                    int y = (int) (height*INFO_BOX_Y_POS_RATIO);
-                    int selectedAnimalWidth = (int) (width*INFO_BOX_WIDTH_RATIO);
-                    int selectedAnimalHeight = (int) (height*SELECTED_ANIMAL_HEIGHT_RATIO);
-                    selectedAnimal.setIcon(new ImageIcon(scaleImage(
-                            glossaryImages[selectedIndex+ANIMAL_START_INDEX], selectedAnimalWidth, selectedAnimalHeight)));
-                    selectedAnimal.setPreferredSize(new Dimension(selectedAnimalWidth, selectedAnimalHeight));
-                    selectedAnimal.setBounds(x, y, selectedAnimalWidth, selectedAnimalHeight);
-                    animalInfo.setText(animals[i].name + "\n" + animals[i].description);
-                }
+            if(animals[i].animal.getBounds().contains(clickLoc) && animals[i].visible) {
+                selectedIndex = i;
+                int width = menu.getWidth();
+                int height = menu.getHeight();
+                animals[i].resizeIcon(width, height, true);
+
+                int x = (int) (width*INFO_BOX_X_POS_RATIO);
+                int y = (int) (height*INFO_BOX_Y_POS_RATIO);
+                int selectedAnimalWidth = (int) (width*INFO_BOX_WIDTH_RATIO);
+                int selectedAnimalHeight = (int) (height*SELECTED_ANIMAL_HEIGHT_RATIO);
+                selectedAnimal.setIcon(new ImageIcon(scaleImage(
+                        glossaryImages[selectedIndex+ANIMAL_START_INDEX], selectedAnimalWidth, selectedAnimalHeight)));
+                selectedAnimal.setPreferredSize(new Dimension(selectedAnimalWidth, selectedAnimalHeight));
+                selectedAnimal.setBounds(x, y, selectedAnimalWidth, selectedAnimalHeight);
+                animalInfo.setText(animals[i].name + "\n" + animals[i].description);
             }
         }
     }

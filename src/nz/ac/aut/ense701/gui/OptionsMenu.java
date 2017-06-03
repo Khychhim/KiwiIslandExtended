@@ -13,6 +13,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -61,6 +63,10 @@ public class OptionsMenu extends SubMenu {
     private static final float HELP_START_HEIGHT_RATIO  = 0.25f;
     private static final float HELP_HEIGHT_RATIO        = 0.60f;
     
+    private static final String XML_NAME = "options.xml";
+    
+    private static final Logger LOG = Logger.getLogger(OptionsMenu.class.getName());
+    
     public OptionsMenu() {
         super("Kiwi Island - Options");
         nameInput = new JTextField();
@@ -100,7 +106,7 @@ public class OptionsMenu extends SubMenu {
             titleImage = ImageIO.read(this.getClass().
                     getResource("/nz/ac/aut/ense701/guiImages/Options.png"));
         } catch (IOException e) {
-            System.err.println("Unable to load Image. " + e.getMessage());
+            LOG.log(Level.SEVERE, "Unable to load Image. {0}", e.getMessage());
         }
     }
     
@@ -144,7 +150,7 @@ public class OptionsMenu extends SubMenu {
     
     private void loadOptions() {
         try {
-            File file = new File("options.xml");
+            File file = new File(XML_NAME);
             DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance()
                     .newDocumentBuilder();
 
@@ -156,17 +162,17 @@ public class OptionsMenu extends SubMenu {
             Element help = (Element) doc.getElementsByTagName("Help").item(0);
             helpText.setText(help.getTextContent());
         } catch (SAXException e) {
-            System.err.println(e.getMessage());
+            LOG.log(Level.SEVERE, "SAXException. {0}", e.getMessage());
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            LOG.log(Level.SEVERE, "IOException. {0}", e.getMessage());
         } catch (ParserConfigurationException e) {
-            System.err.println(e.getMessage());
+            LOG.log(Level.SEVERE, "ParserConfigException. {0}", e.getMessage());
         }
     }
     
     public void saveOptions() {
         try {
-            File file = new File("options.xml");
+            File file = new File(XML_NAME);
             DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance()
                     .newDocumentBuilder();
 
@@ -187,15 +193,15 @@ public class OptionsMenu extends SubMenu {
                     new StreamResult(new File("options.xml"));
             transformer.transform(source, result);
         } catch (IOException e) {
-            System.err.println("IO error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "IOException. {0}", e.getMessage());
         } catch (NumberFormatException e) {
-            System.err.println("NumberFormatException error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "NumberFormatException. {0}", e.getMessage());
         } catch (ParserConfigurationException e) {
-            System.err.println("Parser error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "ParserConfigException. {0}", e.getMessage());
         } catch (SAXException e) {
-            System.err.println("SAXException error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "SAXException. {0}", e.getMessage());
         } catch (TransformerException e) {
-            System.err.println("Transformer error: " + e.getMessage());
+            LOG.log(Level.SEVERE, "TransformerException. {0}", e.getMessage());
         }
     }
     

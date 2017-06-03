@@ -10,6 +10,8 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -82,7 +84,7 @@ public class Tileset {
     
     
     //Array containing paths to tilesets
-    private final String[] tileSets = {
+    private static final String[] TILE_SETS = {
         "/nz/ac/aut/ense701/gameImages/Cliff_tileset_smaller.png",
         "/nz/ac/aut/ense701/gameImages/ground_tiles.png",
         "/nz/ac/aut/ense701/gameImages/rocks.png",
@@ -90,7 +92,7 @@ public class Tileset {
     };
     
     //Array containing paths to single tiles
-    private final String[] singleTilePaths = {
+    private static final String[] SINGLE_TILE_PATHS = {
         "/nz/ac/aut/ense701/gameImages/BlankTile.png",
         "/nz/ac/aut/ense701/gameImages/waterTile.png",
         "/nz/ac/aut/ense701/gameImages/forestTile.png",
@@ -117,38 +119,40 @@ public class Tileset {
     private final Image[][] tiles;
     
     //The width and heights of the tiles in pixels
-    private final int TILE_WIDTH  = 32;
-    private final int TILE_HEIGHT = 32;
+    private static final int TILE_WIDTH  = 32;
+    private static final int TILE_HEIGHT = 32;
+    
+    private static final Logger LOG = Logger.getLogger(Tileset.class.getName());
     
     public Tileset() {
-        tiles = new Image[tileSets.length][];
-        tileSetsImages = new BufferedImage[tileSets.length];
-        singleTileImages = new BufferedImage[singleTilePaths.length];
+        tiles = new Image[TILE_SETS.length][];
+        tileSetsImages = new BufferedImage[TILE_SETS.length];
+        singleTileImages = new BufferedImage[SINGLE_TILE_PATHS.length];
         loadTileSets();
         setupTiles();
     }
     
     //Loads the tileset images
     private void loadTileSets() {
-        for(int i = 0; i < tileSets.length; i++) {
+        for(int i = 0; i < TILE_SETS.length; i++) {
             try {
-                tileSetsImages[i] = ImageIO.read(this.getClass().getResource(tileSets[i]));
+                tileSetsImages[i] = ImageIO.read(this.getClass().getResource(TILE_SETS[i]));
             } catch(IOException ex) {
-                System.err.println("Failed to load " + tileSets[i] + ", " + ex.getMessage());
+                LOG.log(Level.SEVERE, "Failed to load {0}, {1}", new Object[]{TILE_SETS[i], ex.getMessage()});
             }
         }
-        for(int i = 0; i < singleTilePaths.length; i++) {
+        for(int i = 0; i < SINGLE_TILE_PATHS.length; i++) {
             try {
-                singleTileImages[i] = ImageIO.read(this.getClass().getResource(singleTilePaths[i]));
+                singleTileImages[i] = ImageIO.read(this.getClass().getResource(SINGLE_TILE_PATHS[i]));
             } catch(IOException ex) {
-                System.err.println("Failed to load " + tileSets[i] + ", " + ex.getMessage());
+                LOG.log(Level.SEVERE, "Failed to load {0}, {1}", new Object[]{SINGLE_TILE_PATHS[i], ex.getMessage()});
             }
         }
     }
     
     //Setup the tiles array
     private void setupTiles() {
-        for(int i = 0; i < tileSets.length; i++) {
+        for(int i = 0; i < TILE_SETS.length; i++) {
             //The width/height of the tileset over the tiles size
             int imageHeight = tileSetsImages[i].getHeight(null);
             int tilesHorizontal = (tileSetsImages[i].getWidth(null)/TILE_WIDTH);
@@ -196,6 +200,6 @@ public class Tileset {
     }
     
     public int getNumTileSets() {
-        return tileSets.length;
+        return TILE_SETS.length;
     }
 }

@@ -15,6 +15,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -57,6 +59,8 @@ public class HighScoresMenu extends SubMenu {
     private static final float HIGHSCORE_END_HEIGHT     = 0.15f;
     private static final float HIGHSCORE_TEXT_OFFSET    = 0.02f;
     
+    private static final Logger LOG = Logger.getLogger(HighScoresMenu.class.getName());
+    
     public HighScoresMenu() {
         super("Kiwi Island - High Scores Menu");
         highScoreLabels = new JLabel[TOTAL_SCORES_SHOWN];
@@ -74,7 +78,7 @@ public class HighScoresMenu extends SubMenu {
             highScoreLabelImage = ImageIO.read(this.getClass().
                     getResource("/nz/ac/aut/ense701/guiImages/highScoreContainer.png"));
         } catch (IOException e) {
-            System.err.println("Unable to load Image. " + e.getMessage());
+            LOG.log(Level.SEVERE, "Failed to load image {0}", e.getMessage());
         }
     }
     
@@ -165,14 +169,16 @@ public class HighScoresMenu extends SubMenu {
                 }
             }
             Collections.sort(highScores);
-        } catch (SAXException e) {
-            System.err.println(e.getMessage());
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            LOG.log(Level.SEVERE, "Failed to read document {0}", e.getMessage());
+        } catch (NumberFormatException e) {
+            LOG.log(Level.SEVERE, "error parsing id {0}", e.getMessage());
         } catch (ParserConfigurationException e) {
-            System.err.println(e.getMessage());
+            LOG.log(Level.SEVERE, "ParserConfigException {0}", e.getMessage());
+        } catch (SAXException e) {
+            LOG.log(Level.SEVERE, "SaxException {0}", e.getMessage());
         } catch (ParseException e) {
-            System.err.println(e.getMessage());
+            LOG.log(Level.SEVERE, "ParseException {0}", e.getMessage());
         }
     }
 }

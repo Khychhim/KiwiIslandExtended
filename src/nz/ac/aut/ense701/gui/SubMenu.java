@@ -18,6 +18,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -32,10 +34,11 @@ public abstract class SubMenu extends JPanel implements MouseListener {
     private javax.swing.JLabel menuBackground;
     private JLabel backButton;
     protected javax.swing.JLayeredPane menuPane;
-    private Image backGroundImage;
-    private Image backButtonImage;
-    private Timer resizeTimer;
+    private transient Image backGroundImage;
+    private transient Image backButtonImage;
+    private transient Timer resizeTimer;
     protected JFrame menu;
+    private static final Logger LOG = Logger.getLogger(SubMenu.class.getName());
     
     private static final long WAIT_FOR_RESIZE = 250;
     
@@ -65,7 +68,7 @@ public abstract class SubMenu extends JPanel implements MouseListener {
             backGroundImage = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/SubMenuBackground.png"));
             backButtonImage = ImageIO.read(this.getClass().getResource("/nz/ac/aut/ense701/guiImages/BackButton.png"));
         } catch (IOException e) {
-            System.err.println("Unable to load Image. " + e.getMessage());
+            LOG.log(Level.SEVERE, "Failed to load image {0}", e.getMessage());
         }
         
         menu.addComponentListener(new ComponentListener() {
@@ -83,13 +86,19 @@ public abstract class SubMenu extends JPanel implements MouseListener {
             }
 
             @Override
-            public void componentMoved(ComponentEvent e) {}
+            public void componentMoved(ComponentEvent e) {
+                //Empty not used
+            }
 
             @Override
-            public void componentShown(ComponentEvent e) {}
+            public void componentShown(ComponentEvent e) {
+                //Empty not used
+            }
 
             @Override
-            public void componentHidden(ComponentEvent e) {}
+            public void componentHidden(ComponentEvent e) {
+                //Empty not used
+            }
         });
         
         menuPane = new javax.swing.JLayeredPane();
