@@ -29,7 +29,7 @@ public class DifferentMap {
     //Difficulty: HARD
     private final int NUMBER_PREDATOR_HARD = 7;
     private final int MIN__HAZARD_HARD = 10;
-    private final int PREDATOR_MOVE_TIME_HARD = 2;
+    private final int PREDATOR_MOVE_TIME_HARD = 20;
     
     private int mapRows;
     private int mapCols;
