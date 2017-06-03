@@ -1,5 +1,6 @@
-package nz.ac.aut.ense701.gameModel;
+package guiTests;
 
+import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gui.KiwiCountUI;
 import nz.ac.aut.ense701.gui.MiniGameGuess;
 import org.junit.Test;
