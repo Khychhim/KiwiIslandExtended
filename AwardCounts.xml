@@ -7,7 +7,7 @@ and open the template in the editor.
         <name>player1</name>
         <savedKiwis>0</savedKiwis>
         <gamesWon>0</gamesWon>
-        <squares>0</squares>
+        <squares>24</squares>
         <game3won>f</game3won>
         <traveller>f</traveller>
         <hero>f</hero>
