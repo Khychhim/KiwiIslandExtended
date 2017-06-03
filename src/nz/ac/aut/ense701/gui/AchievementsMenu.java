@@ -138,12 +138,12 @@ public class AchievementsMenu extends SubMenu {
                 if(achievement.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) achievement;
                     achievements[GAMES_WON] = new Achievement( 
-                            "Won " + GameAchievement.amount_of_games_won + " games in a row.",
+                            "Won " + GameAchievement.AMOUNTWON + " games in a row.",
                             element.getElementsByTagName("game3won")
                                     .item(0).getTextContent().equalsIgnoreCase("t"),
                             Integer.parseInt(element.
                             getElementsByTagName("gamesWon").item(0).getTextContent()),
-                            GameAchievement.amount_of_games_won
+                            GameAchievement.AMOUNTWON
                     );
                     achievements[HERO] = new Achievement(
                             "Hero",
@@ -151,7 +151,7 @@ public class AchievementsMenu extends SubMenu {
                                     .item(0).getTextContent().equalsIgnoreCase("t"),
                             Integer.parseInt(element.
                             getElementsByTagName("savedKiwis").item(0).getTextContent()),
-                            GameAchievement.amount_of_kiwiSaved
+                            GameAchievement.AMOUNTKIWISAVED
                     );
                     achievements[TRAVELLER] = new Achievement(
                             "Traveller",
@@ -159,7 +159,7 @@ public class AchievementsMenu extends SubMenu {
                                     .item(0).getTextContent().equalsIgnoreCase("t"),
                             Integer.parseInt(element.
                             getElementsByTagName("squares").item(0).getTextContent()),
-                            GameAchievement.amount_of_steps
+                            GameAchievement.AMOUNTSTEPS
                     );
                 }
             }

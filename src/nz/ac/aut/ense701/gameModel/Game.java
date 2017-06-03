@@ -800,10 +800,8 @@ public class Game {
             //creates achievement object to reset counter of total games won.
             GameAchievement achievement = new GameAchievement();
             achievement.lossGameResetCounter();
-
             achievement.write_to_count(count_of_steps);
             achievement.read_kiwiCount(kiwiCount);
-
             setAchievement(achievement);
             
 
@@ -831,8 +829,6 @@ public class Game {
             state = GameState.LOST;
             //creates achievement object to reset counter of total games won.
             GameAchievement achievement = new GameAchievement();
-            
-
             achievement.lossGameResetCounter();
             achievement.write_to_count(count_of_steps);
             achievement.read_kiwiCount(kiwiCount);

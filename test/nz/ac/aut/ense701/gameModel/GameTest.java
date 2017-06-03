@@ -112,16 +112,16 @@ public class GameTest extends junit.framework.TestCase
     }
     @Test
     public void achievementWonGames(){
-        assertTrue(game.achievement.won3gamesinrow);
+        assertTrue(game.achievement.get_won3gamesinrow());
     }
     @Test
     public void achievementTraveller(){
-        assertTrue(game.achievement.walked);
+        assertTrue(game.achievement.get_walked());
     }
     
     @Test
     public void achievementHero(){
-        assertTrue(game.achievement.savedKiwis);
+        assertTrue(game.achievement.get_savedkiwis());
     }
     
     @Test
@@ -133,7 +133,7 @@ public class GameTest extends junit.framework.TestCase
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             xml = (Document) dBuilder.parse(fXmlFile);
-            assertEquals(xml, game.achievement.ReadAchievementXML());
+            assertEquals(xml, game.achievement.readAchievementXML());
         }
         catch(SAXException e){
             System.out.println("SAXException error");
