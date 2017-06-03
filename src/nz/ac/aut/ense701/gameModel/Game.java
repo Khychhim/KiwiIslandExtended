@@ -12,7 +12,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
 import javax.swing.JFrame;
-
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,6 +37,7 @@ import org.xml.sax.SAXException;
  * AS
  */
 public class Game {
+      private static final Logger LOGGER = Logger.getLogger( Game.class.getName() );
       //Constants shared with UI to provide player data
       public static final int STAMINA_INDEX = 0;
       public static final int MAXSTAMINA_INDEX = 1;
@@ -99,16 +100,16 @@ public class Game {
             try {
                 docBuilder = docFactory.newDocumentBuilder();
             } catch (ParserConfigurationException ex) {
-                System.err.println("Parser Exception: " + ex.getMessage());
+                LOGGER.info("Parser Exception: " + ex.getMessage());
             }
             // root elements
             Document doc = null;
             try {
                 doc = docBuilder.parse(glossaryXML);
             } catch (SAXException ex) {
-                System.err.println("SAXEception: " + ex.getMessage());
+                LOGGER.info("SAXEception: " + ex.getMessage());
             } catch (IOException ex) {
-                System.err.println("IOException: " + ex.getMessage());
+               LOGGER.info("IOException: " + ex.getMessage());
             }
             doc.getDocumentElement().normalize();
 
@@ -285,12 +286,10 @@ public class Game {
                         return true;
                   } else {
                         Position twoStep = oneStep.getNewPosition(direction);
-                        if ( twoStep != null) {
-                              if(island.hasKiwi(twoStep)){ // check for two square ahead
+                        if ( twoStep != null && island.hasKiwi(twoStep)) {// check for two square ahead                              
                               predator.setRowAwayFromKiwi(row + row);
                               predator.setcoloumnAwayFromKiwi(col + col);
-                              return true;
-                              }
+                              return true;                              
                         }
                   }
             }
@@ -551,22 +550,21 @@ public class Game {
        */
       public boolean canUse(Object itemToUse) {
             boolean result = (itemToUse != null) && (itemToUse instanceof Item);
-            if (result) {
+            if (result && itemToUse instanceof Tool) {
                   //Food can always be used (though may be wasted)
                   // so no need to change result
-
-                  if (itemToUse instanceof Tool) {
-                        Tool tool = (Tool) itemToUse;
-                        //Traps can only be used if there is a predator to catch
-                        if (tool.isTrap()) {
-                              result = island.hasPredator(player.getPosition());
-                        } //Screwdriver can only be used if player has a broken trap
-                        else if (tool.isScrewdriver() && player.hasTrap()) {
-                              result = player.getTrap().isBroken();
-                        } else {
-                              result = false;
-                        }
+                  
+                  Tool tool = (Tool) itemToUse;
+                  //Traps can only be used if there is a predator to catch
+                  if (tool.isTrap()) {
+                        result = island.hasPredator(player.getPosition());
+                  } //Screwdriver can only be used if player has a broken trap
+                  else if (tool.isScrewdriver() && player.hasTrap()) {
+                        result = player.getTrap().isBroken();
+                  } else {
+                        result = false;
                   }
+                  
             }
             return result;
       }
@@ -764,8 +762,8 @@ public class Game {
             eventListeners.remove(listener);
       }
       
-      public GameAchievement setAchievement(GameAchievement game){
-          return this.achievement = game;
+      public void setAchievement(GameAchievement game){
+           this.achievement = game;
       }
       
       public GameAchievement getAchievement(){
