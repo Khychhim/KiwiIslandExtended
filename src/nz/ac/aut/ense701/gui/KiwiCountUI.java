@@ -13,10 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import nz.ac.aut.ense701.gameModel.Game;
-import nz.ac.aut.ense701.gameModel.GameAchievement;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
 import nz.ac.aut.ense701.gameModel.GameState;
 import nz.ac.aut.ense701.gameModel.MoveDirection;
@@ -159,31 +156,37 @@ public class KiwiCountUI
                     game.getPlayerMessage(), "Important Information",
                     JOptionPane.INFORMATION_MESSAGE);   
         }
-        else if(game.getState() == GameState.QUIZ){
-              this.setEnabled(false);
-              miniGameStart(this);
-             game.setGameState(GameState.PLAYING);
-              
+        else if (game.getState() == GameState.QUIZ) {
+            this.setEnabled(false);
+            miniGameStart(game, GameState.QUIZ);
+            game.setGameState(GameState.PLAYING);
+            System.out.println("Here finish quiz game");
+        } else if (game.getState() == GameState.GUESS) {
+            this.setEnabled(false);
+            miniGameStart(game, GameState.GUESS);
+            game.setGameState(GameState.PLAYING);
         }
     }
     
-     /**
-       * Set up the frame
-       * set up mini game panel instance
-       * @param game 
-       */
-      private void miniGameStart(KiwiCountUI gui){
-                //setup Mini game panel
-                MiniGameQuizPanel minigamePanel = new MiniGameQuizPanel(gui);                
-                //setup Frame
-                miniQuizFrame = new JFrame("Mini Game Quiz");
-                miniQuizFrame.add(minigamePanel);
-                miniQuizFrame.setSize(minigamePanel.getSize());
-                miniQuizFrame.setDefaultCloseOperation(0);                
-                miniQuizFrame.setVisible(true);
-                miniQuizFrame.pack();
-                miniQuizFrame.setLocationRelativeTo(null);
-      }
+    /**
+     * This method start mini game
+     * @param gui
+     * @param game
+     * @param state 
+     */
+    private void miniGameStart(Game game, GameState state) {
+        if (state == GameState.QUIZ) {
+            miniGameQuiz = new MiniGameQuiz(this, game);
+        }else if (state == GameState.GUESS) {
+            if (miniGameGuess == null) {
+                miniGameGuess = new MiniGameGuess(this, game);
+                miniGameGuess.start();
+            }else{
+                miniGameGuess.setVisible(true);
+                miniGameGuess.start();
+            }
+        }
+    }
     
      private void setAsGameListener()
     {
@@ -840,5 +843,7 @@ public class KiwiCountUI
       private GridSquarePanel gsp;
       private Tileset tileset;
       public JFrame miniQuizFrame;
+      public MiniGameQuiz miniGameQuiz;
+      public MiniGameGuess miniGameGuess;
       public Game game;
 }

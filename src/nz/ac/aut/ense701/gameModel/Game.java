@@ -11,8 +11,6 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
-import javax.swing.JFrame;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -21,7 +19,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -51,11 +48,12 @@ public class Game {
       GameAchievement achievement;
       public String playerName = "River Song";
       public ArrayList<QuizQuestion> quizQuestionList;
-      public JFrame miniQuizFrame;
       public PredatorTimerTask predatorTimerTask;
       public Document glossarydocs;
       private DifferentMap dm;
       private GameDifficulty gameDifficulty;
+      public final int NUMBER_OF_MINIGAMES = 2;
+    
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
      * @param playerName
@@ -1052,8 +1050,8 @@ public class Game {
                 Occupant trigger = island.getTrigger(current);
                 //remove launched trigger
                 island.removeOccupant(current, trigger);
-                //change gamestate to quiz
-                state = GameState.QUIZ;
+                //change gamestate
+                state = getRandomMiniGameState();
             }
         }
     
@@ -1334,6 +1332,23 @@ public class Game {
      }
      
      
+    /**
+     * This method return a mini game state
+     * @return state
+     */
+    public GameState getRandomMiniGameState() {
+        Random rnd = new Random();
+        GameState state = null;
+        
+        int number = rnd.nextInt(NUMBER_OF_MINIGAMES);
+        if (number == 0) {
+            state = GameState.QUIZ;
+        }else if (number == 1) {
+            state = GameState.GUESS;
+        }
+        return state;
+    }
+      
      public int getStartRow(){
            return this.startMapRow;
      }
