@@ -60,7 +60,7 @@ The brown kiwi is faster at breeding than other kiwi, producing up to two eggs a
 
 Adventurous and raring to go, little spotted kiwi chicks leave home to feed themselves when just 5-7 days old. However, the male parent does stay near the young chick and both return to the nest burrow to sleep for up to 60 days after hatching.</Description>
 	</Creature>
-	<Creature Seen="false" id="7">
+	<Creature Seen="true" id="7">
 		<Name>Fernbird</Name>
 		<Description>Fernbirds inhabit wetlands throughout New Zealand, but are rarely seen because of their secretive behaviour and excellent camouflage. More often heard than seen, fernbirds are skulking sparrow-sized birds that on the three main islands are found mainly in dense, low wetland vegetation. 
 

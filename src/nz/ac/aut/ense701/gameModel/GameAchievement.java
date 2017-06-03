@@ -5,6 +5,9 @@
  */
 package nz.ac.aut.ense701.gameModel;
 
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -37,18 +40,21 @@ import org.xml.sax.SAXException;
 public class GameAchievement {
 
     public Element Achievement;
-    public boolean won3gamesinrow;
-    public boolean walked;
-    public boolean savedKiwis;
-    public boolean walkingGUI;
-    public boolean savedGUI;
-    public boolean wonGUI;
-    public static int amount_of_kiwiSaved = 3;
-    public static int amount_of_steps = 1000;
-    public static int amount_of_games_won = 3;
+    private  boolean won3gamesinrow;
+    private boolean walked;
+    private boolean  savedKiwis;
+    private boolean walkingGUI;
+    private boolean savedGUI;
+    private boolean wonGUI;
+    public static final int amountKiwisaved = 3;
+    public static final int amountSteps = 1000;
+    public static final int amountWon = 3;
     
     //Empty constructor.
     public GameAchievement(){
+        //empty constructor so that class can be accessed
+        //in kiwiCountGUI.
+        this.Achievement = null;
     }
     
     
@@ -75,14 +81,13 @@ public class GameAchievement {
             xml.getDocumentElement().normalize();
         }
         catch(SAXException e){
-            System.out.println("SAXException error");
-                
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(IOException e){
-            System.out.println("IOException error");
+           Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(ParserConfigurationException e){
-            System.out.println("Parser Error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         return xml;
     }
@@ -106,9 +111,6 @@ public class GameAchievement {
             for(int i=0; i<list.getLength(); i++){
                 Node node = list.item(i);
                 if("gamesWon".equals(node.getNodeName())){
-                    System.out.println("True");
-                    System.out.println("Lost your chance at"
-                            + " winning 3 games in a row.");
                     int gameCounter = 0;
                     node.setTextContent(Integer.toString(gameCounter));
                 }
@@ -118,22 +120,20 @@ public class GameAchievement {
                         TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(xml);
-		StreamResult result = new StreamResult((File));
+		StreamResult result = new StreamResult(File);
 		transformer.transform(source, result);
-		System.out.println("Done"); 
         }
         catch(SAXException e){
-            System.out.println("SAXException error");
-                
+          Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);      
         }
         catch(IOException e){
-            System.out.println("IOException error");
+           Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(ParserConfigurationException e){
-            System.out.println("Parser Error");
+          Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(TransformerException e){
-            System.out.println("Transformer Excpetion");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
     }
     
@@ -162,11 +162,9 @@ public class GameAchievement {
             for(int i=0; i<list.getLength(); i++){
                 Node node = list.item(i);
                 if("gamesWon".equals(node.getNodeName())){
-                    System.out.println("True");
                     //check if number of games won is three.
-                    if(node.getTextContent().equals("3")){
+                    if("3".equals(node.getTextContent())){
                         //user testing check to see if game won.
-                        System.out.println("Won 3 games in a row");
                         won3gamesinrow = true;     
                     }
                     else{
@@ -181,14 +179,13 @@ public class GameAchievement {
                         node.setTextContent(Integer.toString(gameCounter));
                     }
                 }
-                if(check_if_wonaward()){
-                    if(won3gamesinrow &&
-                            "game3won".equals(node.getNodeName())){
+                if(check_if_wonaward() && won3gamesinrow && 
+                        "game3won".equals(node.getNodeName())){
                         node.setTextContent("t");
                         wonGUI = true;
                         setAchievements(ReadAchievementXML(), true,
                                 false, false);             
-                    }  
+                     
                 }
             }
             //write the content into xml file
@@ -196,21 +193,20 @@ public class GameAchievement {
                         TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(xml);
-		StreamResult result = new StreamResult((File));
+		StreamResult result = new StreamResult(File);
 		transformer.transform(source, result);
-		System.out.println("Done"); 
         }
         catch(SAXException e){
-            System.out.println("SAXException error");    
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);     
         }
         catch(IOException e){
-            System.out.println("IOException error");
+           Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(ParserConfigurationException e){
-            System.out.println("Parser Error");
+           Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(TransformerException e){
-            System.out.println("Transformer Excpetion");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
     }
     
@@ -251,11 +247,7 @@ public class GameAchievement {
             DOMSource source = new DOMSource(doc);
             StreamResult result = 
                     new StreamResult(new File("Achievements.xml"));
-        // Output to console for testing
-        // StreamResult result = new StreamResult(System.out);
             transformer.transform(source, result);
-            System.out.println("Achievement file "
-                    + "saved with survivor award added!");
             } catch (TransformerException ex) {
                 Logger.getLogger(GameAchievement.
                         class.getName()).log(Level.SEVERE, null, ex);
@@ -289,11 +281,7 @@ public class GameAchievement {
             DOMSource source = new DOMSource(doc);
             StreamResult result = 
                     new StreamResult(new File("Achievements.xml"));
-        // Output to console for testing
-        // StreamResult result = new StreamResult(System.out);
             transformer.transform(source, result);
-            System.out.println("Achievement file saved"
-                    + " with survivor award added!"); 
         } catch (TransformerException ex) {
                 Logger.getLogger(GameAchievement.
                         class.getName()).log(Level.SEVERE, null, ex);
@@ -324,11 +312,7 @@ public class GameAchievement {
             DOMSource source = new DOMSource(doc);
             StreamResult result = 
                     new StreamResult(new File("Achievements.xml"));
-        // Output to console for testing
-        // StreamResult result = new StreamResult(System.out);
-            transformer.transform(source, result);
-            System.out.println("Achievement file"
-                    + " saved with survivor award added!");                
+            transformer.transform(source, result);            
         } catch (TransformerException ex) {
                 Logger.getLogger(GameAchievement.
                         class.getName()).log(Level.SEVERE, null, ex);
@@ -357,22 +341,18 @@ public class GameAchievement {
             for(int i=0; i<list.getLength(); i++){
                 Node node = list.item(i);
                 if("savedKiwis".equals(node.getNodeName())){
-                    System.out.println("True");
-                    System.out.println("Counting"
-                            + " kiwis saved added to the xml..");
                     node.setTextContent(Integer.toString(kiwi));
-                    if(kiwi >=amount_of_kiwiSaved){ 
-                            //if player saves x amount of kiwi. 
+                    if(kiwi >=amountKiwisaved){ 
+                            //This is if player saves x amount of kiwi. 
                         savedKiwis = true;
                     }
                 }
-                if(check_if_kiwiaward()){
-                    if(savedKiwis && "hero".equals(node.getNodeName())){
+                if(check_if_kiwiaward() && savedKiwis 
+                        && "hero".equals(node.getNodeName())){
                         node.setTextContent("t");
                         savedGUI = true;
                         setAchievements(ReadAchievementXML()
-                                , false, false, true);
-                    }
+                                , false, false, true); 
                 }
             }       
             // write the content into xml file
@@ -380,21 +360,21 @@ public class GameAchievement {
                         TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(xml);
-		StreamResult result = new StreamResult((File));
+		StreamResult result = new StreamResult(File);
 		transformer.transform(source, result);
-		System.out.println("Done"); 
+	
         }
         catch(SAXException e){
-            System.out.println("SAXException error");   
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);     
         }
         catch(IOException e){
-            System.out.println("IOException error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(ParserConfigurationException e){
-            System.out.println("Parser Error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(TransformerException e){
-            System.out.println("Transformer Excpetion");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
     }
     
@@ -416,22 +396,19 @@ public class GameAchievement {
             for(int i=0; i<list.getLength(); i++){
                 Node node = list.item(i);
                 if("squares".equals(node.getNodeName())){
-                    System.out.println("True");
-                    System.out.println("Counting steps added to the xml..");
                     node.setTextContent(Integer.toString(count_of_step));
                     walked = false;
-                    if(count_of_step >=amount_of_steps){ 
-                        //if player walks over 1000 squares.
+                    if(count_of_step >=amountSteps){ 
+                        //This isif player walks over 1000 squares.
                             walked = true;
                     }
                 }
-                if(check_if_tavelaward()){
-                    if(walked && "traveller".equals(node.getNodeName())){
+                if(check_if_tavelaward() && walked &&
+                        "traveller".equals(node.getNodeName())){
                         node.setTextContent("t");
                         walkingGUI = true;
                         setAchievements(ReadAchievementXML(),
                                 false, true, false);
-                    }
                 }
             }
             // write the content into xml file
@@ -439,21 +416,20 @@ public class GameAchievement {
                         TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(xml);
-		StreamResult result = new StreamResult((File));
+		StreamResult result = new StreamResult(File);
 		transformer.transform(source, result);
-		System.out.println("Done"); 
         }
         catch(SAXException e){
-            System.out.println("SAXException error");     
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);      
         }
         catch(IOException e){
-            System.out.println("IOException error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(ParserConfigurationException e){
-            System.out.println("Parser Error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(TransformerException e){
-            System.out.println("Transformer Excpetion");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
 
     }
@@ -489,21 +465,20 @@ public class GameAchievement {
                         TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(xml);
-		StreamResult result = new StreamResult((File));
+		StreamResult result = new StreamResult(File);
 		transformer.transform(source, result);
-		System.out.println("Done"); 
         }
         catch(SAXException e){
-            System.out.println("SAXException error");        
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);       
         }
         catch(IOException e){
-            System.out.println("IOException error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(ParserConfigurationException e){
-            System.out.println("Parser Error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(TransformerException e){
-            System.out.println("Transformer Excpetion");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         return count_of_steps; 
     }
@@ -526,11 +501,7 @@ public class GameAchievement {
             for(int i=0; i<list.getLength(); i++){
                 Node node = list.item(i);
                 if("hero".equals(node.getNodeName())){
-                    System.out.println("True");
-                    System.out.println("reading"
-                            + " into check if kiwiaward exists");
                     if( "f".equals(node.getTextContent())){
-                        System.out.println("hero achievement is false");
                         return true;
                     }
                 }     
@@ -541,21 +512,20 @@ public class GameAchievement {
                         TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(xml);
-		StreamResult result = new StreamResult((File));
+		StreamResult result = new StreamResult(File);
 		transformer.transform(source, result);
-		System.out.println("Done"); 
         }
         catch(SAXException e){
-            System.out.println("SAXException error");    
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);     
         }
         catch(IOException e){
-            System.out.println("IOException error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(ParserConfigurationException e){
-            System.out.println("Parser Error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(TransformerException e){
-            System.out.println("Transformer Excpetion");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         return false;
     }
@@ -578,11 +548,7 @@ public class GameAchievement {
             for(int i=0; i<list.getLength(); i++){
                 Node node = list.item(i);
                 if("traveller".equals(node.getNodeName())){
-                    System.out.println("True");
-                    System.out.println("reading into "
-                            + "check if travelaward exists");
                     if( "f".equals(node.getTextContent())){
-                        System.out.println("travel achievement is false");
                         return true;
                     }
                 }               
@@ -592,21 +558,20 @@ public class GameAchievement {
                         TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(xml);
-		StreamResult result = new StreamResult((File));
+		StreamResult result = new StreamResult(File);
 		transformer.transform(source, result);
-		System.out.println("Done"); 
         }
         catch(SAXException e){
-            System.out.println("SAXException error");       
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);      
         }
         catch(IOException e){
-            System.out.println("IOException error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(ParserConfigurationException e){
-            System.out.println("Parser Error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(TransformerException e){
-            System.out.println("Transformer Excpetion");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         return false;
     }
@@ -625,14 +590,10 @@ public class GameAchievement {
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             xml = dBuilder.parse(File);
             Node main = xml.getElementsByTagName("Player1").item(0);
-            NodeList list = main.getChildNodes();
-            
+            NodeList list = main.getChildNodes();     
             for(int i=0; i<list.getLength(); i++){
                 Node node = list.item(i);
                 if("game3won".equals(node.getNodeName())){
-                    System.out.println("True");
-                    System.out.println("reading into"
-                            + " check if 3GameWonaward exists");
                     if( "f".equals(node.getTextContent())){
                         System.out.println("won achievement is false");
                         return true;
@@ -644,21 +605,20 @@ public class GameAchievement {
                         TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(xml);
-		StreamResult result = new StreamResult((File));
+		StreamResult result = new StreamResult(File);
 		transformer.transform(source, result);
-		System.out.println("Done"); 
         }
         catch(SAXException e){
-            System.out.println("SAXException error");      
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);    
         }
         catch(IOException e){
-            System.out.println("IOException error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(ParserConfigurationException e){
-            System.out.println("Parser Error");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         catch(TransformerException e){
-            System.out.println("Transformer Excpetion");
+            Logger.getLogger(GameAchievement.class.getName()).log(Level.SEVERE, null, e);
         }
         return false;
     }
@@ -679,5 +639,55 @@ public class GameAchievement {
     public String getSavedKiwiAchievement(){
              return "Achievement unlocked: **HERO** - "
                   + " You have saved allot of kiwis well done!!!";
-      }
+    }
+    
+    public boolean get_won3gamesinrow(){
+        return this.won3gamesinrow;
+    }
+    
+    public void set_won3gamesinrow(Boolean b){
+        this.won3gamesinrow =b;
+        
+    }
+    
+    public boolean get_walked(){
+        return this.walked;
+    }
+    
+    public void set_walked(Boolean b){
+        this.walked = b;
+    }
+    
+    public boolean get_savedkiwis(){
+        return this.savedKiwis;
+    }
+    
+    public void set_savedkiwis(Boolean b){
+        this.savedKiwis = b;
+        
+    }
+    
+    public Boolean get_walkingGUI(){
+        return this.walkingGUI;
+    }
+    
+    public void set_walkingGUI(Boolean b){
+        this.walkingGUI =b;
+    }
+    
+    public Boolean get_savedGUI(){
+        return this.savedGUI;
+    }
+    
+    public void set_savedGUI(Boolean b){
+        this.savedGUI = b;
+    }
+    
+    public Boolean get_wonGUI(){
+        return this.wonGUI;
+    }
+    
+    public void set_wonGUI(Boolean b){
+        this.wonGUI = b;
+    }
 }

@@ -63,25 +63,23 @@ public class KiwiCountUI
                     game.getLoseMessage(), "Game over!", 
                     JOptionPane.PLAIN_MESSAGE,JOptionPane.
                             INFORMATION_MESSAGE, null, options, options[0]);
-            //System.out.println("Value of won games is" +
-            //game.getAchievement().won3gamesinrow );
-            if(game.getAchievement().savedKiwis && game.
-                    getAchievement().savedGUI){
+            if(game.getAchievement().get_savedkiwis() && game.
+                    getAchievement().get_savedGUI()){
                  JOptionPane.showOptionDialog(this,game.
                          getAchievement().getSavedKiwiAchievement(),"Hero!",
                  JOptionPane.PLAIN_MESSAGE, JOptionPane.
                          INFORMATION_MESSAGE, null, options, options[0]);  
             }
-            if(game.getAchievement().walked && game.
-                    getAchievement().walkingGUI){
+            if(game.getAchievement().get_walked() && game.
+                    getAchievement().get_walkingGUI()){
                 JOptionPane.showOptionDialog(this,game.
                         getAchievement().getWalkingAchievement(),"Traveller!",
                  JOptionPane.PLAIN_MESSAGE, JOptionPane.
                          INFORMATION_MESSAGE, null, options, options[0]);  
             }
             
-            if(game.getAchievement().won3gamesinrow && game.
-                    getAchievement().wonGUI){
+            if(game.getAchievement().get_won3gamesinrow() && game.
+                    getAchievement().get_wonGUI()){
                 JOptionPane.showOptionDialog(this,game.
                         getAchievement().getWon3Achievement(),"Survivor",
                  JOptionPane.PLAIN_MESSAGE, JOptionPane.
@@ -100,29 +98,23 @@ public class KiwiCountUI
                       ,  game.getWinMessage(), "Well Done!", 
                     JOptionPane.PLAIN_MESSAGE,JOptionPane
                             .INFORMATION_MESSAGE, null, options, options[0]);
-                        if(game.getAchievement().savedKiwis){
+            if(game.getAchievement().get_savedkiwis() && 
+                    game.getAchievement().get_savedGUI()){
                  JOptionPane.showOptionDialog(this,game.
                          getAchievement().getSavedKiwiAchievement(),"Hero!",
                  JOptionPane.PLAIN_MESSAGE, JOptionPane.
                          INFORMATION_MESSAGE, null, options, options[0]);  
             }
-            if(game.getAchievement().savedKiwis && 
-                    game.getAchievement().savedGUI){
-                 JOptionPane.showOptionDialog(this,game.
-                         getAchievement().getSavedKiwiAchievement(),"Hero!",
-                 JOptionPane.PLAIN_MESSAGE, JOptionPane.
-                         INFORMATION_MESSAGE, null, options, options[0]);  
-            }
-            if(game.getAchievement().walked && game.
-                    getAchievement().walkingGUI){
+            if(game.getAchievement().get_walked() && game.
+                    getAchievement().get_walkingGUI()){
                 JOptionPane.showOptionDialog(this,game.
                         getAchievement().getWalkingAchievement(),"Traveller!",
                  JOptionPane.PLAIN_MESSAGE, JOptionPane.
                          INFORMATION_MESSAGE, null, options, options[0]);  
             }
             
-            if(game.getAchievement().won3gamesinrow && 
-                    game.getAchievement().wonGUI){
+            if(game.getAchievement().get_won3gamesinrow() && 
+                    game.getAchievement().get_wonGUI()){
                 JOptionPane.showOptionDialog(this,game.
                         getAchievement().getWon3Achievement(),"Survivor",
                  JOptionPane.PLAIN_MESSAGE, JOptionPane.
