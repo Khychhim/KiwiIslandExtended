@@ -48,6 +48,7 @@ public class Game {
       public static final int SIZE_INDEX = 5;
       private static final double MIN_REQUIRED_CATCH = 0.8;
       private static final double PLAYER_VIEW_PERCENTAGE_OF_MAP = 0.6;
+      
       private String winMessage = "";
       private String loseMessage  = "";
       private String playerMessage  = "";  
@@ -61,7 +62,23 @@ public class Game {
       public PredatorTimerTask predatorTimerTask;
       public Document glossarydocs;
       private DifferentMap dm;
-      private GameDifficulty gameDifficulty;
+      private GameDifficulty gameDifficulty;        
+      private int viewSizeOfMap; 
+      private int startMapRow;
+      private int endMapRow;
+      private int startMapCol;
+      private int endMapCol;
+      private Island island;
+      public Player player;
+      private GameState state;
+      private int kiwiCount;
+      private int totalPredators;
+      private int totalKiwis;
+      private int predatorsTrapped;
+      private Set<GameEventListener> eventListeners;
+      private Random rand;
+      private ArrayList<Occupant> allPredators;
+      private Score score;  
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
        * @param gameDifficulty differentMap object for different game difficulty
@@ -1329,17 +1346,17 @@ public class Game {
        * @param score score to input
       */
      public void setReward(String reward, int score){
-           if(reward.equalsIgnoreCase("predator")){
+           if(reward.equalsIgnoreCase(Reward.PREDATOR.toString())){
                  Occupant predator = allPredators.get(0);
                  island.removeOccupant(predator.getPosition(), predator);
                  allPredators.remove(0);
                  totalPredators--;                 
-           }else if(reward.equalsIgnoreCase("food")){
+           }else if(reward.equalsIgnoreCase(Reward.FOOD.toString())){
                  Item food = new Food(player.getPosition(), "Magic Steak", "A limited edition food from heaven", 0, 0.1, 70.0);
                  island.addOccupant(player.getPosition(), food);
-           }else if(reward.equalsIgnoreCase("stamina")){
+           }else if(reward.equalsIgnoreCase(Reward.STAMINA.toString())){
                  player.increaseToMaxStamina();
-           }else if(reward.equalsIgnoreCase("score")){
+           }else if(reward.equalsIgnoreCase(Reward.SCORE.toString())){
                  this.getScore().addScore(score);
            }
      }
@@ -1360,23 +1377,6 @@ public class Game {
      public int getViewSizeOfMap(){
            return viewSizeOfMap;
      }
-     
-    private int viewSizeOfMap; 
-    private int startMapRow;
-    private int endMapRow;
-    private int startMapCol;
-    private int endMapCol;
-    private Island island;
-    public Player player;
-    private GameState state;
-    private int kiwiCount;
-    private int totalPredators;
-    private int totalKiwis;
-    private int predatorsTrapped;
-    private Set<GameEventListener> eventListeners;
-    private Random rand;
-    private ArrayList<Occupant> allPredators;
-    private Score score;  
 
       /**
        * @return the score
