@@ -219,7 +219,7 @@ public class KiwiCountUI
         btnMoveWest.setEnabled( game.isPlayerMovePossible(MoveDirection.WEST));
         
         //Update score
-        scoreText.setText("" + game.score.getScore());
+        scoreText.setText("" + game.getScore().getScore());
         
         //focus on the window for keypress listener
         this.pnlIsland.requestFocusInWindow();

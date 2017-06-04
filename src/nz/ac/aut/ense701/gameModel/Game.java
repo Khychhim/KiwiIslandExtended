@@ -38,27 +38,19 @@ import org.xml.sax.SAXException;
  */
 public class Game {
 
-      /**
-       * @return the countOfSteps
-       */
-      public int getCountOfSteps() {
-            return countOfSteps;
-      }
-
-      /**
-       * @param countOfSteps the countOfSteps to set
-       */
-      public void setCountOfSteps(int countOfSteps) {
-            this.countOfSteps = countOfSteps;
-      }
-      private static final Logger LOGGER = Logger.getLogger( Game.class.getName() );
       //Constants shared with UI to provide player data
+      private static final Logger LOGGER = Logger.getLogger( Game.class.getName() );
       public static final int STAMINA_INDEX = 0;
       public static final int MAXSTAMINA_INDEX = 1;
       public static final int MAXWEIGHT_INDEX = 2;
       public static final int WEIGHT_INDEX = 3;
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
+      private static final double MIN_REQUIRED_CATCH = 0.8;
+      private static final double PLAYER_VIEW_PERCENTAGE_OF_MAP = 0.6;
+      private String winMessage = "";
+      private String loseMessage  = "";
+      private String playerMessage  = "";  
       private  int mapSize;
       private Timer timer;
       GameAchievement counting = new GameAchievement();
@@ -96,7 +88,7 @@ public class Game {
             totalKiwis = 0;
             predatorsTrapped = 0;
             kiwiCount = 0;
-            score = new Score();
+            setScore(new Score());
             initialiseIslandFromFile("IslandData.txt");
             drawIsland();
             state = GameState.PLAYING;
@@ -135,6 +127,13 @@ public class Game {
        * Accessor methods for game data
     ***********************************************************************************************************************
        */
+            /**
+       * @return the countOfSteps
+       */
+      public int getCountOfSteps() {
+            return countOfSteps;
+      }
+
       /**
        * Get number of rows on island
        *
@@ -371,15 +370,7 @@ public class Game {
                       Predator newPredator = predatorMoveToKiwi(predator);
                       newPredatorList.add(newPredator);
                       
-                      //remove kiwi if predator and kiwi on the same grid square
-                      for(Occupant kiwi : island.getOccupants(newPredator.getPosition())){
-                            if(kiwi instanceof Kiwi){
-                                  island.removeOccupant(kiwi.getPosition(), kiwi);
-                                  this.totalKiwis--;
-                                  this.notifyGameEventListeners();
-                                  this.updateGameState();
-                            }
-                      }
+                      removeKiwi(newPredator);
                            
                   } else {//if kiwi is not nearby, move predator randomly
                        newPredatorList.add(movePredatorRandomly(predator));
@@ -389,6 +380,22 @@ public class Game {
             this.allPredators = newPredatorList;
       }
 
+      /**
+       * method to remove kiwi when predator and kiwi on same grid square
+       * @param predator 
+       */
+      public synchronized void removeKiwi(Predator predator){
+            //remove kiwi if predator and kiwi on the same grid square
+            for(Occupant kiwi : island.getOccupants(predator.getPosition())){
+                  if(kiwi instanceof Kiwi){
+                        island.removeOccupant(kiwi.getPosition(), kiwi);
+                        this.totalKiwis--;
+                        this.notifyGameEventListeners();
+                        this.updateGameState();
+                  }
+            }
+      }
+      
       /**
        * Get terrain for position
        *
@@ -786,6 +793,13 @@ public class Game {
       public void setIsland(Island island){
           this.island = island;
       }
+      
+      /**
+       * @param countOfSteps the countOfSteps to set
+       */
+      public void setCountOfSteps(int countOfSteps) {
+            this.countOfSteps = countOfSteps;
+      }
       /**
        * *******************************************************************************************************************************
        * Private methods
@@ -808,10 +822,8 @@ public class Game {
             achievement.write_to_count(getCountOfSteps());
             achievement.read_kiwiCount(kiwiCount);
 
-            setAchievement(achievement);
-            
+            setAchievement(achievement);           
 
-           
             message = "Sorry, you have lost the game. " + this.getLoseMessage() + endGameBonus();
             
              try {    
@@ -822,10 +834,8 @@ public class Game {
                  StreamResult result = new StreamResult(new File("glossary.xml"));
                  
                  transformer.transform(source, result);
-                 
-                 System.out.println("File saved!");
              } catch (TransformerException ex) {
-                 System.err.println("Transformer Exception: " + ex);
+                 LOGGER.info("Transformer Exception: " + ex);
              }
              this.setLoseMessage(message);
         }
@@ -841,7 +851,6 @@ public class Game {
             achievement.write_to_count(getCountOfSteps());
             achievement.read_kiwiCount(kiwiCount);
             setAchievement(achievement);//setter or getter for achievement instance.
-            
     
             message = "Sorry, you have lost the game. You do not have sufficient stamina to move." + endGameBonus();
             try {    
@@ -852,10 +861,8 @@ public class Game {
                  StreamResult result = new StreamResult(new File("glossary.xml"));
                  
                  transformer.transform(source, result);
-                 
-                 System.out.println("File saved!");
              } catch (TransformerException ex) {
-                 System.err.println("Transformer Exception: " + ex);
+                 LOGGER.info("Transformer Exception: " + ex);
              }
             this.setLoseMessage(message);
       
@@ -878,8 +885,6 @@ public class Game {
                  StreamResult result = new StreamResult(new File("glossary.xml"));
                  
                  transformer.transform(source, result);
-                 
-                 System.out.println("File saved!");
              } catch (TransformerException ex) {
                 LOGGER.info("Transformer Exception: " + ex);
              }
@@ -889,27 +894,24 @@ public class Game {
             
          
         }
-        else if(kiwiCount == totalKiwis)
-        {
-            if(predatorsTrapped >= totalPredators * MIN_REQUIRED_CATCH)
-            {
-                state = GameState.WON;
-                //adds to count for assigning achievement for winning 3 games in a row.
-                GameAchievement achievement = new GameAchievement();
-                achievement.Won3Games();
-                achievement.write_to_count(getCountOfSteps());
-                achievement.read_kiwiCount(kiwiCount);
-                message = "You win! You have counted all the kiwi and trapped at least 80% of the predators." + endGameBonus();
-                try {    
-                 // write the content into xml file
-                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                 Transformer transformer = transformerFactory.newTransformer();
-                 DOMSource source = new DOMSource(glossarydocs);
-                 StreamResult result = new StreamResult(new File("glossary.xml"));
+        else if(kiwiCount == totalKiwis && (predatorsTrapped >= totalPredators * MIN_REQUIRED_CATCH))
+        {                     
+            state = GameState.WON;
+            //adds to count for assigning achievement for winning 3 games in a row.
+            GameAchievement achievement = new GameAchievement();
+            achievement.Won3Games();
+            achievement.write_to_count(getCountOfSteps());
+            achievement.read_kiwiCount(kiwiCount);
+            message = "You win! You have counted all the kiwi and trapped at least 80% of the predators." + endGameBonus();
+            try {    
+             // write the content into xml file
+             TransformerFactory transformerFactory = TransformerFactory.newInstance();
+             Transformer transformer = transformerFactory.newTransformer();
+             DOMSource source = new DOMSource(glossarydocs);
+             StreamResult result = new StreamResult(new File("glossary.xml"));
+
+             transformer.transform(source, result);
                  
-                 transformer.transform(source, result);
-                 
-                 System.out.println("File saved!");
              } catch (TransformerException ex) {
                 LOGGER.info("Transformer Exception: " + ex);
              }
@@ -917,7 +919,7 @@ public class Game {
                 
                 
                 
-            }
+            
         }
             // notify listeners about changes
             notifyGameEventListeners();
@@ -949,14 +951,14 @@ public class Game {
         int predatorsTrappedBonus = (int)(Score.PREDATORS_TRAPPED * ((double) predatorsTrapped / totalPredators));
         int remainingStaminaBonus = (int)(Score.REMAINING_STAMINA * (player.getStaminaLevel() / player.getMaximumStaminaLevel()));
         int survivalBonus = player.isAlive() ? Score.SURVIVED : 0;
-        score.addScore(kiwisCountedBonus + predatorsTrappedBonus + remainingStaminaBonus + survivalBonus);
+            getScore().addScore(kiwisCountedBonus + predatorsTrappedBonus + remainingStaminaBonus + survivalBonus);
         
-        String bonusString = "\nSurvival Bonus:          " + survivalBonus +
+        return "\nSurvival Bonus:          " + survivalBonus +
                              "\nStamina Remaining Bonus: " + remainingStaminaBonus + 
                              "\nKiwis Counted Bonus:     " + kiwisCountedBonus + 
                              "\nPredators Trapped Bonus: " + predatorsTrappedBonus;
 
-        return bonusString;
+        
     }
    
       /**
@@ -1026,7 +1028,7 @@ public class Game {
                   //remove predator object from the arraylist if trap
                   allPredators.remove(occupant);
                   predatorsTrapped++;
-                  score.addScore(Score.VALUE_PREDATOR_TRAPPED);
+                  getScore().addScore(Score.VALUE_PREDATOR_TRAPPED);
             }
             return hadPredator;
       }
@@ -1092,7 +1094,7 @@ public class Game {
             } else // hazard reduces player's stamina
         {
             double impact = hazard.getImpact();
-            score.subtractScore(Score.VALUE_HAZARD_NON_FATAL);
+                  getScore().subtractScore(Score.VALUE_HAZARD_NON_FATAL);
             // Impact is a reduction in players energy by this % of Max Stamina
             double reduction = player.getMaximumStaminaLevel() * impact;
             player.reduceStamina(reduction);
@@ -1338,7 +1340,7 @@ public class Game {
            }else if(reward.equalsIgnoreCase("stamina")){
                  player.increaseToMaxStamina();
            }else if(reward.equalsIgnoreCase("score")){
-                 this.score.addScore(score);
+                 this.getScore().addScore(score);
            }
      }
      
@@ -1374,14 +1376,22 @@ public class Game {
     private Set<GameEventListener> eventListeners;
     private Random rand;
     private ArrayList<Occupant> allPredators;
-    public Score score; 
-    private final double MIN_REQUIRED_CATCH = 0.8;
-    private final int IMPACT_SCORE_MULTIPLIER = 100;
-    private final double PLAYER_VIEW_PERCENTAGE_OF_MAP = 0.6;
-    private String winMessage = "";
-    private String loseMessage  = "";
-    private String playerMessage  = "";   
+    private Score score;  
 
+      /**
+       * @return the score
+       */
+      public Score getScore() {
+            return score;
+      }
+
+      /**
+       * @param score the score to set
+       */
+      public void setScore(Score score) {
+            this.score = score;
+      }
+      
       /**
        * @return the gameDifficulty
        */
@@ -1418,10 +1428,10 @@ public class Game {
       }
 
       /**
-       * @param map_size the map_size to set
+       * @param mapSize the map_size to set
        */
-      public void setMapSize(int map_size) {
-            this.mapSize = map_size;
+      public void setMapSize(int mapSize) {
+            this.mapSize = mapSize;
       }
 
       /**
