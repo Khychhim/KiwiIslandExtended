@@ -1,5 +1,6 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -11,7 +12,7 @@ import java.util.HashSet;
  * @author AS
  * @version July 2011
  */
-public class Player 
+public class Player implements Serializable
 {
     public static final double MOVE_STAMINA = 1.0;
     

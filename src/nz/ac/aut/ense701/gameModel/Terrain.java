@@ -9,7 +9,7 @@ package nz.ac.aut.ense701.gameModel;
  * Maintenance History
  * Representation strings changed Anne July 2011
  */
-public enum Terrain
+public enum Terrain 
 {
     SAND(".", 1.0),
     FOREST("*", 2.0),

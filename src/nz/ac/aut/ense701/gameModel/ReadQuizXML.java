@@ -27,10 +27,6 @@ public class ReadQuizXML {
 
     private ArrayList<QuizQuestion> questionArrayList = new ArrayList<QuizQuestion>();
 
-    public static void main(String[] args) {
-        new ReadQuizXML();
-    }
-    
     /**
      * This is will return a ArrayList of Questions
      *

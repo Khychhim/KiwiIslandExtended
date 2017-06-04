@@ -9,6 +9,7 @@ package nz.ac.aut.ense701.gameModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -36,7 +37,7 @@ import org.xml.sax.SAXException;
  * @author Nishan
  */
 
-public class GameAchievement {
+public class GameAchievement implements Serializable{
 
     private Element Achievement;
     private  boolean won3gamesinrow;

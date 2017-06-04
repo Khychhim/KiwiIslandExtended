@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import nz.ac.aut.ense701.gameModel.Deserialization;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameDifficulty;
 import org.w3c.dom.Document;
@@ -284,11 +285,30 @@ public class MainMenu extends JPanel implements MouseListener {
                           gui.addComponentListener(backListener());
                           gui.setVisible(true);   
                     }
-                case 1:
-                    System.err.println("Load Game");
                     break;
+                    
+                case 1:
+                    Deserialization der = new Deserialization();
+                    //load successful 
+                    if (der.isSaveExist()) {
+                        menu.setVisible(false);
+                        //Load Game
+                        final Game load = der.load();
+                        //Create the GUI for the game
+                        System.err.println("In case 1");
+                        KiwiCountUI KiwiGUI  = new KiwiCountUI(load);
+                        KiwiGUI.setLocation(menu.getLocation());
+                        KiwiGUI.addComponentListener(backListener());
+                        KiwiGUI.setVisible(true);
+                        break;
+                    }else{
+                        System.err.println("There's no Save File.");
+                        JOptionPane.showMessageDialog(this, "Sorry, no saved Game exists.");
+                        break;
+                    }
+                    
                 default:
-                    System.out.println("No option selected");
+                    System.err.println("No option selected");
                     break;
             }
         } else if(buttons[HIGH_SCORES].getBounds().contains(clickLoc)) {

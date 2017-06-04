@@ -1,11 +1,13 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
+
 /**
  * This class that store question information
  *
  * @author Sean Chang
  */
-public class QuizQuestion {
+public class QuizQuestion implements Serializable{
 
     private int difficulty;
     private String question;

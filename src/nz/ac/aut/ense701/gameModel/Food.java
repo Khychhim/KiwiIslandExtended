@@ -1,5 +1,7 @@
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
+
 /**
  * This class represents food that can be found on the island
  * and supplies energy when being consumed (used) by the player.
@@ -7,7 +9,7 @@ package nz.ac.aut.ense701.gameModel;
  * @author AS
  * @version July 2011
  */
-public class Food extends Item
+public class Food extends Item implements Serializable
 {
     private double energy;
 

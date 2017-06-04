@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -18,7 +19,7 @@ import javax.imageio.ImageIO;
  *
  * @author joshl
  */
-public class Tileset {
+public class Tileset implements Serializable{
     
     //Tileset Identifiers
     public static final int CLIFF  = 0;
@@ -110,13 +111,13 @@ public class Tileset {
     };
     
     //Array of tileset Images
-    private final BufferedImage[] tileSetsImages;
+    private transient  BufferedImage[] tileSetsImages;
     
     //Array of single Tile Images
-    private final BufferedImage[] singleTileImages;
+    private transient  BufferedImage[] singleTileImages;
     
     //Array of the tiles in each tileset
-    private final Image[][] tiles;
+    private transient Image[][] tiles;
     
     //The width and heights of the tiles in pixels
     private static final int TILE_WIDTH  = 32;

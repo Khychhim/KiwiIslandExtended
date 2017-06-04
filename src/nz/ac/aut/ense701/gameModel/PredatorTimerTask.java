@@ -5,18 +5,20 @@
  */
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
 import java.util.TimerTask;
 
 /**
  *
  * @author Logan
  */
-public class PredatorTimerTask extends TimerTask {
+public class PredatorTimerTask extends TimerTask implements Serializable{
 
     private boolean hasStarted = false;
     private Game game;
 
     public PredatorTimerTask(Game game) {
+        super();
         this.game = game;
     }
 

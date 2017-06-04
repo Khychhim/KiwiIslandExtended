@@ -2,6 +2,7 @@ package nz.ac.aut.ense701.gameModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
@@ -10,7 +11,7 @@ import java.util.Scanner;
  *
  * @author joshl
  */
-public final class MapDataTypes {
+public final class MapDataTypes implements Serializable{
     public ArrayList<String> tileTypes = new ArrayList<String>();
     public ArrayList<Food> foodTypes = new ArrayList<Food>();
     public ArrayList<Tool> toolTypes = new ArrayList<Tool>();

@@ -1,6 +1,8 @@
 
 package nz.ac.aut.ense701.gameModel;
 
+import java.io.Serializable;
+
 
 /**
  * Fauna at this point represents any species that is not a kiwi or a predator on the island.
@@ -9,7 +11,7 @@ package nz.ac.aut.ense701.gameModel;
  * @author AS
  * @version July 2011
  */
-public class Fauna extends Occupant
+public class Fauna extends Occupant implements Serializable
 {
     
 

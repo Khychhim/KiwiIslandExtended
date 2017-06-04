@@ -2,6 +2,7 @@ package nz.ac.aut.ense701.gameModel;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 import java.util.logging.Level;
@@ -12,7 +13,7 @@ import java.util.logging.Logger;
  * @author joshl
  * @version 2017
  */
-public class DifferentMap {
+public class DifferentMap implements Serializable{
     private static final String MAP_FILE_NAME = "IslandData.txt";
     private static final String TEXT_FORMAT = "UTF-8";
     //Difficulty : EASY
