@@ -105,7 +105,7 @@ public class GameTest extends junit.framework.TestCase
     @Test
     public void countreset(){
         int zero =0;
-        assertEquals(zero, game.count_of_steps);
+        assertEquals(zero, game.getCountOfSteps());
     }
     @Test
     public void achievementWonGames(){

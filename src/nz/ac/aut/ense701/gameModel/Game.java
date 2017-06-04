@@ -37,6 +37,20 @@ import org.xml.sax.SAXException;
  * AS
  */
 public class Game {
+
+      /**
+       * @return the countOfSteps
+       */
+      public int getCountOfSteps() {
+            return countOfSteps;
+      }
+
+      /**
+       * @param countOfSteps the countOfSteps to set
+       */
+      public void setCountOfSteps(int countOfSteps) {
+            this.countOfSteps = countOfSteps;
+      }
       private static final Logger LOGGER = Logger.getLogger( Game.class.getName() );
       //Constants shared with UI to provide player data
       public static final int STAMINA_INDEX = 0;
@@ -48,7 +62,7 @@ public class Game {
       private  int mapSize;
       private Timer timer;
       GameAchievement counting = new GameAchievement();
-      public int count_of_steps = counting.readCount();
+      private int countOfSteps = counting.readCount();
       GameAchievement achievement;
       public ArrayList<QuizQuestion> quizQuestionList;
       public JFrame miniQuizFrame;
@@ -715,7 +729,7 @@ public class Game {
             if (isPlayerMovePossible(direction)) {
                   Position newPosition = player.getPosition().getNewPosition(direction);
                   Terrain terrain = island.getTerrain(newPosition);
-                  count_of_steps++;
+                  setCountOfSteps(getCountOfSteps() + 1);
   
                   
                   
@@ -794,7 +808,7 @@ public class Game {
             GameAchievement achievement = new GameAchievement();
             achievement.lossGameResetCounter();
 
-            achievement.write_to_count(count_of_steps);
+            achievement.write_to_count(getCountOfSteps());
             achievement.read_kiwiCount(kiwiCount);
 
             setAchievement(achievement);
@@ -827,7 +841,7 @@ public class Game {
             
 
             achievement.lossGameResetCounter();
-            achievement.write_to_count(count_of_steps);
+            achievement.write_to_count(getCountOfSteps());
             achievement.read_kiwiCount(kiwiCount);
             setAchievement(achievement);//setter or getter for achievement instance.
             
@@ -856,7 +870,7 @@ public class Game {
             //adds to count for assigning achievement for winning 3 games in a row.
             GameAchievement achievement = new GameAchievement();
             achievement.Won3Games();
-            achievement.write_to_count(count_of_steps);
+            achievement.write_to_count(getCountOfSteps());
             achievement.read_kiwiCount(kiwiCount);
             message = "You win! You have done an excellent job and trapped all the predators." + endGameBonus();
             try {    
@@ -886,7 +900,7 @@ public class Game {
                 //adds to count for assigning achievement for winning 3 games in a row.
                 GameAchievement achievement = new GameAchievement();
                 achievement.Won3Games();
-                achievement.write_to_count(count_of_steps);
+                achievement.write_to_count(getCountOfSteps());
                 achievement.read_kiwiCount(kiwiCount);
                 message = "You win! You have counted all the kiwi and trapped at least 80% of the predators." + endGameBonus();
                 try {    
