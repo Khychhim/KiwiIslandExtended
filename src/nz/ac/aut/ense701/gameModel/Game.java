@@ -111,21 +111,18 @@ public class Game {
             File glossaryXML = new File("glossary.xml");
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = null;
-            try {
-                docBuilder = docFactory.newDocumentBuilder();
-            } catch (ParserConfigurationException ex) {
-                LOGGER.info("Parser Exception: " + ex.getMessage());
-            }
-            // root elements
             Document doc = null;
             try {
-                doc = docBuilder.parse(glossaryXML);
-            } catch (SAXException ex) {
+                docBuilder = docFactory.newDocumentBuilder();
+                 doc = docBuilder.parse(glossaryXML);
+                 doc.getDocumentElement().normalize();
+            } catch (ParserConfigurationException ex) {
+                LOGGER.info("Parser Exception: " + ex.getMessage());
+            }catch (SAXException ex) {
                 LOGGER.info("SAXEception: " + ex.getMessage());
             } catch (IOException ex) {
                LOGGER.info("IOException: " + ex.getMessage());
             }
-            doc.getDocumentElement().normalize();
 
             glossarydocs = doc;
             setMapSize(getDm().getMapCols());
