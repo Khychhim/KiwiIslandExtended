@@ -253,14 +253,14 @@ public class GameTest extends junit.framework.TestCase
     @Test
     public void testIsPlayerMovePossibleValidMove(){
           Position pos = new Position(island, 0,0);
-          game.player = new Player(pos, "JOH",50,50,100);
+          game.setPlayer(new Player(pos, "JOH",50,50,100));
         assertTrue("Move should be valid", game.isPlayerMovePossible(MoveDirection.SOUTH));
     }
     
     @Test
     public void testIsPlayerMovePossibleInvalidMove(){
            Position pos = new Position(island, 0,0);
-          game.player = new Player(pos, "JOH",50,50,100);
+          game.setPlayer(new Player(pos, "JOH",50,50,100));
         //At start of game player has valid moves EAST, West & South
         assertFalse("Move should not be valid", game.isPlayerMovePossible(MoveDirection.NORTH));
     }
@@ -470,7 +470,7 @@ public class GameTest extends junit.framework.TestCase
     @Test
     public void testPlayerMoveToInvalidPosition(){
            Position pos = new Position(island, 0,0);
-          game.player = new Player(pos, "JOH",50,50,100);
+          game.setPlayer(new Player(pos, "JOH",50,50,100));
         //A move NORTH would be invalid from player's start position
         assertFalse("Move not valid", game.playerMove(MoveDirection.NORTH));
     }

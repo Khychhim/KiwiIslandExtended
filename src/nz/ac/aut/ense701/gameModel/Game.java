@@ -68,7 +68,7 @@ public class Game {
       private int startMapCol;
       private int endMapCol;
       private Island island;
-      public Player player;
+      private Player player;
       private GameState state;
       private int kiwiCount;
       private int totalPredators;
@@ -227,14 +227,14 @@ public class Game {
       public boolean isPlayerMovePossible(MoveDirection direction) {
             boolean isMovePossible = false;
             // what position is the player moving to?
-            Position newPosition = player.getPosition().getNewPosition(direction);
+            Position newPosition = getPlayer().getPosition().getNewPosition(direction);
             // is that a valid position?
             if ((newPosition != null) && newPosition.isOnIsland()) {
                   // what is the terrain at that new position?
                   Terrain newTerrain = island.getTerrain(newPosition);
                   // can the playuer do it?
-                  isMovePossible = player.hasStaminaToMove(newTerrain)
-                          && player.isAlive();
+                  isMovePossible = getPlayer().hasStaminaToMove(newTerrain)
+                          && getPlayer().isAlive();
             }
             return isMovePossible;
       }
@@ -451,7 +451,7 @@ public class Game {
        * @return occupants at player's position
        */
       public Occupant[] getOccupantsPlayerPosition() {
-            return island.getOccupants(player.getPosition());
+            return island.getOccupants(getPlayer().getPosition());
       }
 
       /**
@@ -472,12 +472,12 @@ public class Game {
        */
       public int[] getPlayerValues() {
             int[] playerValues = new int[6];
-            playerValues[STAMINA_INDEX] = (int) player.getStaminaLevel();
-            playerValues[MAXSTAMINA_INDEX] = (int) player.getMaximumStaminaLevel();
-            playerValues[MAXWEIGHT_INDEX] = (int) player.getMaximumBackpackWeight();
-            playerValues[WEIGHT_INDEX] = (int) player.getCurrentBackpackWeight();
-            playerValues[MAXSIZE_INDEX] = (int) player.getMaximumBackpackSize();
-            playerValues[SIZE_INDEX] = (int) player.getCurrentBackpackSize();
+            playerValues[STAMINA_INDEX] = (int) getPlayer().getStaminaLevel();
+            playerValues[MAXSTAMINA_INDEX] = (int) getPlayer().getMaximumStaminaLevel();
+            playerValues[MAXWEIGHT_INDEX] = (int) getPlayer().getMaximumBackpackWeight();
+            playerValues[WEIGHT_INDEX] = (int) getPlayer().getCurrentBackpackWeight();
+            playerValues[MAXSIZE_INDEX] = (int) getPlayer().getMaximumBackpackSize();
+            playerValues[SIZE_INDEX] = (int) getPlayer().getCurrentBackpackSize();
 
             return playerValues;
 
@@ -507,7 +507,7 @@ public class Game {
        * @return objects in backpack
        */
       public Object[] getPlayerInventory() {
-            return player.getInventory().toArray();
+            return getPlayer().getInventory().toArray();
       }
 
       /**
@@ -516,7 +516,7 @@ public class Game {
        * @return player name
        */
       public String getPlayerName() {
-            return player.getName();
+            return getPlayer().getName();
       }
 
       /**
@@ -591,10 +591,10 @@ public class Game {
                   Tool tool = (Tool) itemToUse;
                   //Traps can only be used if there is a predator to catch
                   if (tool.isTrap()) {
-                        result = island.hasPredator(player.getPosition());
+                        result = island.hasPredator(getPlayer().getPosition());
                   } //Screwdriver can only be used if player has a broken trap
-                  else if (tool.isScrewdriver() && player.hasTrap()) {
-                        result = player.getTrap().isBroken();
+                  else if (tool.isScrewdriver() && getPlayer().hasTrap()) {
+                        result = getPlayer().getTrap().isBroken();
                   } else {
                         result = false;
                   }
@@ -654,10 +654,10 @@ public class Game {
        * @return true if item was picked up, false if not
        */
       public boolean collectItem(Object item) {
-            boolean success = (item instanceof Item) && (player.collect((Item) item));
+            boolean success = (item instanceof Item) && (getPlayer().collect((Item) item));
             if (success) {
                   // player has picked up an item: remove from grid square
-                  island.removeOccupant(player.getPosition(), (Item) item);
+                  island.removeOccupant(getPlayer().getPosition(), (Item) item);
 
                   // everybody has to know about the change
                   notifyGameEventListeners();
@@ -672,17 +672,17 @@ public class Game {
        * @return true if what was dropped, false if not
        */
       public boolean dropItem(Object what) {
-            boolean success = player.drop((Item) what);
+            boolean success = getPlayer().drop((Item) what);
             if (success) {
                   // player has dropped an what: try to add to grid square
                   Item item = (Item) what;
-                  success = island.addOccupant(player.getPosition(), item);
+                  success = island.addOccupant(getPlayer().getPosition(), item);
                   if (success) {
                         // drop successful: everybody has to know that
                         notifyGameEventListeners();
                   } else {
                         // grid square is full: player has to take what back
-                        player.collect(item);
+                        getPlayer().collect(item);
                   }
             }
             return success;
@@ -696,22 +696,22 @@ public class Game {
        */
       public boolean useItem(Object item) {
             boolean success = false;
-            if (item instanceof Food && player.hasItem((Food) item)) //Player east food to increase stamina
+            if (item instanceof Food && getPlayer().hasItem((Food) item)) //Player east food to increase stamina
             {
                   Food food = (Food) item;
                   // player gets energy boost from food
-                  player.increaseStamina(food.getEnergy());
+                  getPlayer().increaseStamina(food.getEnergy());
                   // player has consumed the food: remove from inventory
-                  player.drop(food);
+                  getPlayer().drop(food);
                   // use successful: everybody has to know that
                   notifyGameEventListeners();
             } else if (item instanceof Tool) {
                   Tool tool = (Tool) item;
                   if (tool.isTrap() && !tool.isBroken()) {
                         success = trapPredator();
-                  } else if (tool.isScrewdriver() && player.hasTrap())// Use screwdriver (to fix trap)
+                  } else if (tool.isScrewdriver() && getPlayer().hasTrap())// Use screwdriver (to fix trap)
                   {                       
-                        Tool trap = player.getTrap();
+                        Tool trap = getPlayer().getTrap();
                         trap.fix();                        
                   }
             }
@@ -724,7 +724,7 @@ public class Game {
        */
       public void countKiwi() {
             //check if there are any kiwis here
-            for (Occupant occupant : island.getOccupants(player.getPosition())) {
+            for (Occupant occupant : island.getOccupants(getPlayer().getPosition())) {
                   if (occupant instanceof Kiwi) {
                         Kiwi kiwi = (Kiwi) occupant;
                         if (!kiwi.counted()) {
@@ -747,7 +747,7 @@ public class Game {
             // what terrain is the player moving on currently
             boolean successfulMove = false;
             if (isPlayerMovePossible(direction)) {
-                  Position newPosition = player.getPosition().getNewPosition(direction);
+                  Position newPosition = getPlayer().getPosition().getNewPosition(direction);
                   Terrain terrain = island.getTerrain(newPosition);
                   setCountOfSteps(getCountOfSteps() + 1);
   
@@ -755,8 +755,8 @@ public class Game {
                   
 
                   // move the player to new position
-                  player.moveToPosition(newPosition, terrain);
-                  island.updatePlayerPosition(player);
+                  getPlayer().moveToPosition(newPosition, terrain);
+                  island.updatePlayerPosition(getPlayer());
                   successfulMove = true;
 
                   // Is there a hazard?
@@ -945,7 +945,7 @@ public class Game {
     private void detectAnimal() {
         NodeList creatures = glossarydocs.getElementsByTagName("Creature");
 
-        for (Occupant occupant : island.getOccupants(player.getPosition())) {
+        for (Occupant occupant : island.getOccupants(getPlayer().getPosition())) {
             if (occupant instanceof Predator || occupant instanceof Kiwi || occupant instanceof Fauna) {
                 for(int i = 0; i < creatures.getLength(); i++) {
                     Node creature = creatures.item(i);
@@ -973,8 +973,8 @@ public class Game {
     private String endGameBonus() {
         int kiwisCountedBonus = (int)(Score.KIWIS_COUNTED * ((double) kiwiCount / totalKiwis));
         int predatorsTrappedBonus = (int)(Score.PREDATORS_TRAPPED * ((double) predatorsTrapped / totalPredators));
-        int remainingStaminaBonus = (int)(Score.REMAINING_STAMINA * (player.getStaminaLevel() / player.getMaximumStaminaLevel()));
-        int survivalBonus = player.isAlive() ? Score.SURVIVED : 0;
+        int remainingStaminaBonus = (int)(Score.REMAINING_STAMINA * (getPlayer().getStaminaLevel() / getPlayer().getMaximumStaminaLevel()));
+        int survivalBonus = getPlayer().isAlive() ? Score.SURVIVED : 0;
             getScore().addScore(kiwisCountedBonus + predatorsTrappedBonus + remainingStaminaBonus + survivalBonus);
         
         return "\nSurvival Bonus:          " + survivalBonus +
@@ -1042,7 +1042,7 @@ public class Game {
        * @return true if predator trapped
        */
       private boolean trapPredator() {
-            Position current = player.getPosition();
+            Position current = getPlayer().getPosition();
             boolean hadPredator = island.hasPredator(current);
             if (hadPredator) //can trap it
             {
@@ -1063,7 +1063,7 @@ public class Game {
        */
       private void checkForHazard() {
             //check if there are hazards
-            for (Occupant occupant : island.getOccupants(player.getPosition())) {
+            for (Occupant occupant : island.getOccupants(getPlayer().getPosition())) {
                   if (occupant instanceof Hazard) {
                         handleHazard((Hazard) occupant);
                   }
@@ -1076,7 +1076,7 @@ public class Game {
        * remove trigger
        */
         private void checkForTrigger() {
-            Position current = player.getPosition();
+            Position current = getPlayer().getPosition();
             boolean hadTrigger = island.hasTrigger(current);
             if (hadTrigger) //can delete the trigger
             {
@@ -1107,10 +1107,10 @@ public class Game {
        */
       private void handleHazard(Hazard hazard) {
             if (hazard.isFatal()) {
-                  player.kill();
+                  getPlayer().kill();
                   this.setLoseMessage(hazard.getDescription() + " has killed you.");
             } else if (hazard.isBreakTrap()) {
-                  Tool trap = player.getTrap();
+                  Tool trap = getPlayer().getTrap();
                   if (trap != null) {
                         trap.setBroken();
                         this.setPlayerMessage("Sorry your predator trap is broken. You will need to find tools to fix it before you can use it again.");
@@ -1120,11 +1120,11 @@ public class Game {
             double impact = hazard.getImpact();
                   getScore().subtractScore(Score.VALUE_HAZARD_NON_FATAL);
             // Impact is a reduction in players energy by this % of Max Stamina
-            double reduction = player.getMaximumStaminaLevel() * impact;
-            player.reduceStamina(reduction);
+            double reduction = getPlayer().getMaximumStaminaLevel() * impact;
+                  getPlayer().reduceStamina(reduction);
             // if stamina drops to zero: player is dead
-            if (player.getStaminaLevel() <= 0.0) {
-                player.kill();
+            if (  getPlayer().getStaminaLevel() <= 0.0) {
+                        getPlayer().kill();
                 this.setLoseMessage(" You have run out of stamina");
             } else // Let player know what happened
                   {
@@ -1207,11 +1207,11 @@ public class Game {
             double playerMaxBackpackWeight = input.nextDouble();
             double playerMaxBackpackSize = input.nextDouble();
             Position pos = new Position(island, playerPosRow, playerPosCol);
-            player = new Player(pos, playerName,
+            setPlayer(new Player(pos, playerName,
                     playerMaxStamina,
-                    playerMaxBackpackWeight, playerMaxBackpackSize);
-           player.setGameDifficulty(getGameDifficulty());
-            island.updatePlayerPosition(player);
+                    playerMaxBackpackWeight, playerMaxBackpackSize));
+            getPlayer().setGameDifficulty(getGameDifficulty());
+            island.updatePlayerPosition(getPlayer());
       }
 
       /**
@@ -1266,8 +1266,8 @@ public class Game {
        */
       public void calculateMapDimension(){
             //get player current position
-            int playerPositionCol = player.getPosition().getColumn();
-            int playerPositionRow = player.getPosition().getRow();
+            int playerPositionCol = getPlayer().getPosition().getColumn();
+            int playerPositionRow = getPlayer().getPosition().getRow();
             
             //calculate the view size which player will see the map
             viewSizeOfMap = (int)Math.round(getMapSize()*PLAYER_VIEW_PERCENTAGE_OF_MAP);
@@ -1357,10 +1357,10 @@ public class Game {
                  allPredators.remove(0);
                  totalPredators--;                 
            }else if(reward.equalsIgnoreCase(Reward.FOOD.toString())){
-                 Item food = new Food(player.getPosition(), "Magic Steak", "A limited edition food from heaven", 0, 0.1, 70.0);
-                 island.addOccupant(player.getPosition(), food);
+                 Item food = new Food(getPlayer().getPosition(), "Magic Steak", "A limited edition food from heaven", 0, 0.1, 70.0);
+                 island.addOccupant(getPlayer().getPosition(), food);
            }else if(reward.equalsIgnoreCase(Reward.STAMINA.toString())){
-                 player.increaseToMaxStamina();
+                  getPlayer().increaseToMaxStamina();
            }else if(reward.equalsIgnoreCase(Reward.SCORE.toString())){
                  this.getScore().addScore(score);
            }
@@ -1466,6 +1466,12 @@ public class Game {
       public void setPredatorTimerTask(PredatorTimerTask predatorTimerTask) {
             this.predatorTimerTask = predatorTimerTask;
       }
-
+      
+      /**
+       * @param player the player to set
+       */
+      public void setPlayer(Player player) {
+            this.player = player;
+      }
 
 }
