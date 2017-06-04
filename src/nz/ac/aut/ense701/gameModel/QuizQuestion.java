@@ -9,7 +9,7 @@ public class QuizQuestion {
 
     private int difficulty;
     private String question;
-    private String questionOptions[];
+    private String[] questionOptions;
     private int correctOptionIndex;
     private boolean complete;
     private String reward;
