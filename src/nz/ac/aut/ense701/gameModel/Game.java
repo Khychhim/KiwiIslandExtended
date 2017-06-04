@@ -47,6 +47,7 @@ public class Game {
       public static final int SIZE_INDEX = 5;
       private static final double MIN_REQUIRED_CATCH = 0.8;
       private static final double PLAYER_VIEW_PERCENTAGE_OF_MAP = 0.6;
+      private static final String GLOSSARY_XML = "glossary.xml";
       
       private String winMessage = "";
       private String loseMessage  = "";
@@ -116,7 +117,7 @@ public class Game {
             startTimer();
 
             //creating XML glossary document.
-            File glossaryXML = new File("glossary.xml");
+            File glossaryXML = new File(GLOSSARY_XML);
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = null;
             Document doc = null;
@@ -1314,7 +1315,7 @@ public class Game {
                   endMap = viewSizeOfMap;
             }
             
-           return (new int[]{startMap, endMap});
+           return new int[]{startMap, endMap};
      }
      
      /**
