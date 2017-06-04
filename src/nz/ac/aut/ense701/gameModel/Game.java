@@ -37,7 +37,6 @@ import org.xml.sax.SAXException;
  * AS
  */
 public class Game {
-
       //Constants shared with UI to provide player data
       private static final Logger LOGGER = Logger.getLogger( Game.class.getName() );
       public static final int STAMINA_INDEX = 0;
@@ -59,8 +58,8 @@ public class Game {
       GameAchievement achievement;
       public ArrayList<QuizQuestion> quizQuestionList;
       public JFrame miniQuizFrame;
-      public PredatorTimerTask predatorTimerTask;
-      public Document glossarydocs;
+      private PredatorTimerTask predatorTimerTask;
+      private Document glossarydocs;
       private DifferentMap dm;
       private GameDifficulty gameDifficulty;        
       private int viewSizeOfMap; 
@@ -179,8 +178,8 @@ public class Game {
       }
 
       public void startTimer(){
-            predatorTimerTask = new PredatorTimerTask(this);
-            getTimer().scheduleAtFixedRate(predatorTimerTask, getDm().getPredatorMoveTime() * 1000, getDm().getPredatorMoveTime() * 1000);            
+            setPredatorTimerTask(new PredatorTimerTask(this));
+            getTimer().scheduleAtFixedRate(getPredatorTimerTask(), getDm().getPredatorMoveTime() * 1000, getDm().getPredatorMoveTime() * 1000);            
             notifyGameEventListeners();
       }
       
@@ -942,8 +941,7 @@ public class Game {
             notifyGameEventListeners();
       }
     
-    // private void 
-          
+    // private void        
     private void detectAnimal() {
         NodeList creatures = glossarydocs.getElementsByTagName("Creature");
 
@@ -951,14 +949,23 @@ public class Game {
             if (occupant instanceof Predator || occupant instanceof Kiwi || occupant instanceof Fauna) {
                 for(int i = 0; i < creatures.getLength(); i++) {
                     Node creature = creatures.item(i);
-                    if(creature.getNodeType() == Node.ELEMENT_NODE) {
-                        Element element = (Element) creature;
-                        Node name = element.getElementsByTagName("Name").item(0);
-                        if(name.getTextContent().equalsIgnoreCase(occupant.getName())) {
-                            element.setAttribute("Seen", "true");
-                        }
-                    }
+                    setGlossaryCreatureVisible(creature,occupant);
                 }
+            }
+        }
+    }
+    
+    /**
+     * set xml attribute for creature to be visible for user to see
+     * @param creature creature to set
+     * @param occupant occupant to set
+     */
+    private void setGlossaryCreatureVisible(Node creature, Occupant occupant){
+          if(creature.getNodeType() == Node.ELEMENT_NODE) {
+            Element element = (Element) creature;
+            Node name = element.getElementsByTagName("Name").item(0);
+            if(name.getTextContent().equalsIgnoreCase(occupant.getName())) {
+                element.setAttribute("Seen", "true");
             }
         }
     }
@@ -1023,8 +1030,8 @@ public class Game {
        * @return true if player can move
        */
       private boolean playerCanMove() {
-            return (isPlayerMovePossible(MoveDirection.NORTH) || isPlayerMovePossible(MoveDirection.SOUTH)
-                    || isPlayerMovePossible(MoveDirection.EAST) || isPlayerMovePossible(MoveDirection.WEST));
+            return isPlayerMovePossible(MoveDirection.NORTH) || isPlayerMovePossible(MoveDirection.SOUTH)
+                    || isPlayerMovePossible(MoveDirection.EAST) || isPlayerMovePossible(MoveDirection.WEST);
 
       }
       
@@ -1090,7 +1097,7 @@ public class Game {
      */
     public void startPredatorTimer(){
             setTimer(new Timer());
-        predatorTimerTask = new PredatorTimerTask(this);
+            setPredatorTimerTask(new PredatorTimerTask(this));
     }
 
     /**
@@ -1164,9 +1171,9 @@ public class Game {
 
                   input.close();
             } catch (FileNotFoundException e) {
-                  System.err.println("Unable to find data file '" + fileName + "'");
+                  LOGGER.info("Unable to find data file '" + fileName + "'");
             } catch (IOException e) {
-                  System.err.println("Problem encountered processing file.");
+                 LOGGER.info("Problem encountered processing file.");
             }
       }
 
@@ -1223,28 +1230,28 @@ public class Game {
                   Position occPos = new Position(island, occRow, occCol);
                   Occupant occupant = null;
 
-                  if (occType.equals("T")) {
+                  if ("T".equals(occType)) {
                         double weight = input.nextDouble();
                         double size = input.nextDouble();
                         occupant = new Tool(occPos, occName, occDesc, weight, size);
-                  } else if (occType.equals("E")) {
+                  } else if ("E".equals(occType)) {
                         double weight = input.nextDouble();
                         double size = input.nextDouble();
                         double energy = input.nextDouble();
                         occupant = new Food(occPos, occName, occDesc, weight, size, energy);
-                  } else if (occType.equals("H")) {
+                  } else if ("H".equals(occType)) {
                         double impact = input.nextDouble();
                         occupant = new Hazard(occPos, occName, occDesc, impact);
-                  } else if (occType.equals("K")) {
+                  } else if ("K".equals(occType)) {
                         occupant = new Kiwi(occPos, occName, occDesc);
                         totalKiwis++;
-                  } else if (occType.equals("P")) {
+                  } else if ("P".equals(occType)) {
                         occupant = new Predator(occPos, occName, occDesc);
                         allPredators.add(occupant);//add predator to arraylist for easy modify position
                         totalPredators++;
-                  } else if (occType.equals("F")) {
+                  } else if ("F".equals(occType)) {
                         occupant = new Fauna(occPos, occName, occDesc);
-                  } else if (occType.equals("Q")) {
+                  } else if ("Q".equals(occType)) {
                         occupant = new Trigger(occPos, occName, occDesc);
                   }
                   if (occupant != null) {
@@ -1264,8 +1271,8 @@ public class Game {
             
             //calculate the view size which player will see the map
             viewSizeOfMap = (int)Math.round(getMapSize()*PLAYER_VIEW_PERCENTAGE_OF_MAP);
-            int start = 0;
-            int end = 0;
+            int start;
+            int end;
             //if view size is an even number, then there is a one grid square difference between the left/top end to player position and
             //from player position to right/bottom end. 
             if(viewSizeOfMap % 2 == 0){                              
@@ -1273,7 +1280,7 @@ public class Game {
                   end = (viewSizeOfMap/2)+1; // for right and bottom
 
             }else{
-                  start = (viewSizeOfMap/2); //for left and top
+                  start = viewSizeOfMap/2; //for left and top
                   end = (viewSizeOfMap/2)+1; // for right and bottom
             }
             
@@ -1330,10 +1337,8 @@ public class Game {
                                newQuizQuestion.add(quizQuestionList.get(i));
                          }
 
-                         if(getGameDifficulty() == GameDifficulty.HARD){
-                               if(this.quizQuestionList.get(i).getDifficulty() == 3){ // add difficuly level 2 and 3 for HARD
-                                     newQuizQuestion.add(quizQuestionList.get(i));
-                               }
+                         if(getGameDifficulty() == GameDifficulty.HARD && this.quizQuestionList.get(i).getDifficulty() == 3){// add difficuly level 2 and 3 for HARD
+                                newQuizQuestion.add(quizQuestionList.get(i));                               
                          }
                    }
             }
@@ -1447,5 +1452,20 @@ public class Game {
       public void setTimer(Timer timer) {
             this.timer = timer;
       }
+      
+            /**
+       * @return the predatorTimerTask
+       */
+      public PredatorTimerTask getPredatorTimerTask() {
+            return predatorTimerTask;
+      }
+
+      /**
+       * @param predatorTimerTask the predatorTimerTask to set
+       */
+      public void setPredatorTimerTask(PredatorTimerTask predatorTimerTask) {
+            this.predatorTimerTask = predatorTimerTask;
+      }
+
 
 }
