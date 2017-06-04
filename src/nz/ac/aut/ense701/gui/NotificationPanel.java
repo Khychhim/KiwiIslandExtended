@@ -135,7 +135,7 @@ public class NotificationPanel extends javax.swing.JPanel {
         miniGamePanel.resultFrame.dispose();
         gui.setEnabled(true);
         gui.toFront();
-        gui.game.timer =  new Timer();
+        gui.game.setTimer(new Timer());
         gui.game.startTimer();        
     }//GEN-LAST:event_jButtonExitActionPerformed
 

@@ -78,7 +78,7 @@ Variable oystercatchers eat a wide range of coastal invertebrates, including mol
 They breed in monogamous pairs and defend territories vigorously against neighbours. Nests are normally simple scrapes in the sand and the 2–3 eggs are laid from October onwards. Incubation is shared and takes about 28 days.
 The chicks fly at 6–7 weeks old and late chicks may not fledge until March. Chicks are vigorously protected by both parents, often well after fledging. Adults show high fidelity to their mate and the site.</Description>
 	</Creature>
-	<Creature Seen="true" id="9">
+	<Creature Seen="false" id="9">
 		<Name>Heron</Name>
 		<Description>The white heron has always been rare in New Zealand and it has gained almost mythical status. 
 

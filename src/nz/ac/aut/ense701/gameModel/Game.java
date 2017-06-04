@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Timer;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,25 +36,49 @@ import org.xml.sax.SAXException;
  */
 public class Game {
       //Constants shared with UI to provide player data
+      private static final Logger LOGGER = Logger.getLogger( Game.class.getName() );
       public static final int STAMINA_INDEX = 0;
       public static final int MAXSTAMINA_INDEX = 1;
       public static final int MAXWEIGHT_INDEX = 2;
       public static final int WEIGHT_INDEX = 3;
       public static final int MAXSIZE_INDEX = 4;
       public static final int SIZE_INDEX = 5;
-      public  int MAP_SIZE;
-      public Timer timer;
+      private static final double MIN_REQUIRED_CATCH = 0.8;
+      private static final double PLAYER_VIEW_PERCENTAGE_OF_MAP = 0.6;
+      private static final String GLOSSARY_XML = "glossary.xml";
+      
+      private String winMessage = "";
+      private String loseMessage  = "";
+      private String playerMessage  = "";  
+      private  int mapSize;
+      private Timer timer;
       GameAchievement counting = new GameAchievement();
-      public int count_of_steps = counting.readCount();
+      private int countOfSteps = counting.readCount();
       GameAchievement achievement;
       public String playerName = "River Song";
       public ArrayList<QuizQuestion> quizQuestionList;
-      public PredatorTimerTask predatorTimerTask;
-      public Document glossarydocs;
+      private PredatorTimerTask predatorTimerTask;
+      private Document glossarydocs;
       private DifferentMap dm;
       private GameDifficulty gameDifficulty;
-      public final int NUMBER_OF_MINIGAMES = 2;
-    
+      public final int NUMBER_OF_MINIGAMES = 2;     
+      private int viewSizeOfMap; 
+      private int startMapRow;
+      private int endMapRow;
+      private int startMapCol;
+      private int endMapCol;
+      private Island island;
+      private Player player;
+      private GameState state;
+      private int kiwiCount;
+      private int totalPredators;
+      private int totalKiwis;
+      private int predatorsTrapped;
+      private Set<GameEventListener> eventListeners;
+      private Random rand;
+      private ArrayList<Occupant> allPredators;
+      private Score score;  
+      
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
      * @param playerName
@@ -82,7 +107,7 @@ public class Game {
             totalKiwis = 0;
             predatorsTrapped = 0;
             kiwiCount = 0;
-            score = new Score();
+            setScore(new Score());
             initialiseIslandFromFile("IslandData.txt");
             drawIsland();
             state = GameState.PLAYING;
@@ -90,31 +115,28 @@ public class Game {
             loseMessage = "";
             playerMessage = "";
             // timer for predator movement
-            timer = new Timer();
+            setTimer(new Timer());
             startTimer();
 
             //creating XML glossary document.
-            File glossaryXML = new File("glossary.xml");
+            File glossaryXML = new File(GLOSSARY_XML);
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = null;
-            try {
-                docBuilder = docFactory.newDocumentBuilder();
-            } catch (ParserConfigurationException ex) {
-                System.err.println("Parser Exception: " + ex.getMessage());
-            }
-            // root elements
             Document doc = null;
             try {
-                doc = docBuilder.parse(glossaryXML);
-            } catch (SAXException ex) {
-                System.err.println("SAXEception: " + ex.getMessage());
+                docBuilder = docFactory.newDocumentBuilder();
+                 doc = docBuilder.parse(glossaryXML);
+                 doc.getDocumentElement().normalize();
+            } catch (ParserConfigurationException ex) {
+                LOGGER.info("Parser Exception: " + ex);
+            }catch (SAXException ex) {
+                LOGGER.info("SAXEception: " + ex);
             } catch (IOException ex) {
-                System.err.println("IOException: " + ex.getMessage());
+               LOGGER.info("IOException: " + ex);
             }
-            doc.getDocumentElement().normalize();
 
             glossarydocs = doc;
-            MAP_SIZE = getDm().getMapCols();
+            setMapSize(getDm().getMapCols());
             calculateMapDimension();
             notifyGameEventListeners();
       }
@@ -124,6 +146,13 @@ public class Game {
        * Accessor methods for game data
     ***********************************************************************************************************************
        */
+            /**
+       * @return the countOfSteps
+       */
+      public int getCountOfSteps() {
+            return countOfSteps;
+      }
+
       /**
        * Get number of rows on island
        *
@@ -152,8 +181,8 @@ public class Game {
       }
 
       public void startTimer(){
-            predatorTimerTask = new PredatorTimerTask(this);
-            timer.scheduleAtFixedRate(predatorTimerTask, getDm().getPredatorMoveTime() * 1000, getDm().getPredatorMoveTime() * 1000);            
+            setPredatorTimerTask(new PredatorTimerTask(this));
+            getTimer().scheduleAtFixedRate(getPredatorTimerTask(), getDm().getPredatorMoveTime() * 1000, getDm().getPredatorMoveTime() * 1000);            
             notifyGameEventListeners();
       }
       
@@ -201,14 +230,14 @@ public class Game {
       public boolean isPlayerMovePossible(MoveDirection direction) {
             boolean isMovePossible = false;
             // what position is the player moving to?
-            Position newPosition = player.getPosition().getNewPosition(direction);
+            Position newPosition = getPlayer().getPosition().getNewPosition(direction);
             // is that a valid position?
             if ((newPosition != null) && newPosition.isOnIsland()) {
                   // what is the terrain at that new position?
                   Terrain newTerrain = island.getTerrain(newPosition);
                   // can the playuer do it?
-                  isMovePossible = player.hasStaminaToMove(newTerrain)
-                          && player.isAlive();
+                  isMovePossible = getPlayer().hasStaminaToMove(newTerrain)
+                          && getPlayer().isAlive();
             }
             return isMovePossible;
       }
@@ -255,19 +284,27 @@ public class Game {
                         if (newPosition != null) {
                               newPredator = new Predator(newPosition, predator.getName(), predator.getDescription());
                               //check to avoid predator stepping on hazard
-                              if (!isPredatorOnHazard(newPredator)) {
-                                    success = island.addOccupant(newPosition, newPredator);
-                                    //if add success, remove previous predator from island and add new predator to arraylist
-                                    if (success) {                                         
-                                          island.removeOccupant(predator.getPosition(), predator);
-                                    }
-                                    this.notifyGameEventListeners();
-                              }
+                             if (!isPredatorOnHazard(newPredator)) {
+                                   success = addNewPredatorToIsland(success, newPredator, predator);
+                             }
                         }
                   } while (!success);
               return newPredator;
       }
 
+      /**
+       * Check if predator not on hazard then add to island and remove old predator
+       */
+      public synchronized boolean addNewPredatorToIsland(boolean success, Occupant newPredator, Predator predator){             
+                  success = island.addOccupant(newPredator.getPosition(), newPredator);
+                  //if add success, remove previous predator from island and add new predator to arraylist
+                  if (success) {                                         
+                        island.removeOccupant(predator.getPosition(), predator);
+                  }
+                  this.notifyGameEventListeners();
+                  return success;            
+      }
+      
       /**
        * check if kiwi is near a predator in a selected direction two grid squares away
        * @param predator the predator used to check for nearby kiwi
@@ -286,12 +323,10 @@ public class Game {
                         return true;
                   } else {
                         Position twoStep = oneStep.getNewPosition(direction);
-                        if ( twoStep != null) {
-                              if(island.hasKiwi(twoStep)){ // check for two square ahead
+                        if ( twoStep != null && island.hasKiwi(twoStep)) {// check for two square ahead                              
                               predator.setRowAwayFromKiwi(row + row);
                               predator.setcoloumnAwayFromKiwi(col + col);
-                              return true;
-                              }
+                              return true;                              
                         }
                   }
             }
@@ -362,15 +397,7 @@ public class Game {
                       Predator newPredator = predatorMoveToKiwi(predator);
                       newPredatorList.add(newPredator);
                       
-                      //remove kiwi if predator and kiwi on the same grid square
-                      for(Occupant kiwi : island.getOccupants(newPredator.getPosition())){
-                            if(kiwi instanceof Kiwi){
-                                  island.removeOccupant(kiwi.getPosition(), kiwi);
-                                  this.totalKiwis--;
-                                  this.notifyGameEventListeners();
-                                  this.updateGameState();
-                            }
-                      }
+                      removeKiwi(newPredator);
                            
                   } else {//if kiwi is not nearby, move predator randomly
                        newPredatorList.add(movePredatorRandomly(predator));
@@ -380,6 +407,22 @@ public class Game {
             this.allPredators = newPredatorList;
       }
 
+      /**
+       * method to remove kiwi when predator and kiwi on same grid square
+       * @param predator 
+       */
+      public synchronized void removeKiwi(Predator predator){
+            //remove kiwi if predator and kiwi on the same grid square
+            for(Occupant kiwi : island.getOccupants(predator.getPosition())){
+                  if(kiwi instanceof Kiwi){
+                        island.removeOccupant(kiwi.getPosition(), kiwi);
+                        this.totalKiwis--;
+                        this.notifyGameEventListeners();
+                        this.updateGameState();
+                  }
+            }
+      }
+      
       /**
        * Get terrain for position
        *
@@ -419,7 +462,7 @@ public class Game {
        * @return occupants at player's position
        */
       public Occupant[] getOccupantsPlayerPosition() {
-            return island.getOccupants(player.getPosition());
+            return island.getOccupants(getPlayer().getPosition());
       }
 
       /**
@@ -440,12 +483,12 @@ public class Game {
        */
       public int[] getPlayerValues() {
             int[] playerValues = new int[6];
-            playerValues[STAMINA_INDEX] = (int) player.getStaminaLevel();
-            playerValues[MAXSTAMINA_INDEX] = (int) player.getMaximumStaminaLevel();
-            playerValues[MAXWEIGHT_INDEX] = (int) player.getMaximumBackpackWeight();
-            playerValues[WEIGHT_INDEX] = (int) player.getCurrentBackpackWeight();
-            playerValues[MAXSIZE_INDEX] = (int) player.getMaximumBackpackSize();
-            playerValues[SIZE_INDEX] = (int) player.getCurrentBackpackSize();
+            playerValues[STAMINA_INDEX] = (int) getPlayer().getStaminaLevel();
+            playerValues[MAXSTAMINA_INDEX] = (int) getPlayer().getMaximumStaminaLevel();
+            playerValues[MAXWEIGHT_INDEX] = (int) getPlayer().getMaximumBackpackWeight();
+            playerValues[WEIGHT_INDEX] = (int) getPlayer().getCurrentBackpackWeight();
+            playerValues[MAXSIZE_INDEX] = (int) getPlayer().getMaximumBackpackSize();
+            playerValues[SIZE_INDEX] = (int) getPlayer().getCurrentBackpackSize();
 
             return playerValues;
 
@@ -475,7 +518,7 @@ public class Game {
        * @return objects in backpack
        */
       public Object[] getPlayerInventory() {
-            return player.getInventory().toArray();
+            return getPlayer().getInventory().toArray();
       }
 
       /**
@@ -484,7 +527,7 @@ public class Game {
        * @return player name
        */
       public String getPlayerName() {
-            return player.getName();
+            return getPlayer().getName();
       }
 
       /**
@@ -552,22 +595,21 @@ public class Game {
        */
       public boolean canUse(Object itemToUse) {
             boolean result = (itemToUse != null) && (itemToUse instanceof Item);
-            if (result) {
+            if (result && itemToUse instanceof Tool) {
                   //Food can always be used (though may be wasted)
                   // so no need to change result
-
-                  if (itemToUse instanceof Tool) {
-                        Tool tool = (Tool) itemToUse;
-                        //Traps can only be used if there is a predator to catch
-                        if (tool.isTrap()) {
-                              result = island.hasPredator(player.getPosition());
-                        } //Screwdriver can only be used if player has a broken trap
-                        else if (tool.isScrewdriver() && player.hasTrap()) {
-                              result = player.getTrap().isBroken();
-                        } else {
-                              result = false;
-                        }
+                  
+                  Tool tool = (Tool) itemToUse;
+                  //Traps can only be used if there is a predator to catch
+                  if (tool.isTrap()) {
+                        result = island.hasPredator(getPlayer().getPosition());
+                  } //Screwdriver can only be used if player has a broken trap
+                  else if (tool.isScrewdriver() && getPlayer().hasTrap()) {
+                        result = getPlayer().getTrap().isBroken();
+                  } else {
+                        result = false;
                   }
+                  
             }
             return result;
       }
@@ -623,10 +665,10 @@ public class Game {
        * @return true if item was picked up, false if not
        */
       public boolean collectItem(Object item) {
-            boolean success = (item instanceof Item) && (player.collect((Item) item));
+            boolean success = (item instanceof Item) && (getPlayer().collect((Item) item));
             if (success) {
                   // player has picked up an item: remove from grid square
-                  island.removeOccupant(player.getPosition(), (Item) item);
+                  island.removeOccupant(getPlayer().getPosition(), (Item) item);
 
                   // everybody has to know about the change
                   notifyGameEventListeners();
@@ -641,17 +683,17 @@ public class Game {
        * @return true if what was dropped, false if not
        */
       public boolean dropItem(Object what) {
-            boolean success = player.drop((Item) what);
+            boolean success = getPlayer().drop((Item) what);
             if (success) {
                   // player has dropped an what: try to add to grid square
                   Item item = (Item) what;
-                  success = island.addOccupant(player.getPosition(), item);
+                  success = island.addOccupant(getPlayer().getPosition(), item);
                   if (success) {
                         // drop successful: everybody has to know that
                         notifyGameEventListeners();
                   } else {
                         // grid square is full: player has to take what back
-                        player.collect(item);
+                        getPlayer().collect(item);
                   }
             }
             return success;
@@ -665,25 +707,23 @@ public class Game {
        */
       public boolean useItem(Object item) {
             boolean success = false;
-            if (item instanceof Food && player.hasItem((Food) item)) //Player east food to increase stamina
+            if (item instanceof Food && getPlayer().hasItem((Food) item)) //Player east food to increase stamina
             {
                   Food food = (Food) item;
                   // player gets energy boost from food
-                  player.increaseStamina(food.getEnergy());
+                  getPlayer().increaseStamina(food.getEnergy());
                   // player has consumed the food: remove from inventory
-                  player.drop(food);
+                  getPlayer().drop(food);
                   // use successful: everybody has to know that
                   notifyGameEventListeners();
             } else if (item instanceof Tool) {
                   Tool tool = (Tool) item;
                   if (tool.isTrap() && !tool.isBroken()) {
                         success = trapPredator();
-                  } else if (tool.isScrewdriver())// Use screwdriver (to fix trap)
-                  {
-                        if (player.hasTrap()) {
-                              Tool trap = player.getTrap();
-                              trap.fix();
-                        }
+                  } else if (tool.isScrewdriver() && getPlayer().hasTrap())// Use screwdriver (to fix trap)
+                  {                       
+                        Tool trap = getPlayer().getTrap();
+                        trap.fix();                        
                   }
             }
             updateGameState();
@@ -695,7 +735,7 @@ public class Game {
        */
       public void countKiwi() {
             //check if there are any kiwis here
-            for (Occupant occupant : island.getOccupants(player.getPosition())) {
+            for (Occupant occupant : island.getOccupants(getPlayer().getPosition())) {
                   if (occupant instanceof Kiwi) {
                         Kiwi kiwi = (Kiwi) occupant;
                         if (!kiwi.counted()) {
@@ -718,16 +758,13 @@ public class Game {
             // what terrain is the player moving on currently
             boolean successfulMove = false;
             if (isPlayerMovePossible(direction)) {
-                  Position newPosition = player.getPosition().getNewPosition(direction);
+                  Position newPosition = getPlayer().getPosition().getNewPosition(direction);
                   Terrain terrain = island.getTerrain(newPosition);
-                  count_of_steps++;
-  
-                  
-                  
+                  setCountOfSteps(getCountOfSteps() + 1);
 
                   // move the player to new position
-                  player.moveToPosition(newPosition, terrain);
-                  island.updatePlayerPosition(player);
+                  getPlayer().moveToPosition(newPosition, terrain);
+                  island.updatePlayerPosition(getPlayer());
                   successfulMove = true;
 
                   // Is there a hazard?
@@ -735,7 +772,6 @@ public class Game {
                   
                   //is there an animal?
                   detectAnimal();
-
 
                   //Is there a trigger
                   checkForTrigger();
@@ -765,8 +801,8 @@ public class Game {
             eventListeners.remove(listener);
       }
       
-      public GameAchievement setAchievement(GameAchievement game){
-          return this.achievement = game;
+      public void setAchievement(GameAchievement game){
+           this.achievement = game;
       }
       
       public GameAchievement getAchievement(){
@@ -780,6 +816,13 @@ public class Game {
       public void setIsland(Island island){
           this.island = island;
       }
+      
+      /**
+       * @param countOfSteps the countOfSteps to set
+       */
+      public void setCountOfSteps(int countOfSteps) {
+            this.countOfSteps = countOfSteps;
+      }
       /**
        * *******************************************************************************************************************************
        * Private methods
@@ -791,19 +834,19 @@ public class Game {
        */
           private void updateGameState()
     {
-         String message = "";
+         String message;
         if ( !player.isAlive() )
         {
             state = GameState.LOST;
             //creates achievement object to reset counter of total games won.
             GameAchievement achievement = new GameAchievement();
             achievement.lossGameResetCounter();
-            achievement.write_to_count(count_of_steps);
-            achievement.read_kiwiCount(kiwiCount);
-            setAchievement(achievement);
-            
+            achievement.write_to_count(getCountOfSteps());
 
-           
+            achievement.read_kiwiCount(kiwiCount);
+            setAchievement(achievement);           
+
+
             message = "Sorry, you have lost the game. " + this.getLoseMessage() + endGameBonus();
             
              try {    
@@ -814,10 +857,8 @@ public class Game {
                  StreamResult result = new StreamResult(new File("glossary.xml"));
                  
                  transformer.transform(source, result);
-                 
-                 System.out.println("File saved!");
              } catch (TransformerException ex) {
-                 System.err.println("Transformer Exception: " + ex);
+                 LOGGER.info("Transformer Exception: " + ex);
              }
              this.setLoseMessage(message);
         }
@@ -828,10 +869,9 @@ public class Game {
             //creates achievement object to reset counter of total games won.
             GameAchievement achievement = new GameAchievement();
             achievement.lossGameResetCounter();
-            achievement.write_to_count(count_of_steps);
+            achievement.write_to_count(getCountOfSteps());
             achievement.read_kiwiCount(kiwiCount);
             setAchievement(achievement);//setter or getter for achievement instance.
-            
     
             message = "Sorry, you have lost the game. You do not have sufficient stamina to move." + endGameBonus();
             try {    
@@ -842,10 +882,8 @@ public class Game {
                  StreamResult result = new StreamResult(new File("glossary.xml"));
                  
                  transformer.transform(source, result);
-                 
-                 System.out.println("File saved!");
              } catch (TransformerException ex) {
-                 System.err.println("Transformer Exception: " + ex);
+                 LOGGER.info("Transformer Exception: " + ex);
              }
             this.setLoseMessage(message);
       
@@ -857,7 +895,7 @@ public class Game {
             //adds to count for assigning achievement for winning 3 games in a row.
             GameAchievement achievement = new GameAchievement();
             achievement.Won3Games();
-            achievement.write_to_count(count_of_steps);
+            achievement.write_to_count(getCountOfSteps());
             achievement.read_kiwiCount(kiwiCount);
             message = "You win! You have done an excellent job and trapped all the predators." + endGameBonus();
             try {    
@@ -868,10 +906,8 @@ public class Game {
                  StreamResult result = new StreamResult(new File("glossary.xml"));
                  
                  transformer.transform(source, result);
-                 
-                 System.out.println("File saved!");
              } catch (TransformerException ex) {
-                 System.err.println("Transformer Exception: " + ex);
+                LOGGER.info("Transformer Exception: " + ex);
              }
             this.setWinMessage(message);
 
@@ -879,55 +915,58 @@ public class Game {
             
          
         }
-        else if(kiwiCount == totalKiwis)
-        {
-            if(predatorsTrapped >= totalPredators * MIN_REQUIRED_CATCH)
-            {
-                state = GameState.WON;
-                //adds to count for assigning achievement for winning 3 games in a row.
-                GameAchievement achievement = new GameAchievement();
-                achievement.Won3Games();
-                achievement.write_to_count(count_of_steps);
-                achievement.read_kiwiCount(kiwiCount);
-                message = "You win! You have counted all the kiwi and trapped at least 80% of the predators." + endGameBonus();
-                try {    
-                 // write the content into xml file
-                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                 Transformer transformer = transformerFactory.newTransformer();
-                 DOMSource source = new DOMSource(glossarydocs);
-                 StreamResult result = new StreamResult(new File("glossary.xml"));
+        else if(kiwiCount == totalKiwis && (predatorsTrapped >= totalPredators * MIN_REQUIRED_CATCH))
+        {                     
+            state = GameState.WON;
+            //adds to count for assigning achievement for winning 3 games in a row.
+            GameAchievement achievement = new GameAchievement();
+            achievement.Won3Games();
+            achievement.write_to_count(getCountOfSteps());
+            achievement.read_kiwiCount(kiwiCount);
+            message = "You win! You have counted all the kiwi and trapped at least 80% of the predators." + endGameBonus();
+            try {    
+             // write the content into xml file
+             TransformerFactory transformerFactory = TransformerFactory.newInstance();
+             Transformer transformer = transformerFactory.newTransformer();
+             DOMSource source = new DOMSource(glossarydocs);
+             StreamResult result = new StreamResult(new File("glossary.xml"));
+
+             transformer.transform(source, result);
                  
-                 transformer.transform(source, result);
-                 
-                 System.out.println("File saved!");
              } catch (TransformerException ex) {
-                 System.err.println("Transformer Exception: " + ex);
+                LOGGER.info("Transformer Exception: " + ex);
              }
-                this.setWinMessage(message);
-                
-                
-                
-            }
+                this.setWinMessage(message);                
         }
             // notify listeners about changes
             notifyGameEventListeners();
       }
-          
-    public void detectAnimal() {
+    
+    // private void        
+    private void detectAnimal() {
         NodeList creatures = glossarydocs.getElementsByTagName("Creature");
 
-        for (Occupant occupant : island.getOccupants(player.getPosition())) {
+        for (Occupant occupant : island.getOccupants(getPlayer().getPosition())) {
             if (occupant instanceof Predator || occupant instanceof Kiwi || occupant instanceof Fauna) {
                 for(int i = 0; i < creatures.getLength(); i++) {
                     Node creature = creatures.item(i);
-                    if(creature.getNodeType() == Node.ELEMENT_NODE) {
-                        Element element = (Element) creature;
-                        Node name = element.getElementsByTagName("Name").item(0);
-                        if(name.getTextContent().equalsIgnoreCase(occupant.getName())) {
-                            element.setAttribute("Seen", "true");
-                        }
-                    }
+                    setGlossaryCreatureVisible(creature,occupant);
                 }
+            }
+        }
+    }
+    
+    /**
+     * set xml attribute for creature to be visible for user to see
+     * @param creature creature to set
+     * @param occupant occupant to set
+     */
+    private void setGlossaryCreatureVisible(Node creature, Occupant occupant){
+          if(creature.getNodeType() == Node.ELEMENT_NODE) {
+            Element element = (Element) creature;
+            Node name = element.getElementsByTagName("Name").item(0);
+            if(name.getTextContent().equalsIgnoreCase(occupant.getName())) {
+                element.setAttribute("Seen", "true");
             }
         }
     }
@@ -940,12 +979,10 @@ public class Game {
         score.addScore(kiwisCountedBonus + predatorsTrappedBonus + remainingStaminaBonus + survivalBonus);
         score.saveHighScore(player.getName());
         
-        String bonusString = "\nSurvival Bonus:          " + survivalBonus +
+        return "\nSurvival Bonus:          " + survivalBonus +
                              "\nStamina Remaining Bonus: " + remainingStaminaBonus + 
                              "\nKiwis Counted Bonus:     " + kiwisCountedBonus + 
                              "\nPredators Trapped Bonus: " + predatorsTrappedBonus;
-
-        return bonusString;
     }
    
       /**
@@ -984,8 +1021,6 @@ public class Game {
             playerMessage = message;
 
       }
-      
-
 
       /**
        * Check if player able to move
@@ -993,19 +1028,18 @@ public class Game {
        * @return true if player can move
        */
       private boolean playerCanMove() {
-            return (isPlayerMovePossible(MoveDirection.NORTH) || isPlayerMovePossible(MoveDirection.SOUTH)
-                    || isPlayerMovePossible(MoveDirection.EAST) || isPlayerMovePossible(MoveDirection.WEST));
+            return isPlayerMovePossible(MoveDirection.NORTH) || isPlayerMovePossible(MoveDirection.SOUTH)
+                    || isPlayerMovePossible(MoveDirection.EAST) || isPlayerMovePossible(MoveDirection.WEST);
 
       }
       
-
       /**
        * Trap a predator in this position
        *
        * @return true if predator trapped
        */
       private boolean trapPredator() {
-            Position current = player.getPosition();
+            Position current = getPlayer().getPosition();
             boolean hadPredator = island.hasPredator(current);
             if (hadPredator) //can trap it
             {
@@ -1015,7 +1049,7 @@ public class Game {
                   //remove predator object from the arraylist if trap
                   allPredators.remove(occupant);
                   predatorsTrapped++;
-                  score.addScore(Score.VALUE_PREDATOR_TRAPPED);
+                  getScore().addScore(Score.VALUE_PREDATOR_TRAPPED);
             }
             return hadPredator;
       }
@@ -1026,7 +1060,7 @@ public class Game {
        */
       private void checkForHazard() {
             //check if there are hazards
-            for (Occupant occupant : island.getOccupants(player.getPosition())) {
+            for (Occupant occupant : island.getOccupants(getPlayer().getPosition())) {
                   if (occupant instanceof Hazard) {
                         handleHazard((Hazard) occupant);
                   }
@@ -1039,13 +1073,13 @@ public class Game {
        * remove trigger
        */
         private void checkForTrigger() {
-            Position current = player.getPosition();
+            Position current = getPlayer().getPosition();
             boolean hadTrigger = island.hasTrigger(current);
             if (hadTrigger) //can delete the trigger
             {
                 //pause game timer
-                timer.cancel();
-                timer.purge();
+                  getTimer().cancel();
+                  getTimer().purge();
                 //remove trigger
                 Occupant trigger = island.getTrigger(current);
                 //remove launched trigger
@@ -1059,8 +1093,8 @@ public class Game {
      * This method start predator timer
      */
     public void startPredatorTimer(){
-        timer = new Timer();
-        predatorTimerTask = new PredatorTimerTask(this);
+            setTimer(new Timer());
+            setPredatorTimerTask(new PredatorTimerTask(this));
     }
 
     /**
@@ -1070,10 +1104,10 @@ public class Game {
        */
       private void handleHazard(Hazard hazard) {
             if (hazard.isFatal()) {
-                  player.kill();
+                  getPlayer().kill();
                   this.setLoseMessage(hazard.getDescription() + " has killed you.");
             } else if (hazard.isBreakTrap()) {
-                  Tool trap = player.getTrap();
+                  Tool trap = getPlayer().getTrap();
                   if (trap != null) {
                         trap.setBroken();
                         this.setPlayerMessage("Sorry your predator trap is broken. You will need to find tools to fix it before you can use it again.");
@@ -1081,13 +1115,13 @@ public class Game {
             } else // hazard reduces player's stamina
         {
             double impact = hazard.getImpact();
-            score.subtractScore(Score.VALUE_HAZARD_NON_FATAL);
+                  getScore().subtractScore(Score.VALUE_HAZARD_NON_FATAL);
             // Impact is a reduction in players energy by this % of Max Stamina
-            double reduction = player.getMaximumStaminaLevel() * impact;
-            player.reduceStamina(reduction);
+            double reduction = getPlayer().getMaximumStaminaLevel() * impact;
+                  getPlayer().reduceStamina(reduction);
             // if stamina drops to zero: player is dead
-            if (player.getStaminaLevel() <= 0.0) {
-                player.kill();
+            if (  getPlayer().getStaminaLevel() <= 0.0) {
+                        getPlayer().kill();
                 this.setLoseMessage(" You have run out of stamina");
             } else // Let player know what happened
                   {
@@ -1134,9 +1168,9 @@ public class Game {
 
                   input.close();
             } catch (FileNotFoundException e) {
-                  System.err.println("Unable to find data file '" + fileName + "'");
+                  LOGGER.info("Unable to find data file '" + fileName + "'"+e);
             } catch (IOException e) {
-                  System.err.println("Problem encountered processing file.");
+                 LOGGER.info("Problem encountered processing file."+e);
             }
       }
 
@@ -1170,11 +1204,11 @@ public class Game {
             double playerMaxBackpackWeight = input.nextDouble();
             double playerMaxBackpackSize = input.nextDouble();
             Position pos = new Position(island, playerPosRow, playerPosCol);
-            player = new Player(pos, playerName,
+            setPlayer(new Player(pos, playerName,
                     playerMaxStamina,
-                    playerMaxBackpackWeight, playerMaxBackpackSize);
-           player.setGameDifficulty(getGameDifficulty());
-            island.updatePlayerPosition(player);
+                    playerMaxBackpackWeight, playerMaxBackpackSize));
+            getPlayer().setGameDifficulty(getGameDifficulty());
+            island.updatePlayerPosition(getPlayer());
       }
 
       /**
@@ -1193,28 +1227,28 @@ public class Game {
                   Position occPos = new Position(island, occRow, occCol);
                   Occupant occupant = null;
 
-                  if (occType.equals("T")) {
+                  if ("T".equals(occType)) {
                         double weight = input.nextDouble();
                         double size = input.nextDouble();
                         occupant = new Tool(occPos, occName, occDesc, weight, size);
-                  } else if (occType.equals("E")) {
+                  } else if ("E".equals(occType)) {
                         double weight = input.nextDouble();
                         double size = input.nextDouble();
                         double energy = input.nextDouble();
                         occupant = new Food(occPos, occName, occDesc, weight, size, energy);
-                  } else if (occType.equals("H")) {
+                  } else if ("H".equals(occType)) {
                         double impact = input.nextDouble();
                         occupant = new Hazard(occPos, occName, occDesc, impact);
-                  } else if (occType.equals("K")) {
+                  } else if ("K".equals(occType)) {
                         occupant = new Kiwi(occPos, occName, occDesc);
                         totalKiwis++;
-                  } else if (occType.equals("P")) {
+                  } else if ("P".equals(occType)) {
                         occupant = new Predator(occPos, occName, occDesc);
                         allPredators.add(occupant);//add predator to arraylist for easy modify position
                         totalPredators++;
-                  } else if (occType.equals("F")) {
+                  } else if ("F".equals(occType)) {
                         occupant = new Fauna(occPos, occName, occDesc);
-                  } else if (occType.equals("Q")) {
+                  } else if ("Q".equals(occType)) {
                         occupant = new Trigger(occPos, occName, occDesc);
                   }
                   if (occupant != null) {
@@ -1229,13 +1263,13 @@ public class Game {
        */
       public void calculateMapDimension(){
             //get player current position
-            int playerPositionCol = player.getPosition().getColumn();
-            int playerPositionRow = player.getPosition().getRow();
+            int playerPositionCol = getPlayer().getPosition().getColumn();
+            int playerPositionRow = getPlayer().getPosition().getRow();
             
             //calculate the view size which player will see the map
-            viewSizeOfMap = (int)Math.round(MAP_SIZE*PLAYER_VIEW_PERCENTAGE_OF_MAP);
-            int start = 0;
-            int end = 0;
+            viewSizeOfMap = (int)Math.round(getMapSize()*PLAYER_VIEW_PERCENTAGE_OF_MAP);
+            int start;
+            int end;
             //if view size is an even number, then there is a one grid square difference between the left/top end to player position and
             //from player position to right/bottom end. 
             if(viewSizeOfMap % 2 == 0){                              
@@ -1243,7 +1277,7 @@ public class Game {
                   end = (viewSizeOfMap/2)+1; // for right and bottom
 
             }else{
-                  start = (viewSizeOfMap/2); //for left and top
+                  start = viewSizeOfMap/2; //for left and top
                   end = (viewSizeOfMap/2)+1; // for right and bottom
             }
             
@@ -1268,16 +1302,16 @@ public class Game {
             int startMap = playerPosition-start;
             int endMap = playerPosition+end;
             if(startMap >=0){                  
-                   if(endMap >=MAP_SIZE){
-                        endMap = MAP_SIZE;
-                        startMap = MAP_SIZE-viewSizeOfMap;
+                   if(endMap >=getMapSize()){
+                        endMap = getMapSize();
+                        startMap = getMapSize()-viewSizeOfMap;
                   }
             }else{
                   startMap = 0;
                   endMap = viewSizeOfMap;
             }
             
-           return (new int[]{startMap, endMap});
+           return new int[]{startMap, endMap};
      }
      
      /**
@@ -1300,10 +1334,8 @@ public class Game {
                                newQuizQuestion.add(quizQuestionList.get(i));
                          }
 
-                         if(getGameDifficulty() == GameDifficulty.HARD){
-                               if(this.quizQuestionList.get(i).getDifficulty() == 3){ // add difficuly level 2 and 3 for HARD
-                                     newQuizQuestion.add(quizQuestionList.get(i));
-                               }
+                         if(getGameDifficulty() == GameDifficulty.HARD && this.quizQuestionList.get(i).getDifficulty() == 3){// add difficuly level 2 and 3 for HARD
+                                newQuizQuestion.add(quizQuestionList.get(i));                               
                          }
                    }
             }
@@ -1316,18 +1348,18 @@ public class Game {
        * @param score score to input
       */
      public void setReward(String reward, int score){
-           if(reward.equalsIgnoreCase("predator")){
+           if(reward.equalsIgnoreCase(Reward.PREDATOR.toString())){
                  Occupant predator = allPredators.get(0);
                  island.removeOccupant(predator.getPosition(), predator);
                  allPredators.remove(0);
                  totalPredators--;                 
-           }else if(reward.equalsIgnoreCase("food")){
-                 Item food = new Food(player.getPosition(), "Magic Steak", "A limited edition food from heaven", 0, 0.1, 70.0);
-                 island.addOccupant(player.getPosition(), food);
-           }else if(reward.equalsIgnoreCase("stamina")){
-                 player.increaseToMaxStamina();
-           }else if(reward.equalsIgnoreCase("score")){
-                 this.score.addScore(score);
+           }else if(reward.equalsIgnoreCase(Reward.FOOD.toString())){
+                 Item food = new Food(getPlayer().getPosition(), "Magic Steak", "A limited edition food from heaven", 0, 0.1, 70.0);
+                 island.addOccupant(getPlayer().getPosition(), food);
+           }else if(reward.equalsIgnoreCase(Reward.STAMINA.toString())){
+                  getPlayer().increaseToMaxStamina();
+           }else if(reward.equalsIgnoreCase(Reward.SCORE.toString())){
+                 this.getScore().addScore(score);
            }
      }
      
@@ -1364,30 +1396,21 @@ public class Game {
      public int getViewSizeOfMap(){
            return viewSizeOfMap;
      }
-     
-    private int viewSizeOfMap; 
-    private int startMapRow;
-    private int endMapRow;
-    private int startMapCol;
-    private int endMapCol;
-    private Island island;
-    public Player player;
-    private GameState state;
-    private int kiwiCount;
-    private int totalPredators;
-    private int totalKiwis;
-    private int predatorsTrapped;
-    private Set<GameEventListener> eventListeners;
-    private Random rand;
-    private ArrayList<Occupant> allPredators;
-    public Score score; 
-    private final double MIN_REQUIRED_CATCH = 0.8;
-    private final int IMPACT_SCORE_MULTIPLIER = 100;
-    private final double PLAYER_VIEW_PERCENTAGE_OF_MAP = 0.6;
-    private String winMessage = "";
-    private String loseMessage  = "";
-    private String playerMessage  = "";   
 
+      /**
+       * @return the score
+       */
+      public Score getScore() {
+            return score;
+      }
+
+      /**
+       * @param score the score to set
+       */
+      public void setScore(Score score) {
+            this.score = score;
+      }
+      
       /**
        * @return the gameDifficulty
        */
@@ -1414,6 +1437,55 @@ public class Game {
        */
       public void setDm(DifferentMap dm) {
             this.dm = dm;
+      }
+
+      /**
+       * @return the map_size
+       */
+      public int getMapSize() {
+            return mapSize;
+      }
+
+      /**
+       * @param mapSize the map_size to set
+       */
+      public void setMapSize(int mapSize) {
+            this.mapSize = mapSize;
+      }
+
+      /**
+       * @return the timer
+       */
+      public Timer getTimer() {
+            return timer;
+      }
+
+      /**
+       * @param timer the timer to set
+       */
+      public void setTimer(Timer timer) {
+            this.timer = timer;
+      }
+      
+            /**
+       * @return the predatorTimerTask
+       */
+      public PredatorTimerTask getPredatorTimerTask() {
+            return predatorTimerTask;
+      }
+
+      /**
+       * @param predatorTimerTask the predatorTimerTask to set
+       */
+      public void setPredatorTimerTask(PredatorTimerTask predatorTimerTask) {
+            this.predatorTimerTask = predatorTimerTask;
+      }
+      
+      /**
+       * @param player the player to set
+       */
+      public void setPlayer(Player player) {
+            this.player = player;
       }
 
 }

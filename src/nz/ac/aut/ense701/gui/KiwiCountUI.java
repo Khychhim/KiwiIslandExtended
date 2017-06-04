@@ -5,13 +5,10 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
@@ -69,8 +66,8 @@ public class KiwiCountUI
             public void actionPerformed(ActionEvent e) {
                 TwitterAPI tweet = new TwitterAPI();
              
-                String game_score = String.valueOf(game.score.getScore());
-                tweet.postToTwitter(game_score, game.player.getName());   
+                String game_score = String.valueOf(game.getScore().getScore());
+                tweet.postToTwitter(game_score, game.getPlayer().getName());   
             }
 
         });
@@ -79,8 +76,8 @@ public class KiwiCountUI
         // check for "game over" or "game won"
         if ( game.getState() == GameState.LOST )
         {
-            game.timer.cancel();
-            game.timer.purge();
+            game.getTimer().cancel();
+            game.getTimer().purge();
             int option = JOptionPane.showOptionDialog(this, 
                     game.getLoseMessage(), "Game over!", 
                     JOptionPane.PLAIN_MESSAGE,JOptionPane.
@@ -246,7 +243,7 @@ public class KiwiCountUI
         btnMoveWest.setEnabled( game.isPlayerMovePossible(MoveDirection.WEST));
         
         //Update score
-        scoreText.setText("" + game.score.getScore());
+        scoreText.setText("" + game.getScore().getScore());
         
         //focus on the window for keypress listener
         this.pnlIsland.requestFocusInWindow();
@@ -842,7 +839,6 @@ public class KiwiCountUI
 
       private GridSquarePanel gsp;
       private Tileset tileset;
-      public JFrame miniQuizFrame;
       public MiniGameQuiz miniGameQuiz;
       public MiniGameGuess miniGameGuess;
       public Game game;

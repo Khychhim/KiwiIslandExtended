@@ -107,6 +107,7 @@ public final class MiniGameQuiz extends javax.swing.JPanel {
     }
 
     public void launchResult() {
+        dispose();
         //setup Mini game panel
         NotificationPanel notificationPanel = new NotificationPanel(this, gui);
 
@@ -267,9 +268,12 @@ public final class MiniGameQuiz extends javax.swing.JPanel {
         //set question is complete and add score
         if (isOptionCorrectAnswer()) {
             game.quizQuestionList.get(currentQuestionIndex).setComplete(true);
-            //add Score
+            // get current reward
+            reward = game.quizQuestionList.get(currentQuestionIndex).getReward();            
+            // get score
             this.score = currentQuestion.getPointGain();
-            game.score.addScore(this.score);
+            //set reward for game
+            game.setReward(reward, score);
         }
         launchResult();
     }//GEN-LAST:event_jButtonEnterActionPerformed
