@@ -126,11 +126,11 @@ public class Game {
                  doc = docBuilder.parse(glossaryXML);
                  doc.getDocumentElement().normalize();
             } catch (ParserConfigurationException ex) {
-                LOGGER.info("Parser Exception: " + ex.getMessage());
+                LOGGER.info("Parser Exception: " + ex);
             }catch (SAXException ex) {
-                LOGGER.info("SAXEception: " + ex.getMessage());
+                LOGGER.info("SAXEception: " + ex);
             } catch (IOException ex) {
-               LOGGER.info("IOException: " + ex.getMessage());
+               LOGGER.info("IOException: " + ex);
             }
 
             glossarydocs = doc;
@@ -1172,9 +1172,9 @@ public class Game {
 
                   input.close();
             } catch (FileNotFoundException e) {
-                  LOGGER.info("Unable to find data file '" + fileName + "'");
+                  LOGGER.info("Unable to find data file '" + fileName + "'"+e);
             } catch (IOException e) {
-                 LOGGER.info("Problem encountered processing file.");
+                 LOGGER.info("Problem encountered processing file."+e);
             }
       }
 
