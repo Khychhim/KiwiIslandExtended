@@ -282,19 +282,27 @@ public class Game {
                         if (newPosition != null) {
                               newPredator = new Predator(newPosition, predator.getName(), predator.getDescription());
                               //check to avoid predator stepping on hazard
-                              if (!isPredatorOnHazard(newPredator)) {
-                                    success = island.addOccupant(newPosition, newPredator);
-                                    //if add success, remove previous predator from island and add new predator to arraylist
-                                    if (success) {                                         
-                                          island.removeOccupant(predator.getPosition(), predator);
-                                    }
-                                    this.notifyGameEventListeners();
-                              }
+                             if (!isPredatorOnHazard(newPredator)) {
+                                   success = addNewPredatorToIsland(success, newPredator, predator);
+                             }
                         }
                   } while (!success);
               return newPredator;
       }
 
+      /**
+       * Check if predator not on hazard then add to island and remove old predator
+       */
+      public synchronized boolean addNewPredatorToIsland(boolean success, Occupant newPredator, Predator predator){             
+                  success = island.addOccupant(newPredator.getPosition(), newPredator);
+                  //if add success, remove previous predator from island and add new predator to arraylist
+                  if (success) {                                         
+                        island.removeOccupant(predator.getPosition(), predator);
+                  }
+                  this.notifyGameEventListeners();
+                  return success;            
+      }
+      
       /**
        * check if kiwi is near a predator in a selected direction two grid squares away
        * @param predator the predator used to check for nearby kiwi
